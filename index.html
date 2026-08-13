@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dreamy-pink">
 <head>
+<audio id="mainBgMusic" src="music.mp3" loop autoplay></audio>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
 <title>Celebration Verse - Premium Interactive Story</title>
@@ -2831,5 +2832,13 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 </script>
 <script src="js/celebration-bgm-sakura.js"></script>
+<script>
+  document.addEventListener('click', function() {
+    const audio = document.getElementById('mainBgMusic');
+    if (audio) {
+      audio.play().catch(e => console.log("Audio play blocked:", e));
+    }
+  }, { once: true });
+</script>
 </body>
 </html>

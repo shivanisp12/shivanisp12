@@ -3062,5 +3062,109 @@ window.addEventListener('DOMContentLoaded', () => {
     });
   });
 </script>
+ <!-- ================================================================= -->
+<!-- HANGING PAPER WISH NOTES ON SAKURA TREE (UNIVERSAL FIX)           -->
+<!-- ================================================================= -->
+<style>
+    @keyframes swayThreadNote {
+        0% { transform: rotate(-6deg); }
+        100% { transform: rotate(6deg); }
+    }
+
+    .hanging-paper-wish {
+        position: absolute !important;
+        background: #fef08a !important; /* Soft parchment yellow */
+        border: 1px solid #eab308 !important;
+        padding: 8px 12px !important;
+        border-radius: 6px !important;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.25) !important;
+        font-family: 'Dancing Script', cursive, Georgia, serif !important;
+        font-size: 15px !important;
+        color: #713f12 !important;
+        transform-origin: top center !important;
+        animation: swayThreadNote 3s ease-in-out infinite alternate !important;
+        z-index: 9999 !important; /* Ensures note sits ON TOP of canvas */
+        max-width: 140px !important;
+        text-align: center !important;
+        word-break: break-word !important;
+        pointer-events: auto !important;
+    }
+
+    /* Thread line connecting paper note to tree branch */
+    .hanging-paper-wish::before {
+        content: '' !important;
+        position: absolute !important;
+        top: -35px !important;
+        left: 50% !important;
+        width: 2px !important;
+        height: 35px !important;
+        background: #854d0e !important; /* Brown hanging thread */
+        transform: translateX(-50%) !important;
+    }
+
+    /* Metallic ring at top of paper */
+    .hanging-paper-wish::after {
+        content: '' !important;
+        position: absolute !important;
+        top: -4px !important;
+        left: 50% !important;
+        width: 7px !important;
+        height: 7px !important;
+        background: #a16207 !important;
+        border-radius: 50% !important;
+        transform: translateX(-50%) !important;
+    }
+</style>
+
+<script>
+  // Global function so you can trigger it anywhere
+  window.spawnHangingWishNote = function(text) {
+    if (!text || !text.trim()) return;
+
+    // Find the canvas container or tree wrapper
+    const canvas = document.getElementById('treeCanvas') || document.querySelector('canvas');
+    const container = (canvas && canvas.parentElement) || document.querySelector('.tree-canvas-wrap') || document.body;
+
+    if (getComputedStyle(container).position === 'static') {
+      container.style.position = 'relative';
+    }
+
+    // Create Paper Note
+    const note = document.createElement('div');
+    note.className = 'hanging-paper-wish';
+
+    // Position randomly on the upper branch area (30%-70% width, 20%-50% height)
+    const randomX = Math.floor(Math.random() * 40) + 30;
+    const randomY = Math.floor(Math.random() * 30) + 20;
+
+    note.style.left = randomX + '%';
+    note.style.top = randomY + '%';
+    note.style.animationDuration = (2.2 + Math.random() * 1.5).toFixed(1) + 's';
+
+    const cleanText = text.trim();
+    const shortText = cleanText.length > 28 ? cleanText.substring(0, 25) + '...' : cleanText;
+    note.innerText = `📜 ${shortText}`;
+    note.title = cleanText;
+
+    container.appendChild(note);
+  };
+
+  // Universal click listener across wish form inputs
+  document.addEventListener('click', function(e) {
+    const target = e.target;
+    // When any button on the page is clicked, check if a text input has content
+    if (target.tagName === 'BUTTON' || target.type === 'submit' || target.getAttribute('role') === 'button') {
+      const inputs = document.querySelectorAll('input[type="text"], textarea');
+      inputs.forEach(input => {
+        if (input.value && input.value.trim().length > 0) {
+          const wishVal = input.value.trim();
+          setTimeout(() => {
+            window.spawnHangingWishNote(wishVal);
+          }, 150);
+        }
+      });
+    }
+  });
+</script>
 </body>
 </html>

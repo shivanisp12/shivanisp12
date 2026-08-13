@@ -2840,5 +2840,38 @@ window.addEventListener('DOMContentLoaded', () => {
     }
   }, { once: true });
 </script>
+<!-- FLOATING MUSIC WIDGET -->
+<div id="musicWidgetContainer" style="position: fixed; bottom: 25px; right: 25px; z-index: 999999;">
+    <button id="floatingMusicBtn" onclick="toggleSiteAudio()" style="background: #db2777; color: white; border: none; padding: 12px 22px; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.3); font-size: 15px; transition: all 0.3s ease;">
+        🎵 Play Music
+    </button>
+    <audio id="siteAudioElement" loop preload="auto">
+        <!-- Tries your uploaded music file first -->
+        <source src="music.mp3" type="audio/mpeg">
+        <!-- Backup working song if music.mp3 is missing or corrupt -->
+        <source src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3" type="audio/mpeg">
+    </audio>
+</div>
+
+<script>
+  function toggleSiteAudio() {
+    const audio = document.getElementById('siteAudioElement');
+    const btn = document.getElementById('floatingMusicBtn');
+    
+    if (audio.paused) {
+      audio.play().then(() => {
+        btn.innerHTML = '⏸️ Pause Music';
+        btn.style.background = '#16a34a';
+      }).catch(err => {
+        alert('Browser blocked audio playback. Please try clicking again!');
+        console.error('Audio playback error:', err);
+      });
+    } else {
+      audio.pause();
+      btn.innerHTML = '🎵 Play Music';
+      btn.style.background = '#db2777';
+    }
+  }
+</script>
 </body>
 </html>

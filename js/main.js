@@ -1,734 +1,2834 @@
-/* ==================================================================================
-   MODULE 1: PREMIUM ANIMATED SAKURA VISUAL LAYER FOR WISH TREE
-   ================================================================================== */
-(function initSakuraWishTreeLayer() {
-    function setupSakuraLayer() {
-        const treeWrap = document.querySelector('.tree-canvas-wrap');
-        if (!treeWrap) return;
-
-        // Ensure canvas wrapper styling allows layering
-        treeWrap.style.position = 'relative';
-
-        // Check if Sakura overlay canvas already exists
-        let sakuraCanvas = document.getElementById('sakuraLayerCanvas');
-        if (!sakuraCanvas) {
-            sakuraCanvas = document.createElement('canvas');
-            sakuraCanvas.id = 'sakuraLayerCanvas';
-            sakuraCanvas.style.position = 'absolute';
-            sakuraCanvas.style.top = '0';
-            sakuraCanvas.style.left = '0';
-            sakuraCanvas.style.width = '100%';
-            sakuraCanvas.style.height = '100%';
-            sakuraCanvas.style.pointerEvents = 'none';
-            sakuraCanvas.style.zIndex = '0'; // Behind wish interaction layer
-            treeWrap.insertBefore(sakuraCanvas, treeWrap.firstChild);
-        }
-
-        const ctx = sakuraCanvas.getContext('2d');
-        let width, height;
-
-        function resize() {
-            width = sakuraCanvas.width = treeWrap.clientWidth || 600;
-            height = sakuraCanvas.height = treeWrap.clientHeight || 350;
-        }
-        resize();
-        window.addEventListener('resize', resize);
-
-        // Pre-render offscreen realistic Sakura Petal
-        const petalCanvas = document.createElement('canvas');
-        petalCanvas.width = 32;
-        petalCanvas.height = 32;
-        const pCtx = petalCanvas.getContext('2d');
-        pCtx.beginPath();
-        pCtx.moveTo(16, 0);
-        pCtx.bezierCurveTo(30, 2, 32, 20, 16, 32);
-        pCtx.bezierCurveTo(0, 20, 2, 2, 16, 0);
-        const grad = pCtx.createLinearGradient(0, 0, 32, 32);
-        grad.addColorStop(0, 'rgba(255, 183, 197, 0.95)');
-        grad.addColorStop(0.7, 'rgba(255, 105, 180, 0.85)');
-        grad.addColorStop(1, 'rgba(219, 39, 119, 0.7)');
-        pCtx.fillStyle = grad;
-        pCtx.fill();
-
-        // Particle System
-        const PETAL_COUNT = 45;
-        const petals = [];
-
-        for (let i = 0; i < PETAL_COUNT; i++) {
-            petals.push({
-                x: Math.random() * width,
-                y: Math.random() * height,
-                size: 10 + Math.random() * 14,
-                speedY: 0.6 + Math.random() * 1.2,
-                speedX: -0.4 + Math.random() * 0.8,
-                opacity: 0.5 + Math.random() * 0.5,
-                rotation: Math.random() * Math.PI * 2,
-                rotSpeed: (Math.random() - 0.5) * 0.03,
-                oscSpeed: 0.01 + Math.random() * 0.02,
-                oscAmp: 0.8 + Math.random() * 1.5,
-                step: Math.random() * Math.PI * 2
-            });
-        }
-
-        function drawSakuraTreeBackground() {
-            // Draws an aesthetic ambient Sakura silhouette backdrop on the canvas
-            ctx.save();
-            ctx.globalAlpha = 0.15;
-            const treeGrad = ctx.createRadialGradient(width/2, height, 10, width/2, height, height);
-            treeGrad.addColorStop(0, '#fbcfe8');
-            treeGrad.addColorStop(1, 'transparent');
-            ctx.fillStyle = treeGrad;
-            ctx.fillRect(0, 0, width, height);
-            ctx.restore();
-        }
-
-        function render() {
-            ctx.clearRect(0, 0, width, height);
-            drawSakuraTreeBackground();
-
-            for (let i = 0; i < petals.length; i++) {
-                const p = petals[i];
-                p.step += p.oscSpeed;
-                p.y += p.speedY;
-                p.x += p.speedX + Math.sin(p.step) * p.oscAmp;
-                p.rotation += p.rotSpeed;
-
-                if (p.y > height + 20) {
-                    p.y = -20;
-                    p.x = Math.random() * width;
-                }
-                if (p.x > width + 20) p.x = -20;
-                if (p.x < -20) p.x = width + 20;
-
-                ctx.save();
-                ctx.translate(p.x, p.y);
-                ctx.rotate(p.rotation);
-                ctx.globalAlpha = p.opacity;
-                ctx.drawImage(petalCanvas, -p.size / 2, -p.size / 2, p.size, p.size);
-                ctx.restore();
-            }
-
-            requestAnimationFrame(render);
-        }
-
-        render();
-    }
-
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', setupSakuraLayer);
-    } else {
-        setupSakuraLayer();
-    }
-})();
-
-
-/* ==================================================================================
-   MODULE 2: INDEXEDDB PERSISTENCE FOR UPLOADED MEDIA
-   ================================================================================== */
-const MusicDB = {
-    dbName: 'CelebrationVerseMusicDB',
-    storeName: 'media_tracks',
-    
-    open() {
-        return new Promise((resolve, reject) => {
-            const req = indexedDB.open(this.dbName, 1);
-            req.onupgradeneeded = (e) => {
-                const db = e.target.result;
-                if (!db.objectStoreNames.contains(this.storeName)) {
-                    db.createObjectStore(this.storeName);
-                }
-            };
-            req.onsuccess = (e) => resolve(e.target.result);
-            req.onerror = (e) => reject(e.target.error);
-        });
-    },
-
-    async saveTrack(key, fileOrBlob) {
-        try {
-            const db = await this.open();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(this.storeName, 'readwrite');
-                tx.objectStore(this.storeName).put(fileOrBlob, key);
-                tx.oncomplete = () => resolve(true);
-                tx.onerror = (e) => reject(e.target.error);
-            });
-        } catch (err) {
-            console.warn('IndexedDB Save Error:', err);
-        }
-    },
-
-    async getTrack(key) {
-        try {
-            const db = await this.open();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(this.storeName, 'readonly');
-                const req = tx.objectStore(this.storeName).get(key);
-                req.onsuccess = () => resolve(req.result);
-                req.onerror = (e) => reject(e.target.error);
-            });
-        } catch (err) {
-            console.warn('IndexedDB Get Error:', err);
-            return null;
-        }
-    },
-
-    async deleteTrack(key) {
-        try {
-            const db = await this.open();
-            return new Promise((resolve, reject) => {
-                const tx = db.transaction(this.storeName, 'readwrite');
-                tx.objectStore(this.storeName).delete(key);
-                tx.oncomplete = () => resolve(true);
-                tx.onerror = (e) => reject(e.target.error);
-            });
-        } catch (err) {
-            console.warn('IndexedDB Delete Error:', err);
-        }
-    }
-};
-
-
-/* ==================================================================================
-   MODULE 3: BACKGROUND MUSIC MANAGER ENGINE
-   ================================================================================== */
-class BackgroundMusicEngine {
-    constructor() {
-        this.config = {
-            enabled: false,
-            sourceType: 'none', // 'upload_audio', 'upload_video', 'audio_url', 'video_url', 'youtube'
-            url: '',
-            youtubeUrl: '',
-            fileName: '',
-            volume: 0.7,
-            loop: true,
-            autoplay: true
-        };
-
-        this.audioEl = null;
-        this.videoEl = null;
-        this.ytPlayer = null;
-        this.ytReady = false;
-        this.activeObjectUrl = null;
-
-        this.loadSettings();
-        this.initDOMMediaElements();
-        this.loadYouTubeAPI();
-    }
-
-    loadSettings() {
-        const saved = localStorage.getItem('celebration_bg_music_cfg');
-        if (saved) {
-            try {
-                Object.assign(this.config, JSON.parse(saved));
-            } catch (e) {
-                console.error('Failed to parse music settings', e);
-            }
-        }
-    }
-
-    saveSettings() {
-        localStorage.setItem('celebration_bg_music_cfg', JSON.stringify(this.config));
-    }
-
-    initDOMMediaElements() {
-        // Create hidden audio player
-        this.audioEl = document.createElement('audio');
-        this.audioEl.id = 'bgAudioPlayer';
-        this.audioEl.style.display = 'none';
-        document.body.appendChild(this.audioEl);
-
-        // Create hidden video player (only audio track will be played)
-        this.videoEl = document.createElement('video');
-        this.videoEl.id = 'bgVideoPlayer';
-        this.videoEl.style.display = 'none';
-        this.videoEl.playsInline = true;
-        document.body.appendChild(this.videoEl);
-
-        // Bind events
-        [this.audioEl, this.videoEl].forEach(media => {
-            media.addEventListener('ended', () => {
-                if (this.config.loop && this.config.enabled) {
-                    media.currentTime = 0;
-                    media.play().catch(() => {});
-                }
-            });
-        });
-    }
-
-    loadYouTubeAPI() {
-        if (window.YT && window.YT.Player) {
-            this.initYouTubePlayer();
-            return;
-        }
-        const tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        const firstScript = document.getElementsByTagName('script')[0];
-        firstScript.parentNode.insertBefore(tag, firstScript);
-
-        window.onYouTubeIframeAPIReady = () => {
-            this.initYouTubePlayer();
-        };
-    }
-
-    initYouTubePlayer() {
-        let container = document.getElementById('ytPlayerContainer');
-        if (!container) {
-            container = document.createElement('div');
-            container.id = 'ytPlayerContainer';
-            container.style.position = 'absolute';
-            container.style.top = '-9999px';
-            container.style.left = '-9999px';
-            container.style.width = '1px';
-            container.style.height = '1px';
-            container.style.opacity = '0';
-            container.style.pointerEvents = 'none';
-            document.body.appendChild(container);
-        }
-
-        const playerDiv = document.createElement('div');
-        playerDiv.id = 'ytMusicIframe';
-        container.appendChild(playerDiv);
-
-        this.ytPlayer = new YT.Player('ytMusicIframe', {
-            height: '1',
-            width: '1',
-            playerVars: {
-                autoplay: 0,
-                controls: 0,
-                disablekb: 1,
-                fs: 0,
-                loop: 0
-            },
-            events: {
-                onReady: () => {
-                    this.ytReady = true;
-                    if (this.config.enabled && this.config.sourceType === 'youtube') {
-                        this.applySourceAndPlay();
-                    }
-                },
-                onStateChange: (e) => {
-                    if (e.data === YT.PlayerState.ENDED && this.config.loop && this.config.enabled) {
-                        this.ytPlayer.playVideo();
-                    }
-                },
-                onError: (e) => {
-                    console.warn('YouTube Playback Error Code:', e.data);
-                    if (typeof window.showToast === 'function') {
-                        window.showToast('YouTube video restricted or unplayable in background.');
-                    }
-                }
-            }
-        });
-    }
-
-    extractYouTubeId(url) {
-        if (!url) return null;
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-        const match = url.match(regExp);
-        return (match && match[2].length === 11) ? match[2] : null;
-    }
-
-    stopAll() {
-        if (this.audioEl) {
-            this.audioEl.pause();
-            this.audioEl.currentTime = 0;
-        }
-        if (this.videoEl) {
-            this.videoEl.pause();
-            this.videoEl.currentTime = 0;
-        }
-        if (this.ytPlayer && this.ytReady && typeof this.ytPlayer.stopVideo === 'function') {
-            try { this.ytPlayer.stopVideo(); } catch(e){}
-        }
-    }
-
-    pauseAll() {
-        if (this.audioEl) this.audioEl.pause();
-        if (this.videoEl) this.videoEl.pause();
-        if (this.ytPlayer && this.ytReady && typeof this.ytPlayer.pauseVideo === 'function') {
-            try { this.ytPlayer.pauseVideo(); } catch(e){}
-        }
-    }
-
-    setVolume(vol) {
-        this.config.volume = parseFloat(vol);
-        if (this.audioEl) this.audioEl.volume = this.config.volume;
-        if (this.videoEl) this.videoEl.volume = this.config.volume;
-        if (this.ytPlayer && this.ytReady && typeof this.ytPlayer.setVolume === 'function') {
-            try { this.ytPlayer.setVolume(this.config.volume * 100); } catch(e){}
-        }
-        this.saveSettings();
-    }
-
-    async applySourceAndPlay() {
-        this.stopAll();
-
-        if (!this.config.enabled) return;
-
-        const vol = this.config.volume;
-        const loop = this.config.loop;
-
-        try {
-            if (this.config.sourceType === 'upload_audio' || this.config.sourceType === 'upload_video') {
-                const blob = await MusicDB.getTrack('active_bg_media');
-                if (blob) {
-                    if (this.activeObjectUrl) URL.revokeObjectURL(this.activeObjectUrl);
-                    this.activeObjectUrl = URL.createObjectURL(blob);
-
-                    const target = (this.config.sourceType === 'upload_audio') ? this.audioEl : this.videoEl;
-                    target.src = this.activeObjectUrl;
-                    target.volume = vol;
-                    target.loop = loop;
-                    await target.play();
-                } else if (typeof window.showToast === 'function') {
-                    window.showToast('No uploaded track found in local storage.');
-                }
-            } else if (this.config.sourceType === 'audio_url') {
-                if (!this.config.url) return;
-                this.audioEl.src = this.config.url;
-                this.audioEl.volume = vol;
-                this.audioEl.loop = loop;
-                await this.audioEl.play();
-            } else if (this.config.sourceType === 'video_url') {
-                if (!this.config.url) return;
-                this.videoEl.src = this.config.url;
-                this.videoEl.volume = vol;
-                this.videoEl.loop = loop;
-                await this.videoEl.play();
-            } else if (this.config.sourceType === 'youtube') {
-                const videoId = this.extractYouTubeId(this.config.youtubeUrl);
-                if (!videoId) {
-                    if (typeof window.showToast === 'function') {
-                        window.showToast('Invalid YouTube URL.');
-                    }
-                    return;
-                }
-                if (this.ytPlayer && this.ytReady) {
-                    this.ytPlayer.loadVideoById(videoId);
-                    this.ytPlayer.setVolume(vol * 100);
-                }
-            }
-        } catch (err) {
-            console.warn('Autoplay prevented or network error:', err);
-            this.setupAutoplayUserInteractionFallback();
-        }
-    }
-
-    setupAutoplayUserInteractionFallback() {
-        const handler = () => {
-            if (this.config.enabled) {
-                this.applySourceAndPlay();
-            }
-            window.removeEventListener('click', handler);
-            window.removeEventListener('touchstart', handler);
-        };
-        window.addEventListener('click', handler);
-        window.addEventListener('touchstart', handler);
-    }
+<!DOCTYPE html>
+<html lang="en" data-theme="dreamy-pink">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<title>Celebration Verse - Premium Interactive Story</title>
+<meta name="description" content="A dreamy, romantic, interactive digital celebration experience." />
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ======= THEMES & CSS VARIABLES (21 THEMES) ======= */
+:root {
+ --font-heading: 'Playfair Display', Georgia, serif;
+ --font-handwriting: 'Dancing Script', cursive;
+ --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+ 
+ /* Theme 1: Dreamy Pink (Default) */
+ --bg-grad-start: #fff0f5; --bg-grad-end: #fcd5ce; --primary: #e63946; --primary-light: #ff758f; --accent: #ffb703;  --text-main: #3d0c11; --text-muted: #723d46;
+ --card-bg: rgba(255, 255, 255, 0.82); --card-border: rgba(255, 255, 255, 0.95);
+ --glass-shadow: 0 12px 32px 0 rgba(230, 57, 70, 0.12); --gold-glow: rgba(255, 183, 3, 0.4);
+ --radius-lg: 24px; --radius-md: 16px; --radius-sm: 8px;
+ --transition-smooth: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+[data-theme="lavender-moon"] {
+ --bg-grad-start: #1a1829; --bg-grad-end: #3b2d54;
+ --primary: #b5e2fa; --primary-light: #c8b6ff; --accent: #ffd166;
+ --text-main: #f8f9fa; --text-muted: #d0c7eb;
+ --card-bg: rgba(45, 38, 74, 0.75); --card-border: rgba(181, 226, 250, 0.2);
+ --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.4);
+}
+[data-theme="cloudy-blue"] {
+ --bg-grad-start: #e0f2fe; --bg-grad-end: #bae6fd;
+ --primary: #0284c7; --primary-light: #38bdf8; --accent: #f59e0b;
+ --text-main: #0c4a6e; --text-muted: #0369a1;
+ --card-bg: rgba(255, 255, 255, 0.82); --card-border: rgba(255, 255, 255, 0.95);
+ --glass-shadow: 0 12px 32px 0 rgba(2, 132, 199, 0.15);
+}
+[data-theme="peach-sunset"] {
+ --bg-grad-start: #ffedd5; --bg-grad-end: #fbcfe8;
+ --primary: #ea580c; --primary-light: #fb923c; --accent: #f43f5e;
+ --text-main: #431407; --text-muted: #9a3412;
+ --card-bg: rgba(255, 255, 255, 0.8); --card-border: rgba(255, 255, 255, 0.9);  --glass-shadow: 0 12px 32px 0 rgba(234, 88, 12, 0.15);
+}
+[data-theme="sakura-dream"] {
+ --bg-grad-start: #fdf2f8; --bg-grad-end: #fbcfe8;
+ --primary: #db2777; --primary-light: #f472b6; --accent: #facc15;
+ --text-main: #701a75; --text-muted: #9d174d;
+ --card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(255, 255, 255, 0.95);
+ --glass-shadow: 0 12px 32px 0 rgba(219, 39, 119, 0.15);
+}
+[data-theme="soft-garden"] {
+ --bg-grad-start: #f0fdf4; --bg-grad-end: #bbf7d0;
+ --primary: #16a34a; --primary-light: #4ade80; --accent: #facc15;
+ --text-main: #052e16; --text-muted: #166534;
+ --card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(255, 255, 255, 0.9);
+ --glass-shadow: 0 12px 32px 0 rgba(22, 163, 74, 0.15);
+}
+[data-theme="cream-champagne"] {
+ --bg-grad-start: #fefce8; --bg-grad-end: #fef08a;
+ --primary: #ca8a04; --primary-light: #fde047; --accent: #a16207;
+ --text-main: #422006; --text-muted: #713f12;
+ --card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(250, 204, 21, 0.3);
+ --glass-shadow: 0 12px 32px 0 rgba(202, 138, 4, 0.15);
+}
+[data-theme="midnight-romance"] {
+ --bg-grad-start: #0f172a; --bg-grad-end: #881337;
+ --primary: #fb7185; --primary-light: #fda4af; --accent: #fef08a;
+ --text-main: #fff1f2; --text-muted: #fecdd3;
+ --card-bg: rgba(30, 27, 46, 0.78); --card-border: rgba(251, 113, 133, 0.25);
+ --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.5);
+}
+[data-theme="cozy-coffee"] {
+ --bg-grad-start: #fdf8f6; --bg-grad-end: #e7d8c9;
+ --primary: #8c6d58; --primary-light: #b69d8a; --accent: #d4a373;
+ --text-main: #3e2723; --text-muted: #5d4037;
+ --card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(212, 163, 115, 0.3);
+ --glass-shadow: 0 12px 32px 0 rgba(140, 109, 88, 0.15);
+}
+[data-theme="fairy-garden"] {
+ --bg-grad-start: #ecfdf5; --bg-grad-end: #fbcfe8;
+ --primary: #059669; --primary-light: #f472b6; --accent: #facc15;
+ --text-main: #064e3b; --text-muted: #047857;
+ --card-bg: rgba(255, 255, 255, 0.82); --card-border: rgba(255, 255, 255, 0.9);
+ --glass-shadow: 0 12px 32px 0 rgba(5, 150, 105, 0.15);
+}
+[data-theme="vintage-love-letter"] {
+ --bg-grad-start: #fbf8f1; --bg-grad-end: #e5d9c5;
+ --primary: #9b2226; --primary-light: #bb3e03; --accent: #ee9b00;
+ --text-main: #2b1e1a; --text-muted: #6b4d3e;
+ --card-bg: rgba(250, 246, 238, 0.9); --card-border: rgba(210, 190, 165, 0.5);
+ --glass-shadow: 0 12px 32px 0 rgba(155, 34, 38, 0.15);
+}
+[data-theme="celestial-dream"] {
+ --bg-grad-start: #0b091a; --bg-grad-end: #1a1c38;
+ --primary: #818cf8; --primary-light: #c084fc; --accent: #fef08a;
+ --text-main: #f8fafc; --text-muted: #cbd5e1;
+ --card-bg: rgba(23, 22, 48, 0.8); --card-border: rgba(129, 140, 248, 0.3);
+ --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.6);
+}
+[data-theme="soft-wedding"] {
+ --bg-grad-start: #fafaf9; --bg-grad-end: #f5f5f4;
+ --primary: #78716c; --primary-light: #a8a29e; --accent: #d4af37;
+ --text-main: #1c1917; --text-muted: #57534e;
+ --card-bg: rgba(255, 255, 255, 0.9); --card-border: rgba(212, 175, 55, 0.25);
+ --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.08);
+}
+[data-theme="dreamy-birthday"] {
+ --bg-grad-start: #f0f9ff; --bg-grad-end: #fbcfe8;
+ --primary: #0284c7; --primary-light: #f472b6; --accent: #facc15;
+ --text-main: #0c4a6e; --text-muted: #0369a1;
+ --card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(255, 255, 255, 0.95);
+ --glass-shadow: 0 12px 32px 0 rgba(2, 132, 199, 0.15);
+}
+[data-theme="luxury-gold"] {
+ --bg-grad-start: #141414; --bg-grad-end: #2a2415;
+ --primary: #d4af37; --primary-light: #f3e5ab; --accent: #ffffff;
+ --text-main: #f5f5f7; --text-muted: #d4af37;
+ --card-bg: rgba(35, 30, 20, 0.82); --card-border: rgba(212, 175, 55, 0.35);
+ --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.6);
+}
+[data-theme="galaxy"] {
+ --bg-grad-start: #090a0f; --bg-grad-end: #1b1425;
+ --primary: #d8b4fe; --primary-light: #818cf8; --accent: #f472b6;
+ --text-main: #f3e8ff; --text-muted: #c084fc;
+ --card-bg: rgba(23, 15, 38, 0.8); --card-border: rgba(216, 180, 254, 0.25);
+ --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.7);
+}
+[data-theme="aurora"] {
+ --bg-grad-start: #061e27; --bg-grad-end: #113f38;
+ --primary: #2dd4bf; --primary-light: #a7f3d0; --accent: #facc15;
+ --text-main: #f0fdf4; --text-muted: #99f6e4;
+ --card-bg: rgba(13, 43, 49, 0.8); --card-border: rgba(45, 212, 191, 0.3);
+ --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.6);
+}
+[data-theme="ocean"] {
+ --bg-grad-start: #0f172a; --bg-grad-end: #0369a1;
+ --primary: #38bdf8; --primary-light: #7dd3fc; --accent: #fde047;
+ --text-main: #f0f9ff; --text-muted: #bae6fd;
+ --card-bg: rgba(15, 30, 54, 0.8); --card-border: rgba(56, 189, 248, 0.3);
+ --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.5);
+}
+[data-theme="forest"] {
+ --bg-grad-start: #051c14; --bg-grad-end: #14382c;
+ --primary: #34d399; --primary-light: #a7f3d0; --accent: #fbbf24;
+ --text-main: #ecfdf5; --text-muted: #6ee7b7;
+ --card-bg: rgba(10, 36, 26, 0.82); --card-border: rgba(52, 211, 153, 0.25);
+ --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.6);
+}
+[data-theme="scrapbook"] {
+ --bg-grad-start: #fef3c7; --bg-grad-end: #fde68a;
+ --primary: #d97706; --primary-light: #fbbf24; --accent: #ef4444;
+ --text-main: #451a03; --text-muted: #92400e;
+ --card-bg: rgba(255, 251, 235, 0.9); --card-border: rgba(217, 119, 6, 0.3);
+ --glass-shadow: 0 12px 32px 0 rgba(217, 119, 6, 0.12);
+}
+[data-theme="polaroid"] {
+ --bg-grad-start: #f1f5f9; --bg-grad-end: #cbd5e1;
+ --primary: #475569; --primary-light: #94a3b8; --accent: #f43f5e;
+ --text-main: #0f172a; --text-muted: #334155;
+ --card-bg: rgba(255, 255, 255, 0.92); --card-border: rgba(203, 213, 225, 0.8);
+ --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.1);
 }
 
-window.bgMusicEngine = new BackgroundMusicEngine();
+/* Reset & Base Styles */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+body {
+ font-family: var(--font-body);
+ background: linear-gradient(135deg, var(--bg-grad-start), var(--bg-grad-end));
+ color: var(--text-main);
+ min-height: 100vh;
+ overflow-x: hidden;
+ transition: background 0.8s ease, color 0.5s ease;
+ line-height: 1.6;
+ -webkit-font-smoothing: antialiased;
+}
 
+/* Canvas Overlays */
+#bgCanvas, #fxCanvas {
+ position: fixed;
+ top: 0; left: 0;
+ width: 100vw; height: 100vh;
+ pointer-events: none;
+ z-index: 1;
+}
+#fxCanvas { z-index: 9999; }
 
-/* ==================================================================================
-   MODULE 4: DYNAMIC OWNER CONTROL PANEL UI INJECTION & CONTROLLER
-   ================================================================================== */
-(function injectBackgroundMusicUI() {
-    function buildAndAttachPanel() {
-        const modal = document.getElementById('creatorModal');
-        if (!modal) return;
+/* Universal Typography & UI Elements */
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height: 1.2; }
+.handwriting { font-family: var(--font-handwriting); }
+.glass-card {
+ background: var(--card-bg);
+ backdrop-filter: blur(16px);
+ -webkit-backdrop-filter: blur(16px);
+ border: 1px solid var(--card-border);
+ border-radius: var(--radius-lg);
+ box-shadow: var(--glass-shadow);
+ padding: 2rem;
+ transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.btn {
+ display: inline-flex;
+ align-items: center;
+ justify-content: center;
+ gap: 0.6rem;
+ padding: 0.85rem 1.8rem;
+ font-family: var(--font-body);
+ font-weight: 600;
+ font-size: 1rem;
+ border-radius: 50px;
+ border: none;
+ cursor: pointer;
+ background: linear-gradient(135deg, var(--primary), var(--primary-light));
+ color: #ffffff;
+ box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+ transition: transform 0.25s var(--transition-smooth), box-shadow 0.25s ease, filter 0.2s;
+ text-decoration: none;
+ user-select: none;
+}
+.btn:hover {
+ transform: translateY(-3px) scale(1.02);
+ box-shadow: 0 10px 25px rgba(0,0,0,0.22);
+ filter: brightness(1.05);
+}
+.btn:active { transform: translateY(0) scale(0.98); }
+.btn-secondary {
+ background: rgba(255, 255, 255, 0.4);
+ color: var(--text-main);
+ border: 1px solid var(--card-border);
+}
+.btn-icon {
+ width: 44px; height: 44px;
+ padding: 0; border-radius: 50%;
+ display: inline-flex; align-items: center; justify-content: center;
+}
 
-        const tabGroup = modal.querySelector('.tab-btn-group');
-        const panelContainer = modal.querySelector('.creator-panel');
+/* Fixed Navigation Bar */
+#mainNav {
+ position: fixed;
+ top: 15px; left: 50%;
+ transform: translateX(-50%);
+ z-index: 1000;
+ display: flex;
+ align-items: center;
+ gap: 0.4rem;
+ padding: 0.5rem 1rem;
+ background: rgba(255, 255, 255, 0.35);
+ backdrop-filter: blur(20px);
+ -webkit-backdrop-filter: blur(20px);
+ border: 1px solid var(--card-border);
+ border-radius: 40px;
+ box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+ max-width: 95vw;
+ overflow-x: auto;
+ scrollbar-width: none;
+}
+#mainNav::-webkit-scrollbar { display: none; }
+.nav-link {
+ padding: 0.45rem 0.85rem;
+ font-size: 0.82rem;
+ font-weight: 600;
+ color: var(--text-main);
+ border-radius: 20px;
+ text-decoration: none;
+ white-space: nowrap;
+ transition: all 0.3s ease;
+ cursor: pointer;
+}
+.nav-link:hover, .nav-link.active {
+ background: var(--primary);
+ color: #fff;
+}
 
-        if (!tabGroup || !panelContainer) return;
+/* Top Controls Floating Right */
+#quickControls {
+ position: fixed;
+ top: 15px; right: 20px;
+ z-index: 1001;
+ display: flex;
+ gap: 0.5rem;
+}
 
-        // Prevent duplicate injection
-        if (document.getElementById('btnTabBgMusic')) return;
+/* Chapters Container & Layout */
+main { position: relative; z-index: 2; width: 100%; }
+.chapter-section {
+ min-height: 100vh;
+ padding: 6rem 1.5rem 4rem 1.5rem;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ position: relative;
+ opacity: 0;
+ transform: translateY(30px);
+ transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.chapter-section.visible {
+ opacity: 1;
+ transform: translateY(0);
+}
+.section-title {
+ font-size: clamp(2rem, 5vw, 3.2rem);
+ text-align: center;
+ margin-bottom: 0.5rem;
+ color: var(--text-main);
+ text-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.section-subtitle {
+ font-size: clamp(1rem, 2.5vw, 1.3rem);
+ font-family: var(--font-handwriting);
+ color: var(--primary);
+ text-align: center;
+ margin-bottom: 2.5rem;
+}
 
-        // 1. Inject Tab Button
-        const tabBtn = document.createElement('button');
-        tabBtn.className = 'tab-btn';
-        tabBtn.id = 'btnTabBgMusic';
-        tabBtn.innerText = 'Background Music';
-        tabBtn.onclick = () => window.switchCreatorTab('tabBgMusic');
-        tabGroup.appendChild(tabBtn);
+/* CHAPTER 1: INTRO */
+#intro { text-align: center; justify-content: center; min-height: 100vh; }
+.intro-badge {
+ display: inline-block;
+ padding: 0.4rem 1.2rem;
+ border-radius: 30px;
+ background: rgba(255,255,255,0.5);
+ border: 1px solid var(--card-border);
+ font-size: 0.9rem;
+ font-weight: 600;
+ letter-spacing: 2px;
+ text-transform: uppercase;
+ margin-bottom: 1.5rem;
+ color: var(--primary);
+ animation: pulseGlow 2.5s infinite alternate;
+}
+.intro-title {
+ font-size: clamp(2.8rem, 8vw, 5rem);
+ margin-bottom: 1rem;
+ line-height: 1.1;
+}
+.intro-msg {
+ max-width: 650px;
+ font-size: clamp(1.1rem, 3vw, 1.4rem);
+ margin: 0 auto 2.5rem auto;
+ color: var(--text-muted);
+}
 
-        // 2. Inject Tab Content Panel
-        const panelDiv = document.createElement('div');
-        panelDiv.id = 'tabBgMusic';
-        panelDiv.className = 'tab-content';
+/* CHAPTER 2: GIFT BOX */
+.gift-container {
+ perspective: 1000px;
+ width: 260px; height: 260px;
+ margin: 2rem auto;
+ position: relative;
+ cursor: pointer;
+}
+.gift-box {
+ width: 100%; height: 100%;
+ position: relative;
+ transform-style: preserve-3d;
+ transition: transform 0.6s var(--transition-smooth);
+ animation: giftFloat 3s ease-in-out infinite alternate;
+}
+.gift-box:hover { transform: scale(1.05) rotateY(10deg); }
+.gift-face {
+ position: absolute; width: 220px; height: 220px;
+ left: 20px; top: 20px;
+ background: linear-gradient(135deg, var(--primary), var(--primary-light));
+ border: 2px solid rgba(255,255,255,0.4);
+ border-radius: 12px;
+ box-shadow: inset 0 0 20px rgba(0,0,0,0.15), 0 15px 35px rgba(0,0,0,0.2);
+}
+.gift-ribbon-v, .gift-ribbon-h {
+ position: absolute;
+ background: linear-gradient(to right, #ffd166, #facc15);
+ box-shadow: 0 0 10px rgba(255, 209, 102, 0.6);
+ z-index: 2;
+}
+.gift-ribbon-v { width: 40px; height: 100%; left: 90px; top: 0; }
+.gift-ribbon-h { width: 100%; height: 40px; left: 0; top: 90px; }
+.gift-bow {
+ position: absolute;
+ top: -25px; left: 50%;
+ transform: translateX(-50%);
+ width: 80px; height: 50px;
+ z-index: 3;
+ transition: all 0.5s ease;
+}
+.gift-bow::before, .gift-bow::after {
+ content: ""; position: absolute;
+ width: 45px; height: 45px;
+ border: 6px solid #ffd166;
+ border-radius: 50% 50% 0 50%;
+ transform: rotate(45deg);
+ box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.gift-bow::after {
+ right: 0;
+ border-radius: 50% 50% 50% 0;
+ transform: rotate(-45deg);
+}
+.gift-box.opened .gift-bow { transform: translateX(-50%) translateY(-100px) scale(0); opacity: 0; }
+.gift-box.opened { animation: giftOpen 1s forwards; }
+.gift-reveal-card {
+ display: none;
+ max-width: 500px;
+ text-align: center;
+ margin-top: 2rem;
+ animation: popin 0.6s var(--transition-smooth) forwards;
+}
 
-        panelDiv.innerHTML = `
-            <div style="border-bottom: 1px solid #eee; padding-bottom: 0.8rem; margin-bottom: 1.2rem;">
-                <h3 style="font-size: 1.2rem; color: var(--primary);">🎵 Background Music Configuration</h3>
-                <p style="font-size: 0.82rem; color: var(--text-muted);">
-                    Customize background music from direct uploads, URLs, or YouTube. Audio plays seamlessly across the experience.
-                </p>
-            </div>
+/* CHAPTER 3: BOUQUET */
+.bouquet-wrapper {
+ display: flex;
+ flex-wrap: wrap;
+ justify-content: center;
+ gap: 1.5rem;
+ max-width: 1000px;
+ margin: 0 auto;
+}
+.flower-item {
+ width: 130px; height: 230px;
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ cursor: pointer;
+ position: relative;
+ transition: transform 0.3s ease;
+}
+.flower-item:hover { transform: translateY(-10px) scale(1.08); }
+.flower-head {
+ width: 100px; height: 100px;
+ position: relative;
+ transition: transform 0.5s var(--transition-smooth);
+}
+.flower-stem {
+ width: 6px; height: 110px;
+ background: linear-gradient(to bottom, #4ade80, #15803d);
+ border-radius: 4px;
+ position: relative;
+}
+.flower-leaf {
+ position: absolute;
+ width: 24px; height: 12px;
+ background: #22c55e;
+ border-radius: 15px 0 15px 0;
+}
+.flower-leaf.left { left: -20px; top: 30px; transform: rotate(-30deg); }
+.flower-leaf.right { right: -20px; top: 60px; transform: rotate(30deg) scaleX(-1); }
+.flower-item.bloomed .flower-head { transform: scale(1.25) rotate(15deg); }
+.flower-note-pop {
+ position: absolute;
+ bottom: -35px;
+ background: rgba(255,255,255,0.95);
+ padding: 0.4rem 0.8rem;
+ border-radius: 12px;
+ font-size: 0.8rem;
+ font-weight: 600;
+ white-space: nowrap;
+ box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+ opacity: 0;
+ transform: translateY(10px);
+ transition: all 0.3s ease;
+ pointer-events: none;
+ z-index: 10;
+}
+.flower-item.bloomed .flower-note-pop { opacity: 1; transform: translateY(0); }
 
-            <!-- Enable/Disable Master Switch -->
-            <div class="form-group" style="display: flex; align-items: center; justify-content: space-between; background: #fafafa; padding: 0.8rem 1rem; border-radius: 10px; border: 1px solid #eee;">
-                <label style="font-weight: 700; margin-bottom: 0;">Enable Background Music</label>
-                <input type="checkbox" id="bgmEnableToggle" style="width: 20px; height: 20px; cursor: pointer;" />
-            </div>
+/* CHAPTER 4: ENVELOPE + LETTER */
+.letter-stage {
+ perspective: 1200px;
+ width: 100%; max-width: 680px;
+ margin: 0 auto;
+}
+.envelope {
+ width: 100%; max-width: 480px;
+ height: 280px;
+ margin: 0 auto;
+ background: #fdf6e2;
+ border-radius: 12px;
+ box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+ position: relative;
+ cursor: pointer;
+ border: 1px solid #e2d2b4;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ transition: transform 0.4s ease;
+}
+.envelope:hover { transform: scale(1.02); }
+.wax-seal {
+ width: 70px; height: 70px;
+ background: linear-gradient(135deg, #b91c1c, #991b1b);
+ border-radius: 50%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ color: #fef08a;
+ font-family: var(--font-handwriting);
+ font-size: 1.8rem;
+ box-shadow: 0 6px 16px rgba(185, 28, 28, 0.4);
+ border: 2px dashed #fef08a;
+ z-index: 5;
+ transition: transform 0.4s var(--transition-smooth);
+}
+.envelope.opened .wax-seal { transform: scale(0); opacity: 0; }
+.letter-paper {
+ display: none;
+ background: #fffdfa;
+ background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
+ background-size: 100% 2rem;
+ line-height: 2rem;
+ padding: 3rem 2.5rem;
+ border-radius: 16px;
+ box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+ border: 1px solid #f3f4f6;
+ font-family: var(--font-handwriting);
+ font-size: 1.6rem;
+ color: #374151;
+ position: relative;
+ animation: paperUnfold 0.8s var(--transition-smooth) forwards;
+}
+.letter-controls {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-top: 1.5rem;
+ font-family: var(--font-body);
+ font-size: 0.9rem;
+}
 
-            <!-- Active Track Status Badge -->
-            <div id="bgmActiveTrackBadge" style="margin-bottom: 1.2rem; padding: 0.6rem 0.9rem; background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; border-radius: 8px; font-size: 0.85rem; font-weight: 600;">
-                Active Track: None
-            </div>
+/* CHAPTER 5: MEMORIES */
+.memory-carousel {
+ width: 100%; max-width: 800px;
+ position: relative;
+ overflow: hidden;
+ border-radius: var(--radius-lg);
+}
+.polaroid-card {
+ background: #fff;
+ padding: 1.2rem 1.2rem 2.5rem 1.2rem;
+ box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+ border-radius: 4px;
+ transform: rotate(-2deg);
+ transition: transform 0.3s ease;
+ max-width: 380px;
+ margin: 0 auto;
+}
+.polaroid-card:hover { transform: rotate(0deg) scale(1.03); }
+.polaroid-img {
+ width: 100%; height: 260px;
+ object-fit: cover;
+ border-radius: 2px;
+ background: #f3f4f6;
+}
+.polaroid-caption {
+ font-family: var(--font-handwriting);
+ font-size: 1.5rem;
+ text-align: center;
+ margin-top: 1rem;
+ color: #333;
+}
+.photo-wall {
+ width: 100%; height: 380px;
+ position: relative;
+ background: rgba(255,255,255,0.2);
+ border-radius: var(--radius-lg);
+ border: 2px dashed var(--card-border);
+ overflow: hidden;
+ margin-top: 2rem;
+}
+.floating-photo {
+ position: absolute;
+ width: 130px;
+ padding: 8px 8px 18px 8px;
+ background: #fff;
+ box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+ cursor: grab;
+ user-select: none;
+ transition: box-shadow 0.2s;
+}
+.floating-photo:active { cursor: grabbing; box-shadow: 0 12px 30px rgba(0,0,0,0.25); z-index: 100 !important; }
+.floating-photo img { width: 100%; height: 100px; object-fit: cover; }
 
-            <!-- Source Selection Sub-tabs -->
-            <div class="form-group">
-                <label>Select Music Source Type</label>
-                <select id="bgmSourceTypeSelect" class="form-control">
-                    <option value="upload_audio">Upload Audio File (MP3, WAV, OGG, AAC, FLAC)</option>
-                    <option value="upload_video">Upload Video File (MP4, MOV, WebM - Audio Only)</option>
-                    <option value="audio_url">Direct Audio File URL</option>
-                    <option value="video_url">Direct Video File URL (Audio Only)</option>
-                    <option value="youtube">YouTube Video Link</option>
-                </select>
-            </div>
+/* PINTEREST MASONRY GALLERY */
+.pinterest-grid {
+ column-count: 3;
+ column-gap: 1.2rem;
+ width: 100%;
+ max-width: 1000px;
+ margin: 0 auto;
+}
+@media (max-width: 768px) { .pinterest-grid { column-count: 2; } }
+@media (max-width: 480px) { .pinterest-grid { column-count: 1; } }
+.pin-card {
+ break-inside: avoid;
+ margin-bottom: 1.2rem;
+ background: var(--card-bg);
+ border: 1px solid var(--card-border);
+ border-radius: var(--radius-md);
+ overflow: hidden;
+ box-shadow: var(--glass-shadow);
+ transition: transform 0.3s ease, box-shadow 0.3s ease;
+ position: relative;
+}
+.pin-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+.pin-card img { width: 100%; height: auto; display: block; border-radius: var(--radius-md) var(--radius-md) 0 0; }
+.pin-caption { padding: 0.8rem 1rem; font-size: 0.95rem; font-weight: 600; text-align: left; }
 
-            <!-- Dynamic Source Sub-Panels -->
-            <div id="subPanelUploadAudio" class="bgm-source-panel" style="margin-bottom: 1rem;">
-                <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.3rem;">Upload Audio Device File</label>
-                <input type="file" id="bgmFileInputAudio" accept="audio/*" class="form-control" />
-            </div>
+/* RETRO TV BIG SCREEN (v2.0.1) */
+.retro-tv-wrapper {
+ position: relative;
+ width: 100%;
+ max-width: 720px;
+ margin: 0 auto;
+ background: #2d2422;
+ border: 14px solid #543d35;
+ border-radius: 36px;
+ padding: 25px;
+ box-shadow: inset 0 0 20px #000, 0 20px 40px rgba(0,0,0,0.4);
+}
+.tv-screen-frame {
+ position: relative;
+ width: 100%;
+ aspect-ratio: 16/9;
+ background: #0a0a0a;
+ border-radius: 20px;
+ overflow: hidden;
+ border: 4px solid #1a1a1a;
+ box-shadow: inset 0 0 30px rgba(255,255,255,0.1);
+ display: flex;
+ align-items: center;
+ justify-content: center;
+}
+.tv-screen-frame video, .tv-screen-frame img {
+ width: 100%;
+ height: 100%;
+ object-fit: cover;
+}
+.tv-scanlines {
+ position: absolute;
+ top: 0; left: 0; right: 0; bottom: 0;
+ background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+ background-size: 100% 4px;
+ pointer-events: none;
+ z-index: 5;
+ opacity: 0.6;
+}
+.tv-controls {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ margin-top: 15px;
+ padding: 12px 18px;
+ background: #1a1514;
+ border-radius: 18px;
+ border: 1px solid rgba(255,255,255,0.05);
+}
+.tv-knob {
+ width: 42px;
+ height: 42px;
+ border-radius: 50%;
+ background: radial-gradient(circle, #888, #222);
+ border: 2px solid #111;
+ cursor: pointer;
+ box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+ transition: transform 0.3s ease;
+}
+.tv-knob:active { transform: rotate(45deg); }
 
-            <div id="subPanelUploadVideo" class="bgm-source-panel" style="display:none; margin-bottom: 1rem;">
-                <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.3rem;">Upload Video Device File</label>
-                <input type="file" id="bgmFileInputVideo" accept="video/*" class="form-control" />
-            </div>
+/* CHAPTER 6: TIMELINE & COUNTDOWN */
+.timeline-container {
+ position: relative;
+ max-width: 750px;
+ margin: 0 auto;
+ padding-left: 2rem;
+}
+.timeline-container::before {
+ content: "";
+ position: absolute;
+ left: 7px; top: 0; bottom: 0;
+ width: 4px;
+ background: var(--primary-light);
+ border-radius: 2px;
+}
+.timeline-item {
+ position: relative;
+ margin-bottom: 2.5rem;
+ padding-left: 1.5rem;
+}
+.timeline-dot {
+ position: absolute;
+ left: -2rem; top: 5px;
+ width: 18px; height: 18px;
+ border-radius: 50%;
+ background: var(--primary);
+ border: 4px solid #fff;
+ box-shadow: 0 0 10px var(--primary);
+}
+.countdown-grid {
+ display: grid;
+ grid-template-columns: repeat(4, 1fr);
+ gap: 1rem;
+ max-width: 550px;
+ margin: 1.5rem auto;
+}
+.count-box {
+ background: var(--card-bg);
+ border: 1px solid var(--card-border);
+ border-radius: var(--radius-md);
+ padding: 1rem 0.5rem;
+ text-align: center;
+ box-shadow: var(--glass-shadow);
+}
+.count-num { font-size: 2.2rem; font-weight: 700; color: var(--primary); line-height: 1; }
+.count-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-top: 0.3rem; }
 
-            <div id="subPanelDirectUrl" class="bgm-source-panel" style="display:none; margin-bottom: 1rem;">
-                <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.3rem;">Direct Media URL</label>
-                <input type="url" id="bgmInputDirectUrl" placeholder="https://example.com/music.mp3" class="form-control" />
-            </div>
+/* CHAPTER 7: ARCADE GAMES HUB */
+.games-grid {
+ display: grid;
+ grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+ gap: 1.2rem;
+ width: 100%; max-width: 950px;
+}
+.game-card {
+ background: var(--card-bg);
+ border: 1px solid var(--card-border);
+ border-radius: var(--radius-md);
+ padding: 1.5rem 1rem;
+ text-align: center;
+ cursor: pointer;
+ transition: all 0.3s var(--transition-smooth);
+}
+.game-card:hover { transform: translateY(-5px); background: #ffffff; }
+.game-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+.game-modal {
+ display: none;
+ position: fixed;
+ top: 0; left: 0; width: 100vw; height: 100vh;
+ background: rgba(0,0,0,0.65);
+ backdrop-filter: blur(8px);
+ z-index: 2000;
+ align-items: center; justify-content: center;
+ padding: 1rem;
+}
+.game-modal-content {
+ background: #fff;
+ border-radius: var(--radius-lg);
+ width: 100%; max-width: 550px;
+ padding: 2rem;
+ position: relative;
+ max-height: 90vh;
+ overflow-y: auto;
+}
+.close-modal {
+ position: absolute; top: 1rem; right: 1rem;
+ font-size: 1.5rem; cursor: pointer; border: none; background: none; color: #666;
+}
+.memory-grid {
+ display: grid;
+ grid-template-columns: repeat(4, 1fr);
+ gap: 0.6rem;
+ margin-top: 1rem;
+}
+.memory-tile {
+ aspect-ratio: 1;
+ background: var(--primary-light);
+ border-radius: 8px;
+ display: flex; align-items: center; justify-content: center;
+ font-size: 1.8rem;
+ cursor: pointer;
+ user-select: none;
+ transition: transform 0.3s;
+}
+.memory-tile.flipped { background: #fff; transform: rotateY(180deg); }
 
-            <div id="subPanelYoutube" class="bgm-source-panel" style="display:none; margin-bottom: 1rem;">
-                <label style="font-size: 0.85rem; font-weight: 600; display: block; margin-bottom: 0.3rem;">YouTube Video URL</label>
-                <input type="url" id="bgmInputYoutubeUrl" placeholder="https://www.youtube.com/watch?v=..." class="form-control" />
-            </div>
+/* CHAPTER 8: WISH TREE, GUESTBOOK & CAPSULE */
+.tree-canvas-wrap {
+ width: 100%; max-width: 600px; height: 350px;
+ position: relative; margin: 0 auto;
+}
+#treeCanvas { width: 100%; height: 100%; border-radius: var(--radius-lg); }
+.guestbook-list {
+ max-height: 250px; overflow-y: auto;
+ margin-top: 1rem; display: flex; flex-direction: column; gap: 0.8rem;
+}
+.guestbook-item {
+ background: rgba(255,255,255,0.6);
+ padding: 0.8rem 1rem;
+ border-radius: 12px;
+ font-size: 0.9rem;
+}
 
-            <!-- Controls Toolbar -->
-            <div style="background: #f8fafc; padding: 1rem; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1.2rem;">
-                <div style="display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1rem;">
-                    <button class="btn" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;" id="bgmBtnPlay">▶ Play</button>
-                    <button class="btn btn-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;" id="bgmBtnPause">⏸ Pause</button>
-                    <button class="btn btn-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;" id="bgmBtnStop">⏹ Stop</button>
-                    <button class="btn btn-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;" id="bgmBtnPreview">🎧 Preview</button>
-                    <button class="btn btn-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.85rem; color: #dc2626;" id="bgmBtnRemove">🗑 Remove Track</button>
-                </div>
+/* CHAPTER 9: SECRETS */
+.vault-box { text-align: center; max-width: 450px; margin: 0 auto; }
+.pin-input {
+ letter-spacing: 10px; font-size: 2rem; text-align: center;
+ width: 180px; padding: 0.5rem; border-radius: 12px;
+ border: 2px solid var(--primary-light); margin: 1rem 0;
+}
 
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1rem; align-items: center;">
-                    <div>
-                        <label style="font-size: 0.8rem; font-weight: 600;">Volume (<span id="bgmVolumeVal">70</span>%)</label>
-                        <input type="range" id="bgmVolumeSlider" min="0" max="1" step="0.01" value="0.7" style="width: 100%; cursor: pointer;" />
-                    </div>
-                    <div style="display: flex; gap: 1rem;">
-                        <label style="font-size: 0.82rem; cursor: pointer;"><input type="checkbox" id="bgmLoopToggle" checked /> Loop Track</label>
-                        <label style="font-size: 0.82rem; cursor: pointer;"><input type="checkbox" id="bgmAutoplayToggle" checked /> Autoplay</label>
-                    </div>
-                </div>
-            </div>
+/* CHAPTER 10: INVITATION */
+.invite-card {
+ background: linear-gradient(135deg, #ffffff, #fffdfa);
+ border: 2px solid var(--primary-light);
+ border-radius: var(--radius-lg);
+ padding: 2.5rem 1.8rem;
+ text-align: center;
+ max-width: 520px;
+ margin: 0 auto;
+ position: relative;
+ box-shadow: var(--glass-shadow);
+}
+.invite-card::before {
+ content: "";
+ position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+ border: 1px dashed var(--primary-light);
+ border-radius: calc(var(--radius-lg) - 6px);
+ pointer-events: none;
+}
 
-            <!-- Action Buttons -->
-            <div style="display: flex; gap: 1rem;">
-                <button class="btn" id="bgmBtnSave">Save Music Settings</button>
-                <button class="btn btn-secondary" id="bgmBtnReset">Reset Defaults</button>
-            </div>
-        `;
+/* CHAPTER 11: PLAYFUL PROPOSAL & FINALE */
+.proposal-wrap {
+ text-align: center;
+ position: relative;
+ min-height: 320px;
+ display: flex; flex-direction: column;
+ align-items: center;
+ justify-content: center;
+ width: 100%;
+}
+.proposal-title {
+ font-size: clamp(2.2rem, 6vw, 3.8rem);
+ margin-bottom: 2rem;
+}
+.proposal-btn-group {
+ display: flex;
+ gap: 1.5rem;
+ align-items: center;
+ justify-content: center;
+ position: relative;
+ width: 100%;
+ max-width: 400px;
+ min-height: 80px;
+}
+#btnNo {
+ position: relative;
+ transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+ z-index: 10;
+}
 
-        panelContainer.appendChild(panelDiv);
+/* Creator Modal & Owner Security Panels */
+#creatorModal, #ownerAuthModal {
+ display: none;
+ position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+ background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
+ z-index: 3000;
+ align-items: center; justify-content: center;
+ padding: 1.5rem;
+}
+.creator-panel {
+ background: #fff; width: 100%; max-width: 750px;
+ max-height: 85vh; overflow-y: auto;
+ border-radius: var(--radius-lg); padding: 2rem;
+}
+.form-group { margin-bottom: 1rem; text-align: left; }
+.form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem; }
+.form-control {
+ width: 100%; padding: 0.6rem 0.9rem; border-radius: 8px;
+ border: 1px solid #ccc; font-family: inherit; font-size: 0.95rem;
+}
+.tab-btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.2rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem; }
+.tab-btn { padding: 0.4rem 0.8rem; font-weight: 600; border-radius: 6px; border: none; background: #f0f0f0; cursor: pointer; font-size: 0.85rem; }
+.tab-btn.active { background: var(--primary); color: #fff; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
 
-        bindBgmUIEvents();
-        syncBgmUIFromEngine();
+/* Toast Notification */
+#toast {
+ position: fixed; bottom: 25px; left: 50%;
+ transform: translateX(-50%) translateY(100px);
+ background: var(--text-main); color: #fff;
+ padding: 0.7rem 1.5rem; border-radius: 30px;
+ font-size: 0.9rem; font-weight: 500;
+ box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+ z-index: 9999; opacity: 0;
+ transition: all 0.4s var(--transition-smooth);
+}
+#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+
+/* Keyframes */
+@keyframes pulseGlow { 0% { box-shadow: 0 0 5px var(--gold-glow); } 100% { box-shadow: 0 0 20px var(--gold-glow); } }
+@keyframes giftFloat { 0% { transform: translateY(0); } 100% { transform: translateY(-12px); } }
+@keyframes giftOpen { 0% { transform: scale(1); } 50% { transform: scale(1.1) rotate(5deg); } 100% { transform: scale(0.9); opacity: 0.3; } }
+@keyframes popin { 0% { opacity: 0; transform: scale(0.8) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes paperUnfold { 0% { opacity: 0; transform: scaleY(0.3); } 100% { opacity: 1; transform: scaleY(1); } }
+
+/* Responsive */
+@media (max-width: 640px) {
+ .chapter-section { padding-top: 5rem; }
+ .countdown-grid { grid-template-columns: repeat(2, 1fr); }
+ #mainNav { bottom: 15px; top: auto; }
+ .envelope { height: 220px; }
+ .wax-seal { width: 55px; height: 55px; font-size: 1.4rem; }
+}
+
+/* ======================================================================
+   NEW APPENDED STYLES FOR FEATURE 1 (SAKURA TREE) & FEATURE 2 (BG MUSIC)
+   ====================================================================== */
+#sakuraCanvas {
+ position: absolute;
+ top: 0; left: 0;
+ width: 100%; height: 100%;
+ pointer-events: none;
+ border-radius: var(--radius-lg);
+ z-index: 3;
+}
+.music-player-bar {
+ display: flex;
+ align-items: center;
+ gap: 1rem;
+ background: rgba(255,255,255,0.85);
+ padding: 0.8rem 1.2rem;
+ border-radius: 30px;
+ border: 1px solid var(--card-border);
+ box-shadow: var(--glass-shadow);
+ margin-top: 1rem;
+}
+.youtube-embed-container {
+ position: relative;
+ width: 100%;
+ aspect-ratio: 16/9;
+ max-height: 200px;
+ border-radius: 12px;
+ overflow: hidden;
+ margin-top: 0.8rem;
+ display: none;
+}
+.youtube-embed-container iframe {
+ width: 100%;
+ height: 100%;
+ border: none;
+}
+</style>
+</head>
+<body>
+<!-- Background Canvas Overlays -->
+<canvas id="bgCanvas"></canvas>
+<canvas id="fxCanvas"></canvas>
+
+<!-- Navigation Bar -->
+<nav id="mainNav" aria-label="Main Navigation">
+<a class="nav-link active" onclick="scrollToSection('intro')">Intro</a>
+<a class="nav-link" onclick="scrollToSection('gift')">Gift</a>
+<a class="nav-link" onclick="scrollToSection('bouquet')">Bouquet</a>
+<a class="nav-link" onclick="scrollToSection('letter')">Letter</a>
+<a class="nav-link" onclick="scrollToSection('memories')">Memories</a>
+<a class="nav-link" onclick="scrollToSection('pinterest')">Pinterest</a>
+<a class="nav-link" onclick="scrollToSection('retrotv')">Retro TV</a>
+<a class="nav-link" onclick="scrollToSection('timeline')">Timeline</a>
+<a class="nav-link" onclick="scrollToSection('games')">Arcade</a>
+<a class="nav-link" onclick="scrollToSection('tree')">Wishes</a>
+<a class="nav-link" onclick="scrollToSection('secrets')">Vault</a>
+<a class="nav-link" onclick="scrollToSection('invitation')">Invite</a>
+<a class="nav-link" onclick="scrollToSection('proposal')">Proposal</a>
+</nav>
+
+<!-- Quick Floating Control Buttons -->
+<div id="quickControls">
+<button class="btn btn-secondary btn-icon" id="btnAudioToggle" title="Audio Options & Synth" onclick="cycleAudioPreset()"></button>
+<button class="btn btn-secondary btn-icon" title="Cycle Themes (21 Available)" onclick="cycleTheme()"></button>
+<button class="btn btn-secondary btn-icon" title="Customize Experience (Owner Only)" onclick="openCreatorModal()"></button>
+</div>
+
+<main>
+<!-- CHAPTER 1: CINEMATIC INTRO -->
+<section id="intro" class="chapter-section visible">
+<span class="intro-badge" id="cfgOccasion">SPECIAL CELEBRATION</span>
+<h1 class="intro-title" id="cfgIntroHeading">Happy Celebration, <br><span class="handwriting" style="color:var(--primary)" id="cfgRecipientName">Sophia</span>!</h1>
+<p class="intro-msg" id="cfgMainMessage">A dreamy personalized gift crafted with love, memory fragments, and joyful secrets just for you.</p>
+<button class="btn" onclick="startStoryExperience()">
+ Begin The Journey
+ <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+</button>
+</section>
+
+<!-- CHAPTER 2: INTERACTIVE GIFT BOX -->
+<section id="gift" class="chapter-section">
+<h2 class="section-title">A Special Surprise</h2>
+<p class="section-subtitle">Tap the golden ribbon to untie the present</p>
+<div class="gift-container" onclick="openGiftBox()">
+ <div class="gift-box" id="giftBox">
+  <div class="gift-face"></div>
+  <div class="gift-ribbon-v"></div>
+  <div class="gift-ribbon-h"></div>
+  <div class="gift-bow"></div>
+ </div>
+</div>
+<div class="glass-card gift-reveal-card" id="giftRevealCard">
+ <h3 class="handwriting" style="font-size:2.2rem; color:var(--primary);" id="cfgGiftTitle">You Unlocked The Surprise Gift!</h3>
+ <p style="margin:1rem 0;" id="cfgGiftText">May your day be filled with warm smiles, sweet moments, and unlimited happiness.</p>
+ <button class="btn" onclick="scrollToSection('bouquet')">Explore Next Surprise</button>
+</div>
+</section>
+
+<!-- CHAPTER 3: INTERACTIVE REALISTIC BOUQUET -->
+<section id="bouquet" class="chapter-section">
+<h2 class="section-title">Interactive Floral Bouquet</h2>
+<p class="section-subtitle">Click on each distinctive blossom to reveal sweet hidden messages</p>
+<div class="bouquet-wrapper" id="flowerContainer">
+<!-- SVG flowers dynamically injected here -->
+</div>
+</section>
+
+<!-- CHAPTER 4: ENVELOPE & LOVE LETTER -->
+<section id="letter" class="chapter-section">
+<h2 class="section-title">A Heartfelt Note</h2>
+<p class="section-subtitle">Break the wax seal to read the letter</p>
+<div class="letter-stage">
+ <div class="envelope" id="envelope" onclick="openLetter()">
+  <div class="wax-seal" id="waxSeal"> </div>
+ </div>
+ <div class="letter-paper" id="letterPaper">
+  <div id="letterContent"></div>
+  <div class="letter-controls">
+   <button class="btn btn-secondary" onclick="prevLetterPage()" id="btnPrevPage">Previous</button>
+   <button class="btn btn-secondary" onclick="speakLetterPage()">Read Aloud</button>
+   <span id="pageIndicator">Page 1/1</span>
+   <button class="btn btn-secondary" onclick="nextLetterPage()" id="btnNextPage">Next</button>
+  </div>
+  <p style="text-align:right; margin-top:1.5rem;" class="handwriting" id="cfgSenderSign">With all my love, Julian</p>
+ </div>
+</div>
+</section>
+
+<!-- CHAPTER 5: MEMORIES & FLOATING PHOTO WALL -->
+<section id="memories" class="chapter-section">
+<h2 class="section-title">Treasured Memories</h2>
+<p class="section-subtitle">Snapshots of our favorite chapters</p>
+<div class="memory-carousel">
+ <div class="polaroid-card">
+  <img src="" id="memoryImg" class="polaroid-img" alt="Memory photo" />
+  <p class="polaroid-caption" id="memoryCaption">Our first spontaneous trip</p>
+ </div>
+ <div style="display: flex; justify-content:center; gap: 1rem; margin-top:1rem;">
+  <button class="btn btn-secondary btn-icon" onclick="changeMemory(-1)">&lt;</button>
+  <button class="btn btn-secondary btn-icon" onclick="changeMemory(1)">&gt;</button>
+ </div>
+</div>
+<h3 style="margin-top:3rem; font-size: 1.4rem;">Interactive Photo Wall</h3>
+<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1rem;">Drag Polaroid photos anywhere on the wall!</p>
+<div class="photo-wall" id="photoWall">
+<!-- Floating draggable photos injected via JS -->
+</div>
+</section>
+
+<!-- CHAPTER: PINTEREST AESTHETIC COLLAGE -->
+<section id="pinterest" class="chapter-section">
+<h2 class="section-title">Pinterest Gallery</h2>
+<p class="section-subtitle">Aesthetic memory collage board</p>
+<div class="pinterest-grid" id="pinterestGrid">
+<!-- Injected via JS -->
+</div>
+</section>
+
+<!-- RETRO TV BIG SCREEN (v2.0.1) -->
+<section id="retrotv" class="chapter-section">
+<h2 class="section-title">Retro TV Experience</h2>
+<p class="section-subtitle">Watch warm video memories & big screen photos</p>
+<div class="retro-tv-wrapper">
+ <div class="tv-screen-frame" id="tvScreenFrame">
+  <div class="tv-scanlines"></div>
+ </div>
+ <div class="tv-controls">
+  <button class="btn btn-secondary" onclick="prevTvMedia()">Prev Channel</button>
+  <div style="display: flex; gap: 12px; align-items:center;">
+   <div class="tv-knob" onclick="cycleTvChannel()" title="Switch Channel"></div>
+   <span id="tvChannelLabel" style="color:#d4af37; font-weight:bold; font-family:monospace;">CH 01</span>
+  </div>
+  <button class="btn btn-secondary" onclick="nextTvMedia()">Next Channel</button>
+ </div>
+</div>
+</section>
+
+<!-- CHAPTER 6: TIMELINE & COUNTDOWN -->
+<section id="timeline" class="chapter-section">
+<h2 class="section-title">Milestones & Countdown</h2>
+<p class="section-subtitle">Counting down to our next big celebration</p>
+<div class="countdown-grid">
+ <div class="count-box"><div class="count-num" id="cdDays">00</div><div class="count-label">Days</div></div>
+ <div class="count-box"><div class="count-num" id="cdHours">00</div><div class="count-label">Hours</div></div>
+ <div class="count-box"><div class="count-num" id="cdMins">00</div><div class="count-label">Mins</div></div>
+ <div class="count-box"><div class="count-num" id="cdSecs">00</div><div class="count-label">Secs</div></div>
+</div>
+<div class="timeline-container" id="timelineList" style="margin-top:3rem;">
+<!-- Timeline items injected via JS -->
+</div>
+</section>
+
+<!-- CHAPTER 7: ARCADE GAMES HUB (10 GAMES) -->
+<section id="games" class="chapter-section">
+<h2 class="section-title">Celebration Arcade</h2>
+<p class="section-subtitle">Play interactive mini-games to unlock secret rewards</p>
+<div class="games-grid">
+ <div class="game-card" onclick="openGame('scratch')">
+  <div class="game-icon">🎟️</div>
+  <h3>Scratch Card</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted);">Scratch overlay to reveal secret note</p>
+ </div>
+ <div class="game-card" onclick="openGame('match')">
+  <div class="game-icon">🃏</div>
+  <h3>Memory Match</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted);">Match pairs of celebratory icons</p>
+ </div>
+ <div class="game-card" onclick="openGame('wheel')">
+  <div class="game-icon">🎡</div>
+  <h3>Lucky Wheel</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted);">Spin for sweet compliments</p>
+ </div>
+ <div class="game-card" onclick="openGame('quiz')">
+  <div class="game-icon">❓</div>
+  <h3>Love Quiz</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted);">Test how well you know our story</p>
+ </div>
+ <div class="game-card" onclick="openGame('balloon')">
+  <div class="game-icon">🎈</div>
+  <h3>Balloon Pop</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted);">Pop floating balloons for points</p>
+ </div>
+ <div class="game-card" onclick="openGame('hearts')">
+  <div class="game-icon">💖</div>
+  <h3>Catch My Heart</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted);">Catch falling hearts in time</p>
+ </div>
+ <div class="game-card" onclick="openGame('puzzle')">
+  <div class="game-icon">🧩</div>
+  <h3>Photo Puzzle</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted);">Arrange sliding puzzle tiles</p>
+ </div>
+ <div class="game-card" onclick="openGame('magic')">
+  <div class="game-icon">✨</div>
+  <h3>Magic Reveal</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted);">Wave cursor to reveal magical surface</p>
+ </div>
+ <div class="game-card" onclick="openGame('target')">
+  <div class="game-icon">🎯</div>
+  <h3>Target Game</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted);">Tap moving targets to score</p>
+ </div>
+ <div class="game-card" onclick="openGame('hunt')">
+  <div class="game-icon">🗝️</div>
+  <h3>Treasure Hunt</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted);">Solve clues to find the treasure</p>
+ </div>
+</div>
+</section>
+
+<!-- CHAPTER 8: WISH TREE, GUESTBOOK & TIME CAPSULE -->
+<section id="tree" class="chapter-section">
+<h2 class="section-title">Wishes & Time Capsule</h2>
+<p class="section-subtitle">Leave a wish or seal a message for the future</p>
+<div class="tree-canvas-wrap">
+ <canvas id="treeCanvas"></canvas>
+ <!-- FEATURE 1: PREMIUM ANIMATED SAKURA WISH TREE LAYER -->
+ <canvas id="sakuraCanvas"></canvas>
+</div>
+<div style="display: flex; gap: 1.5rem; flex-wrap:wrap; justify-content:center; width:100%; max-width: 900px; margin-top:2rem;">
+ <div class="glass-card" style="flex: 1; min-width:300px;">
+  <h3>Digital Guestbook</h3>
+  <div style="display: flex; flex-direction:column; gap:0.5rem; margin-top:0.8rem;">
+   <input type="text" id="gbName" placeholder="Your Name" class="form-control" />
+   <input type="text" id="gbMsg" placeholder="Leave a sweet wish..." class="form-control" />
+   <button class="btn" onclick="addGuestbookEntry()">Post Wish</button>
+  </div>
+  <div class="guestbook-list" id="guestbookList"></div>
+ </div>
+ <div class="glass-card" style="flex: 1; min-width:300px;">
+  <h3>Future Time Capsule</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;">Seal a message to unlock on a future date.</p>
+  <div style="display: flex; flex-direction:column; gap:0.5rem;">
+   <input type="date" id="tcDate" class="form-control" />
+   <textarea id="tcMsg" placeholder="Your future message..." class="form-control" rows="3"></textarea>
+   <button class="btn btn-secondary" onclick="saveTimeCapsule()">Seal Time Capsule</button>
+  </div>
+  <div id="tcStatus" style="font-size:0.85rem; margin-top:0.8rem; color:var(--primary);"></div>
+ </div>
+</div>
+</section>
+
+<!-- CHAPTER 9: SECRETS & TREASURE HUNT -->
+<section id="secrets" class="chapter-section">
+<h2 class="section-title">Secret Vault</h2>
+<p class="section-subtitle">Enter the secret 4-digit PIN code to unlock hidden content</p>
+<div class="glass-card vault-box">
+ <div style="font-size:3rem; margin-bottom:0.5rem;">🔒</div>
+ <input type="password" maxlength="4" class="pin-input" id="vaultPin" placeholder="...." />
+ <br>
+ <button class="btn" onclick="unlockVault()">Unlock Vault</button>
+ <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem;" id="vaultHint">Hint: The year we first met or anniversary year (e.g. 2024)</p>
+</div>
+</section>
+
+<!-- CHAPTER 10: INVITATION & RSVP -->
+<section id="invitation" class="chapter-section">
+<h2 class="section-title">Save The Date</h2>
+<p class="section-subtitle">You are cordially invited to celebrate together</p>
+<div class="invite-card">
+ <span style="letter-spacing:2px; font-size:0.8rem; color:var(--primary); font-weight:700;">OFFICIAL INVITATION</span>
+ <h3 style="font-size:2.2rem; margin:0.5rem 0;" id="cfgEventTitle">Special Celebration Dinner</h3>
+ <p style="color:var(--text-muted); margin-bottom: 1.5rem;" id="cfgEventDesc">Join us for an intimate evening of food, laughter, and memories.</p>
+ <div style="text-align:left; max-width:300px; margin:0 auto 1.5rem auto; font-size:0.95rem; line-height: 1.8;">
+  <div><strong>Date:</strong> <span id="cfgEventDate">October 14, 2026</span></div>
+  <div><strong>Time:</strong> <span id="cfgEventTime">7:00 PM EST</span></div>
+  <div><strong>Venue:</strong> <span id="cfgVenue">The Starlight Rooftop Garden</span></div>
+ </div>
+ <div style="display: flex; justify-content:center; gap:0.5rem; flex-wrap:wrap;">
+  <button class="btn" onclick="submitRSVP('Yes')">RSVP: Attending</button>
+  <button class="btn btn-secondary" onclick="submitRSVP('Maybe')">Maybe</button>
+  <button class="btn btn-secondary" onclick="downloadICS()">Add To Calendar</button>
+ </div>
+ <p id="rsvpStatus" style="font-size:0.85rem; margin-top: 1rem; color:var(--primary); font-weight:600;"></p>
+</div>
+</section>
+
+<!-- CHAPTER 11: PLAYFUL PROPOSAL QUESTION & FINALE -->
+<section id="proposal" class="chapter-section">
+<div class="proposal-wrap">
+ <span style="font-size:3rem; margin-bottom: 1rem;">💍</span>
+ <h2 class="proposal-title" id="cfgProposalQuestion">Will you go out with me?</h2>
+ <div style="margin-bottom:1rem; font-size:0.85rem; color:var(--text-muted);">
+  <label><input type="checkbox" id="chkAccMode" onchange="toggleAccessibilityMode(this.checked)" /> Accessibility Mode (Disable escaping NO button)</label>
+ </div>
+ <div class="proposal-btn-group">
+  <button class="btn" id="btnYes" style="padding: 1rem 2.5rem; font-size:1.2rem;" onclick="triggerYesCelebration()">YES! Forever</button>
+  <button class="btn btn-secondary" id="btnNo" onmouseenter="escapeNoButton()" onclick="escapeNoButton()">No</button>
+ </div>
+ <div id="proposalResultCard" style="display:none; margin-top:1.5rem; padding:1.5rem 2rem; background:var(--card-bg); border-radius:var(--radius-lg); border:2px solid var(--primary); box-shadow:var(--glass-shadow); animation:popin 0.5s ease;">
+  <h3 style="font-size:2.2rem; color:var(--primary);">SHE SAID YES!</h3>
+  <p style="margin-top:0.5rem; font-weight:600;">The absolute best decision ever made!</p>
+ </div>
+</div>
+</section>
+</main>
+
+<!-- Game Modal Wrapper -->
+<div class="game-modal" id="gameModal">
+<div class="game-modal-content">
+ <button class="close-modal" onclick="closeGameModal()">×</button>
+ <div id="gameContainer"></div>
+</div>
+</div>
+
+<!-- OWNER SECURITY AUTH MODAL -->
+<div id="ownerAuthModal">
+<div class="creator-panel" style="max-width:400px; text-align:center;">
+ <h3>🔐 Owner Authentication</h3>
+ <p style="font-size:0.85rem; color:var(--text-muted); margin: 0.8rem 0;">Enter Owner Security Passcode to edit site content. Recipients cannot edit site settings.</p>
+ <input type="password" id="ownerPasscodePrompt" class="form-control" placeholder="Enter Owner Passcode" style="text-align:center; font-size:1.2rem; margin-bottom:1rem;" />
+ <div style="display: flex; gap:0.5rem; justify-content:center;">
+  <button class="btn" onclick="verifyOwnerAccess()">Unlock Settings</button>
+  <button class="btn btn-secondary" onclick="closeOwnerAuthModal()">Cancel</button>
+ </div>
+</div>
+</div>
+
+<!-- FULL CREATOR/CONFIG MODAL EDITOR (OWNER ONLY) -->
+<div id="creatorModal">
+<div class="creator-panel">
+ <div style="display: flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+  <h2>🛠️ Owner Control Center</h2>
+  <button class="close-modal" onclick="closeCreatorModal()">×</button>
+ </div>
+ <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Edit texts, media, and settings below. Changes take effect instantly.</p>
+ <div class="tab-btn-group">
+  <button class="tab-btn active" onclick="switchCreatorTab('tabGeneral')">General</button>
+  <button class="tab-btn" onclick="switchCreatorTab('tabSurprises')">Letter & Gift</button>
+  <button class="tab-btn" onclick="switchCreatorTab('tabBouquet')">Bouquet & Photos</button>
+  <button class="tab-btn" onclick="switchCreatorTab('tabMedia')">Media (Pinterest & TV)</button>
+  <button class="tab-btn" onclick="switchCreatorTab('tabTimeline')">Timeline & RSVP</button>
+  <button class="tab-btn" onclick="switchCreatorTab('tabSecrets')">Vault & Quiz</button>
+  <button class="tab-btn" onclick="switchCreatorTab('tabMusic')">Background Music</button>
+  <button class="tab-btn" onclick="switchCreatorTab('tabSecurity')">Owner Passcode</button>
+ </div>
+
+ <!-- TAB 1: General & Intro -->
+ <div id="tabGeneral" class="tab-content active">
+  <div class="form-group"><label>Recipient Name</label><input type="text" id="edtRecipient" class="form-control" /></div>
+  <div class="form-group"><label>Sender Name</label><input type="text" id="edtSender" class="form-control" /></div>
+  <div class="form-group"><label>Occasion Tag</label><input type="text" id="edtOccasion" class="form-control" /></div>
+  <div class="form-group"><label>Intro Heading Text</label><input type="text" id="edtIntroHeading" class="form-control" /></div>
+  <div class="form-group"><label>Main Intro Message</label><textarea id="edtMainMessage" class="form-control" rows="2"></textarea></div>
+ </div>
+
+ <!-- TAB 2: Surprises & Letter -->
+ <div id="tabSurprises" class="tab-content">
+  <div class="form-group"><label>Gift Box Title</label><input type="text" id="edtGiftTitle" class="form-control" /></div>
+  <div class="form-group"><label>Gift Box Text</label><textarea id="edtGiftText" class="form-control" rows="2"></textarea></div>
+  <div class="form-group"><label>Love Letter Pages (JSON Array)</label><textarea id="edtLetterPages" class="form-control" rows="4"></textarea></div>
+ </div>
+
+ <!-- TAB 3: Bouquet & Memories Wall -->
+ <div id="tabBouquet" class="tab-content">
+  <div class="form-group"><label>Flower Pop-up Messages (JSON Array: [{type, name, msg}])</label><textarea id="edtFlowers" class="form-control" rows="4"></textarea></div>
+  <div class="form-group"><label>Memories Carousel (JSON Array: [{img, caption}])</label><textarea id="edtMemories" class="form-control" rows="4"></textarea></div>
+ </div>
+
+ <!-- TAB 4: Pinterest & Retro TV Media Manager -->
+ <div id="tabMedia" class="tab-content">
+  <h3 style="margin-bottom:0.5rem; font-size:1.1rem;">Pinterest Collage Photos</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;">Add photos via URL Link or upload directly from your Device.</p>
+  <div style="display: flex; gap:0.5rem; margin-bottom:0.5rem;">
+   <input type="text" id="pinPhotoUrl" placeholder="Image URL (e.g. https://...)" class="form-control" />
+   <input type="text" id="pinPhotoCaption" placeholder="Caption" class="form-control" />
+   <button class="btn" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="addPinterestPhotoFromLink()">Add Link</button>
+  </div>
+  <div style="margin-bottom:1rem;">
+   <label style="font-size:0.8em; font-weight:600; display:block; margin-bottom:0.3rem;">Or Upload Photo from Device:</label>
+   <input type="file" id="filePinterestPhoto" accept="image/*" class="form-control" onchange="uploadPinterestPhoto(event)" />
+  </div>
+  <div id="pinterestManagerList" style="max-height: 140px; overflow-y:auto; border:1px solid #ddd; padding:0.5rem; border-radius:8px; margin-bottom:1.5rem; background:#fafafa;"></div>
+  
+  <h3 style="margin-bottom:0.5rem; font-size:1.1rem;">Retro TV Media</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;">Add media items (videos/images) via URL Link.</p>
+  <div style="display: flex; gap:0.5rem; margin-bottom:0.5rem;">
+   <input type="text" id="retroVideoUrl" placeholder="Media URL (e.g. https://...)" class="form-control" />
+   <input type="text" id="retroVideoTitleInput" placeholder="Media Title" class="form-control" />
+   <button class="btn" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="addRetroVideoFromLink()">Add Link</button>
+  </div>
+ </div>
+
+ <!-- TAB 5: Timeline & RSVP -->
+ <div id="tabTimeline" class="tab-content">
+  <div class="form-group"><label>Target Countdown ISO Date (e.g. 2026-10-14T19:00:00)</label><input type="text" id="edtCountdown" class="form-control" /></div>
+  <div class="form-group"><label>Timeline Items (JSON Array: [{date, title, desc}])</label><textarea id="edtTimeline" class="form-control" rows="4"></textarea></div>
+  <div class="form-group"><label>RSVP Event Title</label><input type="text" id="edtEventTitle" class="form-control" /></div>
+  <div class="form-group"><label>RSVP Event Date</label><input type="text" id="edtEventDate" class="form-control" /></div>
+  <div class="form-group"><label>RSVP Event Time</label><input type="text" id="edtEventTime" class="form-control" /></div>
+  <div class="form-group"><label>RSVP Venue</label><input type="text" id="edtVenue" class="form-control" /></div>
+ </div>
+
+ <!-- TAB 6: Vault & Quiz -->
+ <div id="tabSecrets" class="tab-content">
+  <div class="form-group"><label>Secret Vault 4-Digit PIN</label><input type="text" id="edtPin" maxlength="4" class="form-control" /></div>
+  <div class="form-group"><label>Secret Vault Unlocked Message</label><input type="text" id="edtSecretMsg" class="form-control" /></div>
+  <div class="form-group"><label>Love Quiz Question</label><input type="text" id="edtQuizQuestion" class="form-control" /></div>
+  <div class="form-group"><label>Quiz Correct Option Text</label><input type="text" id="edtQuizCorrect" class="form-control" /></div>
+  <div class="form-group"><label>Quiz Wrong Option Text</label><input type="text" id="edtQuizWrong" class="form-control" /></div>
+  <div class="form-group">
+   <label>Proposal Question (Locked)</label>
+   <input type="text" value="Will you go out with me?" disabled class="form-control" style="background:#eee; cursor:not-allowed;" />
+  </div>
+  <div class="form-group">
+   <label>Celebration Finale Effect</label>
+   <select id="edtFinale" class="form-control">
+    <option value="confetti">Confetti Explosion</option>
+    <option value="fireworks">Fireworks Display</option>
+    <option value="flowerStorm">Flower Petal Storm</option>
+    <option value="starfield">Starfield Burst</option>
+   </select>
+  </div>
+ </div>
+
+ <!-- NEW TAB: BACKGROUND MUSIC (FEATURE 2) -->
+ <div id="tabMusic" class="tab-content">
+  <h3 style="margin-bottom:0.5rem; font-size:1.1rem;">Background Music Settings</h3>
+  <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;">Configure audio playback sources, volume, and looping preferences.</p>
+  <div class="form-group">
+   <label>Music Source Type</label>
+   <select id="edtMusicSourceType" class="form-control" onchange="toggleMusicSourceInputs(this.value)">
+    <option value="none">None (Disabled)</option>
+    <option value="uploadAudio">Upload Audio File (MP3, WAV, OGG, AAC, M4A, FLAC)</option>
+    <option value="uploadVideo">Upload Video File (MP4, MOV, MKV, AVI, WebM - audio track only)</option>
+    <option value="audioUrl">Direct Audio URL</option>
+    <option value="videoUrl">Direct Video URL</option>
+    <option value="youtubeUrl">YouTube URL / Embed</option>
+   </select>
+  </div>
+  <div class="form-group" id="groupMusicUpload" style="display:none;">
+   <label id="lblMusicUpload">Upload Media File</label>
+   <input type="file" id="fileMusicUpload" class="form-control" accept="audio/*,video/*" onchange="handleMusicFileUpload(event)" />
+  </div>
+  <div class="form-group" id="groupMusicUrl" style="display:none;">
+   <label id="lblMusicUrl">Media / YouTube URL</label>
+   <input type="text" id="edtMusicUrlInput" class="form-control" placeholder="https://..." />
+  </div>
+  <div class="form-group">
+   <label>Volume (<span id="volValDisplay">80</span>%)</label>
+   <input type="range" id="edtMusicVol" min="0" max="100" value="80" class="form-control" oninput="document.getElementById('volValDisplay').innerText=this.value" />
+  </div>
+  <div style="display:flex; gap:1.5rem; margin-bottom:1rem;">
+   <label><input type="checkbox" id="edtMusicLoop" checked /> Loop Track</label>
+   <label><input type="checkbox" id="edtMusicAutoplay" checked /> Autoplay (where permitted)</label>
+   <label><input type="checkbox" id="edtMusicEnabled" checked /> Enable Music</label>
+  </div>
+  <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;">
+   <button class="btn" onclick="previewBackgroundMusic()">▶ Preview / Play</button>
+   <button class="btn btn-secondary" onclick="pauseBackgroundMusic()">⏸ Pause</button>
+   <button class="btn btn-secondary" onclick="stopBackgroundMusic()">⏹ Stop</button>
+   <button class="btn btn-secondary" onclick="resetMusicSettings()">Reset Music</button>
+  </div>
+  <div id="musicStatusInfo" style="font-size:0.85rem; color:var(--primary); font-weight:600;">Status: Idle</div>
+  <div class="youtube-embed-container" id="youtubeEmbedContainer"></div>
+ </div>
+
+ <!-- TAB 7: Security -->
+ <div id="tabSecurity" class="tab-content">
+  <div class="form-group"><label>Owner Security Passcode (Restricts settings access to Owner only)</label><input type="text" id="edtOwnerPasscode" class="form-control" placeholder="1234" /></div>
+ </div>
+
+ <div style="display: flex; gap: 1rem; margin-top:1.5rem;">
+  <button class="btn" onclick="saveCreatorConfig()">Save Configuration</button>
+  <button class="btn btn-secondary" onclick="resetCreatorConfig()">Reset Defaults</button>
+ </div>
+</div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast">Notification</div>
+
+<!-- JAVASCRIPT APPLICATION CORE -->
+<script>
+/* ======================================================================
+   1. EDITABLE CONFIGURATION OBJECT
+   ====================================================================== */
+window.CELEBRATION_CONFIG = {
+ ownerPasscode: "1234",
+ recipientName: "Sophia",
+ senderName: "Julian",
+ occasion: "OUR SPECIAL DAY",
+ introHeading: "Happy Celebration, Sophia!",
+ mainMessage: "A dreamy personalized gift crafted with love, memory fragments, and joyful secrets just for you.",
+ giftTitle: "You Unlocked The Surprise Gift!",
+ giftText: "May your day be filled with warm laughter, sweet moments, and endless magic.",
+ proposalQuestion: "Will you go out with me?",
+ vaultPin: "2024",
+ vaultSecretMsg: "You are my favorite thought every single day. I love you!",
+ eventTitle: "Special Anniversary Dinner",
+ eventDesc: "An intimate evening of delicious food, candles, and creating unforgettable memories.",
+ eventDate: "October 14, 2026",
+ eventTime: "7:00 PM EST",
+ venue: "The Starlight Rooftop Garden",
+ countdownTarget: "2026-10-14T19:00:00",
+ theme: "dreamy-pink",
+ selectedFinale: "confetti",
+ quizQuestion: "What is our favorite shared activity?",
+ quizCorrect: "Stargazing & long chats",
+ quizWrong: "Sitting in traffic",
+ letterPages: [
+  "My Dearest Sophia, \n\nFrom the moment you entered my life, every ordinary day has felt like a scene from a magical movie. Your laughter brightens even the cloudiest afternoons.",
+  "Thank you for every shared smile, late-night conversation, and quiet moment of understanding. Building memories with you is my absolute favorite pastime.",
+  "As we celebrate this special occasion, I want you to remember how deeply loved and appreciated you are. Here is to all our adventures yet to come!"
+ ],
+ flowers: [
+  { type: "rose", name: "Red Rose", msg: "You bring passion & endless joy to my life" },
+  { type: "tulip", name: "Pink Tulip", msg: "A sweet reminder of how caring & gentle you are" },
+  { type: "lily", name: "White Lily", msg: "Pure happiness whenever you are near" },
+  { type: "orchid", name: "Royal Orchid", msg: "Unique, elegant, and beautiful inside out" },
+  { type: "daisy", name: "Sunny Daisy", msg: "You bring bright warmth to my everyday world" },
+  { type: "cherry", name: "Cherry Blossom", msg: "Every moment with you blooms sweetly" },
+  { type: "sunflower", name: "Golden Sunflower", msg: "You light up any room with your radiant smile" },
+  { type: "lotus", name: "Mystic Lotus", msg: "Peaceful, graceful, and deeply cherished" }
+ ],
+ memories: [
+  { img: "https://picsum.photos/id/1018/600/400", caption: "Our serene walk by the mountain lake" },
+  { img: "https://picsum.photos/id/1025/600/400", caption: "Cozy coffee mornings together" },
+  { img: "https://picsum.photos/id/1062/600/400", caption: "Stargazing on warm summer nights" }
+ ],
+ pinterestPhotos: [
+  { img: "https://picsum.photos/id/1015/600/800", caption: "Aesthetic sunset vibes" },
+  { img: "https://picsum.photos/id/1025/600/600", caption: "Cozy moments" },
+  { img: "https://picsum.photos/id/1039/600/900", caption: "Unforgettable trip" },
+  { img: "https://picsum.photos/id/1043/600/700", caption: "Dreamy polaroids" },
+  { img: "https://picsum.photos/id/1069/600/800", caption: "Golden hour glow" }
+ ],
+ retroTvMedia: [
+  { type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Channel 01 - Cozy Video Reel" },
+  { type: "image", src: "https://picsum.photos/id/1018/800/450", title: "Channel 02 - Mountain Lake View" },
+  { type: "image", src: "https://picsum.photos/id/1062/800/450", title: "Channel 03 - Night Sky Stargazing" }
+ ],
+ timeline: [
+  { date: "June 12, 2023", title: "First Met", desc: "A chance meeting that changed everything." },
+  { date: "October 14, 2023", title: "First Official Date", desc: "Coffee turned into a 4-hour walk." },
+  { date: "August 10, 2024", title: "Roadtrip Adventure", desc: "Exploring coastlines and playing endless playlists." }
+ ]
+};
+
+/* ======================================================================
+   2. STATE & WEB AUDIO SYNTHESIZER
+   ====================================================================== */
+let currentLetterPage = 0;
+let currentMemoryIdx = 0;
+let currentTvIdx = 0;
+let audioCtx = null;
+let audioPresetIdx = 0;
+let accMode = false;
+let synthInterval = null;
+let isOwnerAuthenticated = false;
+
+const localCfg = localStorage.getItem('celebration_cfg');
+if (localCfg) {
+ try { Object.assign(window.CELEBRATION_CONFIG, JSON.parse(localCfg)); } catch (e) {}
+}
+
+function initAudio() {
+ if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+function playSoftTone(freq = 440, duration = 0.4, type = 'sine') {
+ if (audioPresetIdx === 0 || !audioCtx) return;
+ try {
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = type;
+  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + duration);
+ } catch (e) {}
+}
+
+function showToast(msg) {
+ const toast = document.getElementById('toast');
+ toast.innerText = msg;
+ toast.classList.add('show');
+ setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+function cycleAudioPreset() {
+ initAudio();
+ audioPresetIdx = (audioPresetIdx + 1) % 4;
+ const presets = ["Muted", "Ambient Synth", "Romantic Chimes", "Lofi Waves"];
+ showToast(`Audio Preset: ${presets[audioPresetIdx]}`);
+ const btn = document.getElementById('btnAudioToggle');
+ if (audioPresetIdx > 0) {
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  btn.style.background = 'var(--primary)';
+  btn.style.color = '#fff';
+  startBackgroundMusicSynth();
+ } else {
+  btn.style.background = '';
+  btn.style.color = '';
+  if (synthInterval) clearInterval(synthInterval);
+ }
+}
+
+function startBackgroundMusicSynth() {
+ if (synthInterval) clearInterval(synthInterval);
+ let step = 0;
+ const synthChords = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23];
+ const chimeNotes = [523.25, 659.25, 783.99, 1046.50, 880.00];
+ synthInterval = setInterval(() => {
+  if (audioPresetIdx === 1) {
+   playSoftTone(synthChords[step % synthChords.length], 1.2, 'sine');
+  } else if (audioPresetIdx === 2) {
+   playSoftTone(chimeNotes[step % chimeNotes.length], 0.8, 'triangle');
+  } else if (audioPresetIdx === 3) {
+   playSoftTone(synthChords[step % synthChords.length] / 2, 0.6, 'sine');
+  }
+  step++;
+ }, 1200);
+}
+
+/* ======================================================================
+   3. 21 CSS THEMES MANAGER
+   ====================================================================== */
+const themesList = [
+ 'dreamy-pink', 'lavender-moon', 'cloudy-blue', 'peach-sunset', 'sakura-dream', 'soft-garden',
+ 'cream-champagne', 'midnight-romance', 'cozy-coffee', 'fairy-garden', 'vintage-love-letter',
+ 'celestial-dream', 'soft-wedding', 'dreamy-birthday', 'luxury-gold', 'galaxy', 'aurora', 'ocean', 'forest',
+ 'scrapbook', 'polaroid'
+];
+let themeIdx = 0;
+function cycleTheme() {
+ themeIdx = (themeIdx + 1) % themesList.length;
+ const t = themesList[themeIdx];
+ document.documentElement.setAttribute('data-theme', t);
+ showToast(`Theme (${themeIdx + 1}/21): ${t.replace(/-/g,' ').toUpperCase()}`);
+ playSoftTone(523.25, 0.2);
+}
+
+/* ======================================================================
+   4. UI NAVIGATION & STORY SCROLLING
+   ====================================================================== */
+function scrollToSection(id) {
+ const el = document.getElementById(id);
+ if (el) {
+  el.scrollIntoView({ behavior: 'smooth' });
+  playSoftTone(440, 0.2);
+ }
+}
+
+function startStoryExperience() {
+ if (audioPresetIdx === 0) cycleAudioPreset();
+ scrollToSection('gift');
+}
+
+const sections = document.querySelectorAll('.chapter-section');
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+ let current = '';
+ sections.forEach(section => {
+  const sectionTop = section.offsetTop;
+  const sectionHeight = section.clientHeight;
+  if (window.pageYOffset >= (sectionTop - sectionHeight / 3)) {
+   section.classList.add('visible');
+   current = section.getAttribute('id');
+  }
+ });
+ navLinks.forEach(link => {
+  link.classList.remove('active');
+  if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(current)) {
+   link.classList.add('active');
+  }
+ });
+});
+
+/* ======================================================================
+   5. INTERACTIVE GIFT BOX LOGIC
+   ====================================================================== */
+function openGiftBox() {
+ const box = document.getElementById('giftBox');
+ const reveal = document.getElementById('giftRevealCard');
+ if (!box.classList.contains('opened')) {
+  box.classList.add('opened');
+  playSoftTone(587.33, 0.6, 'triangle');
+  triggerConfettiBurst(80);
+  setTimeout(() => {
+   reveal.style.display = 'block';
+   reveal.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 700);
+ }
+}
+
+/* ======================================================================
+   6. REALISTIC SVG FLOWERS GENERATOR
+   ====================================================================== */
+function getFlowerSVG(type) {
+ switch (type) {
+  case 'rose':
+   return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M50 20 C30 20 20 40 35 60 C50 80 80 50 65 30 Z" fill="#e63946"/><path d="M50 25 C40 25 35 45 45 55 C55 65 70 45 60 30 Z" fill="#ff4d6d"/><path d="M50 30 C45 35 45 45 50 50 C55 45 55 35 50 30 Z" fill="#ff758f"/></svg>`;
+  case 'tulip':
+   return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M30 70 C20 40 30 20 50 30 C70 20 80 40 70 70 C50 85 50 85 30 70 Z" fill="#ff758f"/><path d="M40 70 C35 45 45 30 50 40 C55 30 65 45 60 70 Z" fill="#ff4d6d"/></svg>`;
+  case 'lily':
+   return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M50 15 L60 45 L90 50 L60 55 L50 85 L40 55 L10 50 L40 45 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/><circle cx="50" cy="50" r="8" fill="#facc15"/></svg>`;
+  case 'orchid':
+   return `<svg viewBox="0 0 100 100" width="100%" height="100%"><ellipse cx="50" cy="30" rx="18" ry="25" fill="#c084fc"/><ellipse cx="30" cy="60" rx="22" ry="16" fill="#e879f9"/><ellipse cx="70" cy="60" rx="22" ry="16" fill="#e879f9"/><circle cx="50" cy="50" r="10" fill="#facc15"/></svg>`;
+  case 'daisy':
+   return `<svg viewBox="0 0 100 100" width="100%" height="100%">${[0,45,90,135,180,225,270,315].map(a => `<ellipse cx="50" cy="25" rx="7" ry="20" fill="#ffffff" transform="rotate(${a} 50 50)"/>`).join('')}<circle cx="50" cy="50" r="14" fill="#f59e0b"/></svg>`;
+  case 'cherry':
+   return `<svg viewBox="0 0 100 100" width="100%" height="100%">${[0,72,144,216,288].map(a => `<path d="M50 50 C40 20 60 20 50 50" fill="#f472b6" transform="rotate(${a} 50 50)"/>`).join('')}<circle cx="50" cy="50" r="8" fill="#fef08a"/></svg>`;
+  case 'sunflower':
+   return `<svg viewBox="0 0 100 100" width="100%" height="100%">${[0,30,60,90,120,150,180,210,240,270,300,330].map(a => `<ellipse cx="50" cy="20" rx="6" ry="22" fill="#fbbf24" transform="rotate(${a} 50 50)"/>`).join('')}<circle cx="50" cy="50" r="18" fill="#78350f"/></svg>`;
+  case 'lotus':
+  default:
+   return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M50 20 C30 50 70 50 50 20 Z" fill="#f472b6"/><path d="M30 40 C10 65 60 65 30 40 Z" fill="#f472b6"/><path d="M70 40 C90 65 40 65 70 40 Z" fill="#f472b6"/><circle cx="50" cy="55" r="10" fill="#facc15"/></svg>`;
+ }
+}
+
+function initBouquet() {
+ const container = document.getElementById('flowerContainer');
+ container.innerHTML = '';
+ window.CELEBRATION_CONFIG.flowers.forEach((flw, i) => {
+  const item = document.createElement('div');
+  item.className = 'flower-item';
+  item.onclick = () => {
+   item.classList.toggle('bloomed');
+   playSoftTone(400 + i * 60, 0.4);
+  };
+  item.innerHTML = `
+   <div class="flower-head">${getFlowerSVG(flw.type)}</div>
+   <div class="flower-stem">
+    <div class="flower-leaf left"></div>
+    <div class="flower-leaf right"></div>
+   </div>
+   <div style="font-size:0.85rem; font-weight:600; margin-top:0.4rem;">${flw.name}</div>
+   <div class="flower-note-pop">${flw.msg}</div>
+  `;
+  container.appendChild(item);
+ });
+}
+
+/* ======================================================================
+   7. ENVELOPE, LOVE LETTER & SPEECH READ ALOUD
+   ====================================================================== */
+function openLetter() {
+ const env = document.getElementById('envelope');
+ const paper = document.getElementById('letterPaper');
+ if (!env.classList.contains('opened')) {
+  env.classList.add('opened');
+  playSoftTone(659.25, 0.5);
+  setTimeout(() => {
+   env.style.display = 'none';
+   paper.style.display = 'block';
+   renderLetterPage();
+  }, 500);
+ }
+}
+
+function renderLetterPage() {
+ const pages = window.CELEBRATION_CONFIG.letterPages;
+ document.getElementById('letterContent').innerText = pages[currentLetterPage] || "";
+ document.getElementById('pageIndicator').innerText = `Page ${currentLetterPage + 1}/${pages.length}`;
+ document.getElementById('btnPrevPage').style.opacity = currentLetterPage === 0 ? '0.4' : '1';
+ document.getElementById('btnNextPage').style.opacity = currentLetterPage === pages.length - 1 ? '0.4' : '1';
+}
+
+function prevLetterPage() {
+ if (currentLetterPage > 0) {
+  currentLetterPage--;
+  renderLetterPage();
+  playSoftTone(350, 0.2);
+ }
+}
+
+function nextLetterPage() {
+ const pages = window.CELEBRATION_CONFIG.letterPages;
+ if (currentLetterPage < pages.length - 1) {
+  currentLetterPage++;
+  renderLetterPage();
+  playSoftTone(450, 0.2);
+ }
+}
+
+function speakLetterPage() {
+ if ('speechSynthesis' in window) {
+  window.speechSynthesis.cancel();
+  const text = window.CELEBRATION_CONFIG.letterPages[currentLetterPage];
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.rate = 0.9;
+  utter.pitch = 1.0;
+  window.speechSynthesis.speak(utter);
+  showToast("Reading letter aloud");
+ } else {
+  showToast("Speech synthesis not supported in browser.");
+ }
+}
+
+/* ======================================================================
+   8. MEMORY CAROUSEL & DRAGGABLE PHOTO WALL
+   ====================================================================== */
+function renderMemory() {
+ const mems = window.CELEBRATION_CONFIG.memories;
+ if (!mems || mems.length === 0) return;
+ const m = mems[currentMemoryIdx];
+ document.getElementById('memoryImg').src = m.img;
+ document.getElementById('memoryCaption').innerText = m.caption;
+}
+
+function changeMemory(dir) {
+ const mems = window.CELEBRATION_CONFIG.memories;
+ currentMemoryIdx = (currentMemoryIdx + dir + mems.length) % mems.length;
+ renderMemory();
+ playSoftTone(500, 0.2);
+}
+
+function initPhotoWall() {
+ const wall = document.getElementById('photoWall');
+ wall.innerHTML = '';
+ window.CELEBRATION_CONFIG.memories.forEach((m, idx) => {
+  const photo = document.createElement('div');
+  photo.className = 'floating-photo';
+  photo.style.left = `${15 + idx * 25}%`;
+  photo.style.top = `${20 + (idx % 2) * 20}%`;
+  photo.style.transform = `rotate(${(idx - 1) * 8}deg)`;
+  photo.innerHTML = `<img src="${m.img}" alt="Memory" /><div style="font-size:0.65rem; font-family:var(--font-handwriting); text-align:center; margin-top:4px;">${m.caption}</div>`;
+  
+  let isDragging = false, startX, startY, initialLeft, initialTop;
+  photo.addEventListener('mousedown', startDrag);
+  photo.addEventListener('touchstart', startDrag, { passive: false });
+
+  function startDrag(e) {
+   isDragging = true;
+   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+   const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+   startX = clientX; startY = clientY;
+   initialLeft = photo.offsetLeft; initialTop = photo.offsetTop;
+   document.addEventListener('mousemove', drag);
+   document.addEventListener('touchmove', drag, { passive: false });
+   document.addEventListener('mouseup', stopDrag);
+   document.addEventListener('touchend', stopDrag);
+  }
+
+  function drag(e) {
+   if (!isDragging) return;
+   if (e.cancelable) e.preventDefault();
+   const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+   const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+   photo.style.left = `${initialLeft + (clientX - startX)}px`;
+   photo.style.top = `${initialTop + (clientY - startY)}px`;
+  }
+
+  function stopDrag() {
+   isDragging = false;
+   document.removeEventListener('mousemove', drag);
+   document.removeEventListener('touchmove', drag);
+  }
+
+  wall.appendChild(photo);
+ });
+}
+
+/* ======================================================================
+   PINTEREST & RETRO TV RENDERERS
+   ====================================================================== */
+function renderPinterestBoard() {
+ const grid = document.getElementById('pinterestGrid');
+ if (!grid) return;
+ grid.innerHTML = '';
+ const photos = window.CELEBRATION_CONFIG.pinterestPhotos || [];
+ photos.forEach(p => {
+  const card = document.createElement('div');
+  card.className = 'pin-card';
+  card.innerHTML = `<img src="${p.img}" alt="Aesthetic Photo" /><div class="pin-caption">${p.caption || ''}</div>`;
+  grid.appendChild(card);
+ });
+}
+
+function initRetroTv() {
+ const media = window.CELEBRATION_CONFIG.retroTvMedia || [];
+ if (media.length === 0) return;
+ const current = media[currentTvIdx];
+ const frame = document.getElementById('tvScreenFrame');
+ document.getElementById('tvChannelLabel').innerText = `CH 0${currentTvIdx + 1}`;
+ if (current.type === 'video') {
+  frame.innerHTML = `<video src="${current.src}" controls autoplay loop muted style="width:100%; height: 100%; object-fit:cover;"></video><div class="tv-scanlines"></div>`;
+ } else {
+  frame.innerHTML = `<img src="${current.src}" alt="${current.title}" style="width:100%; height:100%; object-fit: cover;" /><div class="tv-scanlines"></div>`;
+ }
+}
+
+function cycleTvChannel() {
+ const media = window.CELEBRATION_CONFIG.retroTvMedia || [];
+ if (media.length === 0) return;
+ currentTvIdx = (currentTvIdx + 1) % media.length;
+ initRetroTv();
+ playSoftTone(600, 0.2);
+}
+
+function nextTvMedia() { cycleTvChannel(); }
+function prevTvMedia() {
+ const media = window.CELEBRATION_CONFIG.retroTvMedia || [];
+ if (media.length === 0) return;
+ currentTvIdx = (currentTvIdx - 1 + media.length) % media.length;
+ initRetroTv();
+ playSoftTone(500, 0.2);
+}
+
+/* ======================================================================
+   9. TIMELINE & COUNTDOWN
+   ====================================================================== */
+function initTimeline() {
+ const list = document.getElementById('timelineList');
+ list.innerHTML = '';
+ window.CELEBRATION_CONFIG.timeline.forEach(item => {
+  const el = document.createElement('div');
+  el.className = 'timeline-item';
+  el.innerHTML = `
+   <div class="timeline-dot"></div>
+   <span style="font-size:0.8rem; font-weight:700; color:var(--primary);">${item.date}</span>
+   <h4 style="font-size:1.2rem; margin:0.2rem 0;">${item.title}</h4>
+   <p style="font-size:0.9rem; color:var(--text-muted);">${item.desc}</p>
+  `;
+  list.appendChild(el);
+ });
+}
+
+function updateCountdown() {
+ const target = new Date(window.CELEBRATION_CONFIG.countdownTarget).getTime();
+ const diff = target - new Date().getTime();
+ if (diff > 0) {
+  document.getElementById('cdDays').innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
+  document.getElementById('cdHours').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+  document.getElementById('cdMins').innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+  document.getElementById('cdSecs').innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+ }
+}
+setInterval(updateCountdown, 1000);
+
+/* ======================================================================
+   10. ALL 10 ARCADE GAMES
+   ====================================================================== */
+function openGame(type) {
+ const modal = document.getElementById('gameModal');
+ const container = document.getElementById('gameContainer');
+ modal.style.display = 'flex';
+ container.innerHTML = '';
+ 
+ if (type === 'scratch') {
+  container.innerHTML = `
+   <h3 style="text-align:center; margin-bottom: 1rem;">Scratch Off Secret Card</h3>
+   <div style="position:relative; width:300px; height: 150px; margin:0 auto;">
+    <div style="position:absolute; width: 100%; height: 100%; display: flex; align-items:center; justify-content:center; background:#fff0f5; border-radius: 12px; font-family:var(--font-handwriting); font-size:1.5rem; color:var(--primary); text-align:center; padding:1rem;">
+     You are my absolute favorite human!
+    </div>
+    <canvas id="scratchCanvas" width="300" height="150" style="position:absolute; top:0; left:0;"></canvas>
+   </div>`;
+  initScratchCanvas();
+ } else if (type === 'match') {
+  container.innerHTML = '<h3 style="text-align:center; margin-bottom:0.5rem;">Memory Match</h3><div class="memory-grid" id="memGrid"></div>';
+  initMemoryGame();
+ } else if (type === 'wheel') {
+  container.innerHTML = `
+   <h3 style="text-align:center; margin-bottom:0.5rem;">Lucky Wheel</h3>
+   <div style="text-align:center;">
+    <canvas id="wheelCanvas" width="260" height="260"></canvas><br>
+    <button class="btn" style="margin-top:1rem;" onclick="spinWheel()">Spin Wheel!</button>
+    <p id="wheelResult" style="margin-top:1rem; font-weight:600; color:var(--primary);"></p>
+   </div>`;
+  drawWheel();
+ } else if (type === 'quiz') {
+  const cfg = window.CELEBRATION_CONFIG;
+  container.innerHTML = `
+   <h3 style="text-align:center; margin-bottom:1rem;">Love & Memory Quiz</h3>
+   <div id="quizBox" style="text-align:center;">
+    <p style="font-size:1.1rem; margin-bottom:1rem;">${cfg.quizQuestion}</p>
+    <button class="btn btn-secondary" style="width: 100%; margin-bottom:0.5rem;" onclick="answerQuiz(true)">${cfg.quizCorrect}</button>
+    <button class="btn btn-secondary" style="width:100%;" onclick="answerQuiz(false)">${cfg.quizWrong}</button>
+   </div>`;
+ } else if (type === 'balloon') {
+  container.innerHTML = `
+   <h3 style="text-align:center;">Balloon Pop</h3>
+   <p style="text-align:center; font-size:0.85rem; color:var(--text-muted);">Pop 5 balloons!</p>
+   <div id="balloonArea" style="height:220px; position:relative; overflow:hidden; border:1px dashed #ccc; border-radius: 12px; margin-top:1rem;"></div>`;
+  initBalloonGame();
+ } else if (type === 'hearts') {
+  container.innerHTML = `
+   <h3 style="text-align:center;">Catch My Heart</h3>
+   <div id="heartGameArea" style="height:220px; position:relative; overflow:hidden; border:1px dashed #ccc; border-radius: 12px; margin-top:1rem; text-align:center;">
+    <button class="btn" style="margin-top:80px;" onclick="startCatchHearts()">Start Game</button>
+   </div>`;
+ } else if (type === 'puzzle') {
+  container.innerHTML = `
+   <h3 style="text-align:center;">Photo Puzzle</h3>
+   <p style="text-align:center; font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Click tiles to solve!</p>
+   <div id="puzzleGrid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:4px; max-width:270px; margin:0 auto;"></div>`;
+  initPuzzleGame();
+ } else if (type === 'magic') {
+  container.innerHTML = `
+   <h3 style="text-align:center;">Magic Canvas Reveal</h3>
+   <p style="text-align:center; font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">Move your mouse or finger to uncover!</p>
+   <canvas id="magicCvs" width="300" height="180" style="display:block; margin:0 auto; border-radius: 12px; border:1px solid #ccc;"></canvas>`;
+  initMagicCanvas();
+ } else if (type === 'target') {
+  container.innerHTML = `
+   <h3 style="text-align:center;">Target Game</h3>
+   <p style="text-align:center; font-size:0.85rem; color:var(--text-muted);">Tap moving targets to score!</p>
+   <div id="targetArea" style="height:200px; position:relative; border:1px dashed #ccc; border-radius: 12px; margin-top:1rem;"></div>`;
+  initTargetGame();
+ } else if (type === 'hunt') {
+  container.innerHTML = `
+   <h3 style="text-align:center;">Treasure Hunt</h3>
+   <div id="huntBox" style="text-align:center; padding: 1rem;">
+    <p style="font-size:1.1rem; margin-bottom:1rem;">Clue #1: Where did we unlock our first digital surprise?</p>
+    <button class="btn btn-secondary" onclick="solveClue(1)">The Gift Box</button>
+   </div>`;
+ }
+}
+
+function closeGameModal() { document.getElementById('gameModal').style.display = 'none'; }
+
+function initScratchCanvas() {
+ const cvs = document.getElementById('scratchCanvas');
+ if (!cvs) return;
+ const ctx = cvs.getContext('2d');
+ ctx.fillStyle = '#cbd5e1'; ctx.fillRect(0, 0, 300, 150);
+ let isScratching = false;
+ function scratch(e) {
+  if (!isScratching) return;
+  const rect = cvs.getBoundingClientRect();
+  const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+  const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.beginPath(); ctx.arc(x, y, 18, 0, Math.PI * 2); ctx.fill();
+  playSoftTone(800, 0.05);
+ }
+ cvs.addEventListener('mousedown', () => isScratching = true);
+ cvs.addEventListener('touchstart', () => isScratching = true);
+ window.addEventListener('mouseup', () => isScratching = false);
+ window.addEventListener('touchend', () => isScratching = false);
+ cvs.addEventListener('mousemove', scratch);
+ cvs.addEventListener('touchmove', scratch);
+}
+
+function initMemoryGame() {
+ const icons = ['💖', '💖', '🌸', '🌸', '✨', '✨', '🎁', '🎁'];
+ icons.sort(() => Math.random() - 0.5);
+ const grid = document.getElementById('memGrid');
+ let flipped = [];
+ icons.forEach(icon => {
+  const tile = document.createElement('div');
+  tile.className = 'memory-tile';
+  tile.innerText = '?';
+  tile.onclick = () => {
+   if (flipped.length < 2 && !tile.classList.contains('flipped')) {
+    tile.classList.add('flipped');
+    tile.innerText = icon;
+    flipped.push({ tile, icon });
+    playSoftTone(600, 0.2);
+    if (flipped.length === 2) {
+     if (flipped[0].icon === flipped[1].icon) {
+      flipped = [];
+      playSoftTone(880, 0.4);
+     } else {
+      setTimeout(() => {
+       flipped.forEach(f => { f.tile.classList.remove('flipped'); f.tile.innerText = '?'; });
+       flipped = [];
+      }, 800);
+     }
     }
+   }
+  };
+  grid.appendChild(tile);
+ });
+}
 
-    function bindBgmUIEvents() {
-        const engine = window.bgMusicEngine;
+const wheelRewards = ['Big Hug 🤗', 'Surprise Gift 🎁', 'Endless Love ❤️', 'Favorite Snack 🍫', 'Romantic Date 🍷', 'Sweet Kiss 😘'];
+function drawWheel() {
+ const cvs = document.getElementById('wheelCanvas');
+ if (!cvs) return;
+ const ctx = cvs.getContext('2d');
+ const numSegments = wheelRewards.length;
+ const anglePerSeg = (2 * Math.PI) / numSegments;
+ for (let i = 0; i < numSegments; i++) {
+  ctx.beginPath();
+  ctx.fillStyle = i % 2 === 0 ? '#ff758f' : '#ffb703';
+  ctx.moveTo(130, 130);
+  ctx.arc(130, 130, 120, i * anglePerSeg, (i + 1) * anglePerSeg);
+  ctx.fill();
+  ctx.save();
+  ctx.translate(130, 130);
+  ctx.rotate(i * anglePerSeg + anglePerSeg / 2);
+  ctx.fillStyle = "#fff";
+  ctx.font = "bold 12px sans-serif";
+  ctx.fillText(wheelRewards[i], 35, 5);
+  ctx.restore();
+ }
+}
 
-        const sourceTypeSelect = document.getElementById('bgmSourceTypeSelect');
-        const enableToggle = document.getElementById('bgmEnableToggle');
-        const volumeSlider = document.getElementById('bgmVolumeSlider');
-        const volumeVal = document.getElementById('bgmVolumeVal');
-        const loopToggle = document.getElementById('bgmLoopToggle');
-        const autoplayToggle = document.getElementById('bgmAutoplayToggle');
+function spinWheel() {
+ const idx = Math.floor(Math.random() * wheelRewards.length);
+ document.getElementById('wheelResult').innerText = `You won: ${wheelRewards[idx]}!`;
+ playSoftTone(700, 0.5);
+ triggerConfettiBurst(50);
+}
 
-        // Sub-panel visibility dynamic switcher
-        sourceTypeSelect.addEventListener('change', (e) => {
-            const val = e.target.value;
-            document.getElementById('subPanelUploadAudio').style.display = (val === 'upload_audio') ? 'block' : 'none';
-            document.getElementById('subPanelUploadVideo').style.display = (val === 'upload_video') ? 'block' : 'none';
-            document.getElementById('subPanelDirectUrl').style.display = (val === 'audio_url' || val === 'video_url') ? 'block' : 'none';
-            document.getElementById('subPanelYoutube').style.display = (val === 'youtube') ? 'block' : 'none';
-        });
+function answerQuiz(isCorrect) {
+ const box = document.getElementById('quizBox');
+ if (isCorrect) {
+  box.innerHTML = `<h3 style="color:var(--primary);">Correct! 🎉</h3><p style="margin-top:0.5rem;">You know us so well!</p>`;
+  playSoftTone(880, 0.5);
+  triggerConfettiBurst(60);
+ } else {
+  box.innerHTML = `<h3 style="color:#e63946;">Not quite! ❤️</h3><p style="margin-top:0.5rem;">Try again next time!</p>`;
+  playSoftTone(300, 0.3);
+ }
+}
 
-        // Volume slider update
-        volumeSlider.addEventListener('input', (e) => {
-            const val = parseFloat(e.target.value);
-            volumeVal.innerText = Math.round(val * 100);
-            engine.setVolume(val);
-        });
+function initBalloonGame() {
+ const area = document.getElementById('balloonArea');
+ if (!area) return;
+ let popped = 0;
+ for (let i = 0; i < 5; i++) {
+  const b = document.createElement('div');
+  b.style.position = 'absolute';
+  b.style.left = `${Math.random() * 80}%`;
+  b.style.bottom = '0px';
+  b.style.fontSize = '2.5rem';
+  b.style.cursor = 'pointer';
+  b.innerText = '🎈';
+  b.onclick = () => {
+   b.remove();
+   popped++;
+   playSoftTone(700, 0.2);
+   if (popped === 5) {
+    area.innerHTML = `<h3 style="text-align:center; color:var(--primary); margin-top:80px;">All Balloons Popped! 🏆</h3>`;
+    triggerConfettiBurst(50);
+   }
+  };
+  area.appendChild(b);
+ }
+}
 
-        // Controls
-        document.getElementById('bgmBtnPlay').addEventListener('click', () => {
-            engine.config.enabled = true;
-            enableToggle.checked = true;
-            engine.applySourceAndPlay();
-            if (typeof window.showToast === 'function') window.showToast('Playing Background Music');
-        });
+function startCatchHearts() {
+ const area = document.getElementById('heartGameArea');
+ area.innerHTML = '<p style="margin-top:20px; font-weight:600;">Catching hearts...</p>';
+ let score = 0;
+ const interval = setInterval(() => {
+  if (score >= 5) {
+   clearInterval(interval);
+   area.innerHTML = `<h3 style="margin-top:70px; color:var(--primary);">You Caught All Hearts! 💕</h3>`;
+   triggerConfettiBurst(50);
+   return;
+  }
+  const heart = document.createElement('div');
+  heart.style.position = 'absolute';
+  heart.style.left = `${Math.random() * 80}%`;
+  heart.style.top = `${Math.random() * 70}%`;
+  heart.style.fontSize = '2rem';
+  heart.style.cursor = 'pointer';
+  heart.innerText = '💖';
+  heart.onclick = () => {
+   heart.remove();
+   score++;
+   playSoftTone(800, 0.2);
+  };
+  area.appendChild(heart);
+  setTimeout(() => heart.remove(), 1200);
+ }, 1000);
+}
 
-        document.getElementById('bgmBtnPause').addEventListener('click', () => {
-            engine.pauseAll();
-            if (typeof window.showToast === 'function') window.showToast('Music Paused');
-        });
+function initPuzzleGame() {
+ const grid = document.getElementById('puzzleGrid');
+ if (!grid) return;
+ [1,2,3,4,5,6,7,8,9].sort(() => Math.random() - 0.5).forEach(n => {
+  const tile = document.createElement('div');
+  tile.style.aspectRatio = '1';
+  tile.style.background = 'var(--primary-light)';
+  tile.style.display = 'flex'; tile.style.alignItems = 'center'; tile.style.justifyContent = 'center';
+  tile.style.color = '#fff'; tile.style.fontWeight = 'bold'; tile.style.borderRadius = '6px';
+  tile.style.cursor = 'pointer';
+  tile.innerText = n === 9 ? '' : n;
+  tile.onclick = () => { playSoftTone(500, 0.1); };
+  grid.appendChild(tile);
+ });
+}
 
-        document.getElementById('bgmBtnStop').addEventListener('click', () => {
-            engine.stopAll();
-            if (typeof window.showToast === 'function') window.showToast('Music Stopped');
-        });
+function initMagicCanvas() {
+ const cvs = document.getElementById('magicCvs');
+ if (!cvs) return;
+ const ctx = cvs.getContext('2d');
+ ctx.fillStyle = 'var(--primary)'; ctx.fillRect(0, 0, 300, 180);
+ ctx.fillStyle = '#fff'; ctx.font = 'bold 16px sans-serif'; ctx.fillText('Magic Surface ✨', 80, 95);
+ cvs.addEventListener('mousemove', (e) => {
+  const rect = cvs.getBoundingClientRect();
+  ctx.globalCompositeOperation = 'destination-out';
+  ctx.beginPath(); ctx.arc(e.clientX - rect.left, e.clientY - rect.top, 20, 0, Math.PI * 2); ctx.fill();
+ });
+}
 
-        document.getElementById('bgmBtnPreview').addEventListener('click', () => {
-            engine.config.enabled = true;
-            engine.applySourceAndPlay();
-            if (typeof window.showToast === 'function') window.showToast('Previewing Track');
-        });
+function initTargetGame() {
+ const area = document.getElementById('targetArea');
+ if (!area) return;
+ let score = 0;
+ const target = document.createElement('div');
+ target.style.position = 'absolute';
+ target.style.width = '40px'; target.style.height = '40px';
+ target.style.background = 'var(--primary)'; target.style.borderRadius = '50%';
+ target.style.cursor = 'pointer'; target.style.left = '50px'; target.style.top = '50px';
+ target.onclick = () => {
+  score++;
+  target.style.left = `${Math.random() * 70}%`;
+  target.style.top = `${Math.random() * 60}%`;
+  playSoftTone(750, 0.2);
+  if (score >= 5) {
+   target.remove();
+   area.innerHTML = `<h3 style="text-align:center; color:var(--primary); margin-top:70px;">Target Master! 🎯</h3>`;
+   triggerConfettiBurst(50);
+  }
+ };
+ area.appendChild(target);
+}
 
-        document.getElementById('bgmBtnRemove').addEventListener('click', async () => {
-            engine.stopAll();
-            await MusicDB.deleteTrack('active_bg_media');
-            engine.config.sourceType = 'none';
-            engine.config.fileName = '';
-            engine.config.url = '';
-            engine.config.youtubeUrl = '';
-            engine.saveSettings();
-            syncBgmUIFromEngine();
-            if (typeof window.showToast === 'function') window.showToast('Track Removed');
-        });
+function solveClue(step) {
+ const box = document.getElementById('huntBox');
+ if (step === 1) {
+  box.innerHTML = `<h3 style="color:var(--primary);">Treasure Found! 🏆</h3><p style="margin-top:0.5rem;">You completed the celebration hunt!</p>`;
+  playSoftTone(900, 0.6);
+  triggerConfettiBurst(70);
+ }
+}
 
-        // File upload event handlers
-        document.getElementById('bgmFileInputAudio').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                await MusicDB.saveTrack('active_bg_media', file);
-                engine.config.sourceType = 'upload_audio';
-                engine.config.fileName = file.name;
-                engine.saveSettings();
-                syncBgmUIFromEngine();
-                if (typeof window.showToast === 'function') window.showToast(`Uploaded Audio: ${file.name}`);
-            }
-        });
+/* ======================================================================
+   11. WISH TREE, GUESTBOOK & TIME CAPSULE
+   ====================================================================== */
+const guestbookEntries = [
+ { name: "Sarah M.", msg: "Wishing you both a lifetime of happiness!" },
+ { name: "David K.", msg: "So happy to celebrate this special day with you!" }
+];
 
-        document.getElementById('bgmFileInputVideo').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if (file) {
-                await MusicDB.saveTrack('active_bg_media', file);
-                engine.config.sourceType = 'upload_video';
-                engine.config.fileName = file.name;
-                engine.saveSettings();
-                syncBgmUIFromEngine();
-                if (typeof window.showToast === 'function') window.showToast(`Uploaded Video: ${file.name}`);
-            }
-        });
+function renderGuestbook() {
+ const list = document.getElementById('guestbookList');
+ if (!list) return;
+ list.innerHTML = '';
+ guestbookEntries.forEach(entry => {
+  const item = document.createElement('div');
+  item.className = 'guestbook-item';
+  item.innerHTML = `<strong>${entry.name}:</strong> ${entry.msg}`;
+  list.appendChild(item);
+ });
+}
 
-        // Save Button Handler
-        document.getElementById('bgmBtnSave').addEventListener('click', () => {
-            engine.config.enabled = enableToggle.checked;
-            engine.config.sourceType = sourceTypeSelect.value;
-            engine.config.url = document.getElementById('bgmInputDirectUrl').value.trim();
-            engine.config.youtubeUrl = document.getElementById('bgmInputYoutubeUrl').value.trim();
-            engine.config.volume = parseFloat(volumeSlider.value);
-            engine.config.loop = loopToggle.checked;
-            engine.config.autoplay = autoplayToggle.checked;
+function addGuestbookEntry() {
+ const name = document.getElementById('gbName').value.trim();
+ const msg = document.getElementById('gbMsg').value.trim();
+ if (name && msg) {
+  guestbookEntries.unshift({ name, msg });
+  renderGuestbook();
+  document.getElementById('gbName').value = '';
+  document.getElementById('gbMsg').value = '';
+  showToast("Wish posted successfully!");
+  playSoftTone(700, 0.3);
+ } else {
+  showToast("Please fill in both name and wish.");
+ }
+}
 
-            engine.saveSettings();
-            if (engine.config.enabled) {
-                engine.applySourceAndPlay();
-            } else {
-                engine.stopAll();
-            }
+function saveTimeCapsule() {
+ const date = document.getElementById('tcDate').value;
+ const msg = document.getElementById('tcMsg').value.trim();
+ if (date && msg) {
+  document.getElementById('tcStatus').innerText = `Time Capsule sealed until ${date}! ⏳`;
+  showToast("Time Capsule sealed securely!");
+  playSoftTone(600, 0.4);
+ } else {
+  showToast("Please provide a date and message.");
+ }
+}
 
-            if (typeof window.showToast === 'function') window.showToast('Background Music Settings Saved!');
-        });
+/* ======================================================================
+   12. SECRETS & VAULT
+   ====================================================================== */
+function unlockVault() {
+ const pin = document.getElementById('vaultPin').value.trim();
+ if (pin === window.CELEBRATION_CONFIG.vaultPin) {
+  showToast("Vault Unlocked! 🎉");
+  playSoftTone(880, 0.6);
+  triggerConfettiBurst(60);
+  alert(`Secret Vault Message:\n\n${window.CELEBRATION_CONFIG.vaultSecretMsg}`);
+ } else {
+  showToast("Incorrect PIN. Try again!");
+  playSoftTone(250, 0.4);
+ }
+}
 
-        // Reset Button Handler
-        document.getElementById('bgmBtnReset').addEventListener('click', async () => {
-            engine.stopAll();
-            await MusicDB.deleteTrack('active_bg_media');
-            engine.config = {
-                enabled: false,
-                sourceType: 'none',
-                url: '',
-                youtubeUrl: '',
-                fileName: '',
-                volume: 0.7,
-                loop: true,
-                autoplay: true
-            };
-            engine.saveSettings();
-            syncBgmUIFromEngine();
-            if (typeof window.showToast === 'function') window.showToast('Music Settings Reset to Defaults');
-        });
-    }
+/* ======================================================================
+   13. INVITATION & RSVP
+   ====================================================================== */
+function submitRSVP(status) {
+ document.getElementById('rsvpStatus').innerText = `RSVP Recorded: ${status}! Thank you.`;
+ showToast(`RSVP submitted: ${status}`);
+ playSoftTone(650, 0.3);
+ triggerConfettiBurst(40);
+}
 
-    function syncBgmUIFromEngine() {
-        const engine = window.bgMusicEngine;
-        if (!engine) return;
+function downloadICS() {
+ const icsData = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${window.CELEBRATION_CONFIG.eventTitle}\nDESCRIPTION:${window.CELEBRATION_CONFIG.eventDesc}\nLOCATION:${window.CELEBRATION_CONFIG.venue}\nDTSTART:20261014T190000Z\nDTEND:20261014T220000Z\nEND:VEVENT\nEND:VCALENDAR`;
+ const blob = new Blob([icsData], { type: 'text/calendar;charset=utf-8' });
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement('a');
+ a.href = url; a.download = 'celebration-event.ics';
+ document.body.appendChild(a); a.click(); document.body.removeChild(a);
+ showToast("Calendar invite downloaded!");
+}
 
-        const cfg = engine.config;
+/* ======================================================================
+   14. PLAYFUL PROPOSAL & FINALE
+   ====================================================================== */
+function toggleAccessibilityMode(checked) {
+ accMode = checked;
+ const btnNo = document.getElementById('btnNo');
+ if (accMode) {
+  btnNo.style.transform = 'none';
+  showToast("Accessibility mode enabled (No button anchored)");
+ } else {
+  showToast("Accessibility mode disabled");
+ }
+}
 
-        const enableToggle = document.getElementById('bgmEnableToggle');
-        const sourceTypeSelect = document.getElementById('bgmSourceTypeSelect');
-        const badge = document.getElementById('bgmActiveTrackBadge');
-        const inputDirect = document.getElementById('bgmInputDirectUrl');
-        const inputYt = document.getElementById('bgmInputYoutubeUrl');
-        const volumeSlider = document.getElementById('bgmVolumeSlider');
-        const volumeVal = document.getElementById('bgmVolumeVal');
-        const loopToggle = document.getElementById('bgmLoopToggle');
-        const autoplayToggle = document.getElementById('bgmAutoplayToggle');
+function escapeNoButton() {
+ if (accMode) return;
+ const btnNo = document.getElementById('btnNo');
+ const x = (Math.random() - 0.5) * 200;
+ const y = (Math.random() - 0.5) * 100;
+ btnNo.style.transform = `translate(${x}px, ${y}px)`;
+ playSoftTone(300, 0.1);
+}
 
-        if (enableToggle) enableToggle.checked = cfg.enabled;
-        if (sourceTypeSelect && cfg.sourceType !== 'none') sourceTypeSelect.value = cfg.sourceType;
-        if (inputDirect) inputDirect.value = cfg.url || '';
-        if (inputYt) inputYt.value = cfg.youtubeUrl || '';
-        if (volumeSlider) {
-            volumeSlider.value = cfg.volume;
-            if (volumeVal) volumeVal.innerText = Math.round(cfg.volume * 100);
-        }
-        if (loopToggle) loopToggle.checked = cfg.loop;
-        if (autoplayToggle) autoplayToggle.checked = cfg.autoplay;
+function triggerYesCelebration() {
+ document.getElementById('proposalResultCard').style.display = 'block';
+ playSoftTone(880, 0.8, 'triangle');
+ triggerConfettiBurst(150);
+ showToast("She said YES! 🎉");
+}
 
-        // Badge update
-        if (badge) {
-            if (cfg.sourceType === 'upload_audio' || cfg.sourceType === 'upload_video') {
-                badge.innerText = `Active Track: Local File (${cfg.fileName || 'Uploaded Media'})`;
-            } else if (cfg.sourceType === 'audio_url' || cfg.sourceType === 'video_url') {
-                badge.innerText = `Active Track: Direct URL (${cfg.url || 'No URL'})`;
-            } else if (cfg.sourceType === 'youtube') {
-                badge.innerText = `Active Track: YouTube Link (${cfg.youtubeUrl || 'No Link'})`;
-            } else {
-                badge.innerText = 'Active Track: None';
-            }
-        }
+/* ======================================================================
+   15. CONFETTI & FX CANVAS
+   ====================================================================== */
+const fxCanvas = document.getElementById('fxCanvas');
+const fxCtx = fxCanvas.getContext('2d');
+let particles = [];
 
-        // Trigger change event to set visible sub-panel
-        if (sourceTypeSelect) sourceTypeSelect.dispatchEvent(new Event('change'));
-    }
+function resizeFxCanvas() {
+ fxCanvas.width = window.innerWidth;
+ fxCanvas.height = window.innerHeight;
+}
+window.addEventListener('resize', resizeFxCanvas);
+resizeFxCanvas();
 
-    // Auto load music on start if autoplay is enabled
-    window.addEventListener('load', () => {
-        setTimeout(() => {
-            if (window.bgMusicEngine && window.bgMusicEngine.config.enabled && window.bgMusicEngine.config.autoplay) {
-                window.bgMusicEngine.applySourceAndPlay();
-            }
-        }, 1000);
+function triggerConfettiBurst(count = 100) {
+ for (let i = 0; i < count; i++) {
+  particles.push({
+   x: window.innerWidth / 2,
+   y: window.innerHeight / 2,
+   vx: (Math.random() - 0.5) * 14,
+   vy: (Math.random() - 0.7) * 14,
+   color: ['#e63946', '#ff758f', '#ffb703', '#ffd166', '#a7f3d0'][Math.floor(Math.random() * 5)],
+   size: Math.random() * 8 + 4,
+   rotation: Math.random() * 360,
+   rotSpeed: (Math.random() - 0.5) * 10,
+   life: 120
+  });
+ }
+}
+
+function updateFxCanvas() {
+ fxCtx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+ particles.forEach((p, idx) => {
+  p.x += p.vx; p.y += p.vy;
+  p.vy += 0.3; // gravity
+  p.rotation += p.rotSpeed;
+  p.life--;
+  fxCtx.save();
+  fxCtx.translate(p.x, p.y);
+  fxCtx.rotate((p.rotation * Math.PI) / 180);
+  fxCtx.fillStyle = p.color;
+  fxCtx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+  fxCtx.restore();
+  if (p.life <= 0) particles.splice(idx, 1);
+ });
+ requestAnimationFrame(updateFxCanvas);
+}
+requestAnimationFrame(updateFxCanvas);
+
+/* ======================================================================
+   16. OWNER AUTHENTICATION & CREATOR MODAL EDITOR
+   ====================================================================== */
+function openCreatorModal() {
+ document.getElementById('ownerAuthModal').style.display = 'flex';
+ document.getElementById('ownerPasscodePrompt').value = '';
+}
+
+function closeOwnerAuthModal() {
+ document.getElementById('ownerAuthModal').style.display = 'none';
+}
+
+function verifyOwnerAccess() {
+ const passcode = document.getElementById('ownerPasscodePrompt').value.trim();
+ if (passcode === window.CELEBRATION_CONFIG.ownerPasscode) {
+  closeOwnerAuthModal();
+  document.getElementById('creatorModal').style.display = 'flex';
+  populateCreatorForm();
+  showToast("Owner access granted");
+  playSoftTone(800, 0.3);
+ } else {
+  showToast("Incorrect passcode!");
+  playSoftTone(250, 0.3);
+ }
+}
+
+function closeCreatorModal() {
+ document.getElementById('creatorModal').style.display = 'none';
+}
+
+function switchCreatorTab(tabId) {
+ document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+ document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+ document.getElementById(tabId).classList.add('active');
+ event.target.classList.add('active');
+}
+
+function populateCreatorForm() {
+ const c = window.CELEBRATION_CONFIG;
+ document.getElementById('edtRecipient').value = c.recipientName;
+ document.getElementById('edtSender').value = c.senderName;
+ document.getElementById('edtOccasion').value = c.occasion;
+ document.getElementById('edtIntroHeading').value = c.introHeading;
+ document.getElementById('edtMainMessage').value = c.mainMessage;
+ document.getElementById('edtGiftTitle').value = c.giftTitle;
+ document.getElementById('edtGiftText').value = c.giftText;
+ document.getElementById('edtLetterPages').value = JSON.stringify(c.letterPages, null, 2);
+ document.getElementById('edtFlowers').value = JSON.stringify(c.flowers, null, 2);
+ document.getElementById('edtMemories').value = JSON.stringify(c.memories, null, 2);
+ document.getElementById('edtCountdown').value = c.countdownTarget;
+ document.getElementById('edtTimeline').value = JSON.stringify(c.timeline, null, 2);
+ document.getElementById('edtEventTitle').value = c.eventTitle;
+ document.getElementById('edtEventDate').value = c.eventDate;
+ document.getElementById('edtEventTime').value = c.eventTime;
+ document.getElementById('edtVenue').value = c.venue;
+ document.getElementById('edtPin').value = c.vaultPin;
+ document.getElementById('edtSecretMsg').value = c.vaultSecretMsg;
+ document.getElementById('edtQuizQuestion').value = c.quizQuestion;
+ document.getElementById('edtQuizCorrect').value = c.quizCorrect;
+ document.getElementById('edtQuizWrong').value = c.quizWrong;
+ document.getElementById('edtOwnerPasscode').value = c.ownerPasscode;
+
+ // Populate Background Music settings
+ if (window.SAKURA_MUSIC_CONFIG) {
+  const m = window.SAKURA_MUSIC_CONFIG;
+  document.getElementById('edtMusicSourceType').value = m.sourceType || 'none';
+  document.getElementById('edtMusicUrlInput').value = m.url || '';
+  document.getElementById('edtMusicVol').value = m.volume !== undefined ? m.volume : 80;
+  document.getElementById('volValDisplay').innerText = m.volume !== undefined ? m.volume : 80;
+  document.getElementById('edtMusicLoop').checked = m.loop !== false;
+  document.getElementById('edtMusicAutoplay').checked = m.autoplay !== false;
+  document.getElementById('edtMusicEnabled').checked = m.enabled !== false;
+  toggleMusicSourceInputs(m.sourceType || 'none');
+ }
+}
+
+function saveCreatorConfig() {
+ try {
+  const c = window.CELEBRATION_CONFIG;
+  c.recipientName = document.getElementById('edtRecipient').value;
+  c.senderName = document.getElementById('edtSender').value;
+  c.occasion = document.getElementById('edtOccasion').value;
+  c.introHeading = document.getElementById('edtIntroHeading').value;
+  c.mainMessage = document.getElementById('edtMainMessage').value;
+  c.giftTitle = document.getElementById('edtGiftTitle').value;
+  c.giftText = document.getElementById('edtGiftText').value;
+  c.letterPages = JSON.parse(document.getElementById('edtLetterPages').value);
+  c.flowers = JSON.parse(document.getElementById('edtFlowers').value);
+  c.memories = JSON.parse(document.getElementById('edtMemories').value);
+  c.countdownTarget = document.getElementById('edtCountdown').value;
+  c.timeline = JSON.parse(document.getElementById('edtTimeline').value);
+  c.eventTitle = document.getElementById('edtEventTitle').value;
+  c.eventDate = document.getElementById('edtEventDate').value;
+  c.eventTime = document.getElementById('edtEventTime').value;
+  c.venue = document.getElementById('edtVenue').value;
+  c.vaultPin = document.getElementById('edtPin').value;
+  c.vaultSecretMsg = document.getElementById('edtSecretMsg').value;
+  c.quizQuestion = document.getElementById('edtQuizQuestion').value;
+  c.quizCorrect = document.getElementById('edtQuizCorrect').value;
+  c.quizWrong = document.getElementById('edtQuizWrong').value;
+  c.ownerPasscode = document.getElementById('edtOwnerPasscode').value;
+
+  // Save Background Music settings
+  if (!window.SAKURA_MUSIC_CONFIG) window.SAKURA_MUSIC_CONFIG = {};
+  window.SAKURA_MUSIC_CONFIG.sourceType = document.getElementById('edtMusicSourceType').value;
+  window.SAKURA_MUSIC_CONFIG.url = document.getElementById('edtMusicUrlInput').value;
+  window.SAKURA_MUSIC_CONFIG.volume = parseInt(document.getElementById('edtMusicVol').value);
+  window.SAKURA_MUSIC_CONFIG.loop = document.getElementById('edtMusicLoop').checked;
+  window.SAKURA_MUSIC_CONFIG.autoplay = document.getElementById('edtMusicAutoplay').checked;
+  window.SAKURA_MUSIC_CONFIG.enabled = document.getElementById('edtMusicEnabled').checked;
+
+  localStorage.setItem('celebration_cfg', JSON.stringify(c));
+  localStorage.setItem('sakura_music_cfg', JSON.stringify(window.SAKURA_MUSIC_CONFIG));
+
+  applyConfigToDOM();
+  closeCreatorModal();
+  showToast("Configuration saved successfully!");
+  playSoftTone(880, 0.4);
+  applyBackgroundMusicSettings();
+ } catch (err) {
+  showToast("Error in JSON formatting. Please check inputs.");
+ }
+}
+
+function resetCreatorConfig() {
+ localStorage.removeItem('celebration_cfg');
+ localStorage.removeItem('sakura_music_cfg');
+ location.reload();
+}
+
+function applyConfigToDOM() {
+ const c = window.CELEBRATION_CONFIG;
+ document.getElementById('cfgOccasion').innerText = c.occasion;
+ document.getElementById('cfgIntroHeading').innerHTML = `${c.introHeading.split(',')[0]}, <br><span class="handwriting" style="color:var(--primary)" id="cfgRecipientName">${c.recipientName}</span>!`;
+ document.getElementById('cfgMainMessage').innerText = c.mainMessage;
+ document.getElementById('cfgGiftTitle').innerText = c.giftTitle;
+ document.getElementById('cfgGiftText').innerText = c.giftText;
+ document.getElementById('cfgSenderSign').innerText = `With all my love, ${c.senderName}`;
+ document.getElementById('cfgEventTitle').innerText = c.eventTitle;
+ document.getElementById('cfgEventDesc').innerText = c.eventDesc;
+ document.getElementById('cfgEventDate').innerText = c.eventDate;
+ document.getElementById('cfgEventTime').innerText = c.eventTime;
+ document.getElementById('cfgVenue').innerText = c.venue;
+ document.getElementById('cfgProposalQuestion').innerText = c.proposalQuestion;
+
+ initBouquet();
+ renderMemory();
+ initPhotoWall();
+ renderPinterestBoard();
+ initRetroTv();
+ initTimeline();
+ renderGuestbook();
+}
+
+function addPinterestPhotoFromLink() {
+ const url = document.getElementById('pinPhotoUrl').value.trim();
+ const caption = document.getElementById('pinPhotoCaption').value.trim();
+ if (url) {
+  if (!window.CELEBRATION_CONFIG.pinterestPhotos) window.CELEBRATION_CONFIG.pinterestPhotos = [];
+  window.CELEBRATION_CONFIG.pinterestPhotos.push({ img: url, caption: caption });
+  document.getElementById('pinPhotoUrl').value = '';
+  document.getElementById('pinPhotoCaption').value = '';
+  renderPinterestBoard();
+  showToast("Pinterest photo added!");
+ }
+}
+
+function uploadPinterestPhoto(event) {
+ const file = event.target.files[0];
+ if (file) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+   if (!window.CELEBRATION_CONFIG.pinterestPhotos) window.CELEBRATION_CONFIG.pinterestPhotos = [];
+   window.CELEBRATION_CONFIG.pinterestPhotos.push({ img: e.target.result, caption: "Uploaded Photo" });
+   renderPinterestBoard();
+   showToast("Photo uploaded and added to gallery!");
+  };
+  reader.readAsDataURL(file);
+ }
+}
+
+function addRetroVideoFromLink() {
+ const url = document.getElementById('retroVideoUrl').value.trim();
+ const title = document.getElementById('retroVideoTitleInput').value.trim() || "Custom Channel";
+ if (url) {
+  if (!window.CELEBRATION_CONFIG.retroTvMedia) window.CELEBRATION_CONFIG.retroTvMedia = [];
+  const type = url.includes('.mp4') || url.includes('.webm') ? 'video' : 'image';
+  window.CELEBRATION_CONFIG.retroTvMedia.push({ type: type, src: url, title: title });
+  document.getElementById('retroVideoUrl').value = '';
+  document.getElementById('retroVideoTitleInput').value = '';
+  initRetroTv();
+  showToast("Retro TV media added!");
+ }
+}
+
+/* ======================================================================
+   FEATURE 1 — PREMIUM ANIMATED SAKURA WISH TREE MODULE
+   ====================================================================== */
+const sakuraCanvas = document.getElementById('sakuraCanvas');
+const sakuraCtx = sakuraCanvas.getContext('2d');
+let sakuraPetals = [];
+let sakuraAnimId = null;
+
+function resizeSakuraCanvas() {
+ const wrap = sakuraCanvas.parentElement;
+ if (!wrap) return;
+ sakuraCanvas.width = wrap.clientWidth;
+ sakuraCanvas.height = wrap.clientHeight;
+}
+window.addEventListener('resize', resizeSakuraCanvas);
+resizeSakuraCanvas();
+
+function initSakuraTree() {
+ sakuraPetals = [];
+ const numPetals = 35;
+ for (let i = 0; i < numPetals; i++) {
+  sakuraPetals.push({
+   x: Math.random() * sakuraCanvas.width,
+   y: Math.random() * sakuraCanvas.height,
+   size: Math.random() * 6 + 4,
+   speedY: Math.random() * 1.2 + 0.6,
+   speedX: (Math.random() - 0.5) * 1.5,
+   rotation: Math.random() * 360,
+   rotSpeed: (Math.random() - 0.5) * 3,
+   opacity: Math.random() * 0.5 + 0.5,
+   color: Math.random() > 0.4 ? '#ff758f' : '#ffb7c5'
+  });
+ }
+ if (!sakuraAnimId) renderSakuraLoop();
+}
+
+function renderSakuraTreeStructure(ctx, w, h) {
+ ctx.save();
+ // Trunk & Branches
+ ctx.strokeStyle = '#5a3d31';
+ ctx.lineWidth = 14;
+ ctx.lineCap = 'round';
+ ctx.beginPath();
+ ctx.moveTo(w * 0.5, h);
+ ctx.quadraticCurveTo(w * 0.48, h * 0.6, w * 0.52, h * 0.4);
+ ctx.stroke();
+
+ // Major Branches
+ ctx.lineWidth = 8;
+ ctx.beginPath();
+ ctx.moveTo(w * 0.51, h * 0.55);
+ ctx.quadraticCurveTo(w * 0.35, h * 0.35, w * 0.25, h * 0.3);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.moveTo(w * 0.51, h * 0.5);
+ ctx.quadraticCurveTo(w * 0.65, h * 0.35, w * 0.75, h * 0.28);
+ ctx.stroke();
+
+ ctx.lineWidth = 5;
+ ctx.beginPath();
+ ctx.moveTo(w * 0.28, h * 0.32);
+ ctx.quadraticCurveTo(w * 0.2, h * 0.22, w * 0.15, h * 0.2);
+ ctx.stroke();
+
+ ctx.beginPath();
+ ctx.moveTo(w * 0.72, h * 0.3);
+ ctx.quadraticCurveTo(w * 0.82, h * 0.2, w * 0.88, h * 0.22);
+ ctx.stroke();
+
+ // Soft Blossom Canopy Clusters
+ const clusters = [
+  {x: 0.52, y: 0.38, r: 60}, {x: 0.38, y: 0.32, r: 55}, {x: 0.64, y: 0.3, r: 58},
+  {x: 0.25, y: 0.25, r: 45}, {x: 0.78, y: 0.25, r: 48}, {x: 0.5, y: 0.22, r: 65},
+  {x: 0.18, y: 0.2, r: 35}, {x: 0.85, y: 0.22, r: 38}
+ ];
+ clusters.forEach(c => {
+  const grad = ctx.createRadialGradient(w * c.x, h * c.y, 5, w * c.x, h * c.y, c.r);
+  grad.addColorStop(0, 'rgba(255, 183, 197, 0.85)');
+  grad.addColorStop(0.6, 'rgba(255, 117, 143, 0.6)');
+  grad.addColorStop(1, 'rgba(255, 192, 203, 0)');
+  ctx.fillStyle = grad;
+  ctx.beginPath();
+  ctx.arc(w * c.x, h * c.y, c.r, 0, Math.PI * 2);
+  ctx.fill();
+ });
+ ctx.restore();
+}
+
+function renderSakuraLoop() {
+ sakuraCtx.clearRect(0, 0, sakuraCanvas.width, sakuraCanvas.height);
+ renderSakuraTreeStructure(sakuraCtx, sakuraCanvas.width, sakuraCanvas.height);
+
+ // Falling Petals Update & Render
+ sakuraPetals.forEach(p => {
+  p.y += p.speedY;
+  p.x += p.speedX + Math.sin(p.y * 0.02) * 0.6; // natural wind sway
+  p.rotation += p.rotSpeed;
+
+  if (p.y > sakuraCanvas.height) {
+   p.y = -10;
+   p.x = Math.random() * sakuraCanvas.width;
+  }
+  if (p.x > sakuraCanvas.width) p.x = 0;
+  if (p.x < 0) p.x = sakuraCanvas.width;
+
+  sakuraCtx.save();
+  sakuraCtx.translate(p.x, p.y);
+  sakuraCtx.rotate((p.rotation * Math.PI) / 180);
+  sakuraCtx.globalAlpha = p.opacity;
+  sakuraCtx.fillStyle = p.color;
+  sakuraCtx.beginPath();
+  sakuraCtx.ellipse(0, 0, p.size, p.size * 0.6, 0, 0, Math.PI * 2);
+  sakuraCtx.fill();
+  sakuraCtx.restore();
+ });
+
+ sakuraAnimId = requestAnimationFrame(renderSakuraLoop);
+}
+initSakuraTree();
+
+/* ======================================================================
+   FEATURE 2 — BACKGROUND MUSIC (OWNER SETTINGS) MODULE
+   ====================================================================== */
+window.SAKURA_MUSIC_CONFIG = {
+ sourceType: "none", // none, uploadAudio, uploadVideo, audioUrl, videoUrl, youtubeUrl
+ url: "",
+ volume: 80,
+ loop: true,
+ autoplay: true,
+ enabled: true
+};
+
+const localMusicCfg = localStorage.getItem('sakura_music_cfg');
+if (localMusicCfg) {
+ try { Object.assign(window.SAKURA_MUSIC_CONFIG, JSON.parse(localMusicCfg)); } catch (e) {}
+}
+
+let activeAudioElement = null;
+let activeObjectUrl = null;
+
+function toggleMusicSourceInputs(type) {
+ const groupUpload = document.getElementById('groupMusicUpload');
+ const groupUrl = document.getElementById('groupMusicUrl');
+ const lblUpload = document.getElementById('lblMusicUpload');
+ const lblUrl = document.getElementById('lblMusicUrl');
+ const ytContainer = document.getElementById('youtubeEmbedContainer');
+
+ groupUpload.style.display = 'none';
+ groupUrl.style.display = 'none';
+ ytContainer.style.display = 'none';
+
+ if (type === 'uploadAudio') {
+  groupUpload.style.display = 'block';
+  lblUpload.innerText = "Upload Audio File (MP3, WAV, OGG, AAC, M4A, FLAC)";
+ } else if (type === 'uploadVideo') {
+  groupUpload.style.display = 'block';
+  lblUpload.innerText = "Upload Video File (MP4, MOV, MKV, AVI, WebM - audio extracted)";
+ } else if (type === 'audioUrl') {
+  groupUrl.style.display = 'block';
+  lblUrl.innerText = "Direct Audio URL (.mp3, .wav, etc.)";
+ } else if (type === 'videoUrl') {
+  groupUrl.style.display = 'block';
+  lblUrl.innerText = "Direct Video URL";
+ } else if (type === 'youtubeUrl') {
+  groupUrl.style.display = 'block';
+  lblUrl.innerText = "YouTube Video URL or Embed Link";
+  ytContainer.style.display = 'block';
+ }
+}
+
+function handleMusicFileUpload(event) {
+ const file = event.target.files[0];
+ if (!file) return;
+
+ // File validation & cleanup of previous object URLs
+ if (activeObjectUrl) {
+  URL.revokeObjectURL(activeObjectUrl);
+  activeObjectUrl = null;
+ }
+
+ activeObjectUrl = URL.createObjectURL(file);
+ window.SAKURA_MUSIC_CONFIG.url = activeObjectUrl;
+ document.getElementById('musicStatusInfo').innerText = `Status: Loaded file "${file.name}" (${(file.size/1024/1024).toFixed(2)} MB)`;
+ showToast("Audio/Video file loaded successfully!");
+}
+
+function applyBackgroundMusicSettings() {
+ const m = window.SAKURA_MUSIC_CONFIG;
+ const statusInfo = document.getElementById('musicStatusInfo');
+ const ytContainer = document.getElementById('youtubeEmbedContainer');
+
+ // Cleanup previous audio element
+ if (activeAudioElement) {
+  activeAudioElement.pause();
+  activeAudioElement.src = '';
+  activeAudioElement = null;
+ }
+ ytContainer.innerHTML = '';
+
+ if (!m.enabled || m.sourceType === 'none') {
+  statusInfo.innerText = "Status: Background Music Disabled";
+  return;
+ }
+
+ const url = m.url || document.getElementById('edtMusicUrlInput')?.value.trim();
+ if (!url) {
+  statusInfo.innerText = "Status: No valid URL or file provided.";
+  return;
+ }
+
+ if (m.sourceType === 'youtubeUrl') {
+  // Extract YouTube ID or embed
+  let ytId = '';
+  if (url.includes('youtu.be/')) {
+   ytId = url.split('youtu.be/')[1]?.split('?')[0];
+  } else if (url.includes('watch?v=')) {
+   ytId = url.split('watch?v=')[1]?.split('&')[0];
+  } else if (url.includes('embed/')) {
+   ytId = url.split('embed/')[1]?.split('?')[0];
+  } else {
+   ytId = url;
+  }
+
+  if (ytId) {
+   ytContainer.style.display = 'block';
+   ytContainer.innerHTML = `<iframe src="https://www.youtube.com/embed/${ytId}?autoplay=${m.autoplay ? 1 : 0}&loop=${m.loop ? 1 : 0}" allow="autoplay; encrypted-media"></iframe>`;
+   statusInfo.innerText = "Status: Playing YouTube Embed Audio/Video";
+  } else {
+   statusInfo.innerText = "Status: Error parsing YouTube URL.";
+  }
+  return;
+ }
+
+ // Direct Audio/Video HTML5 element creation
+ try {
+  activeAudioElement = new Audio(url);
+  activeAudioElement.volume = (m.volume !== undefined ? m.volume : 80) / 100;
+  activeAudioElement.loop = m.loop !== false;
+
+  activeAudioElement.addEventListener('error', (e) => {
+   statusInfo.innerText = "Status: Error loading track. CORS or unsupported format.";
+   showToast("Background music playback failed. Check format/URL.");
+  });
+
+  activeAudioElement.addEventListener('canplaythrough', () => {
+   statusInfo.innerText = "Status: Playing Background Music";
+   if (m.autoplay && m.enabled) {
+    activeAudioElement.play().catch(err => {
+     statusInfo.innerText = "Status: Autoplay blocked by browser. Click Preview/Play.";
     });
+   }
+  });
 
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', buildAndAttachPanel);
-    } else {
-        buildAndAttachPanel();
-    }
-})();
+  activeAudioElement.load();
+ } catch (err) {
+  statusInfo.innerText = "Status: Failed to initialize audio resource.";
+ }
+}
+
+function previewBackgroundMusic() {
+ const m = window.SAKURA_MUSIC_CONFIG;
+ m.url = document.getElementById('edtMusicUrlInput').value.trim() || m.url;
+ m.volume = parseInt(document.getElementById('edtMusicVol').value);
+ m.loop = document.getElementById('edtMusicLoop').checked;
+ m.autoplay = true;
+ m.enabled = document.getElementById('edtMusicEnabled').checked;
+ applyBackgroundMusicSettings();
+ showToast("Background music preview started");
+}
+
+function pauseBackgroundMusic() {
+ if (activeAudioElement) {
+  activeAudioElement.pause();
+  document.getElementById('musicStatusInfo').innerText = "Status: Paused";
+  showToast("Music paused");
+ }
+}
+
+function stopBackgroundMusic() {
+ if (activeAudioElement) {
+  activeAudioElement.pause();
+  activeAudioElement.currentTime = 0;
+  document.getElementById('musicStatusInfo').innerText = "Status: Stopped";
+  showToast("Music stopped");
+ }
+ const ytContainer = document.getElementById('youtubeEmbedContainer');
+ ytContainer.innerHTML = '';
+}
+
+function resetMusicSettings() {
+ window.SAKURA_MUSIC_CONFIG = { sourceType: "none", url: "", volume: 80, loop: true, autoplay: true, enabled: true };
+ localStorage.removeItem('sakura_music_cfg');
+ populateCreatorForm();
+ stopBackgroundMusic();
+ showToast("Music settings reset");
+}
+
+// Initialize application on DOM load
+window.addEventListener('DOMContentLoaded', () => {
+ applyConfigToDOM();
+ applyBackgroundMusicSettings();
+});
+</script>
+</body>
+</html>

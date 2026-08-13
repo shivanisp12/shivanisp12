@@ -3335,5 +3335,242 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 })();
 </script>
+ <!-- ================================================================= -->
+<!-- FEATURE 1: ADVANCED ADVANCED SAKURA WISH TREE & DIRECT HANGING SYSTEM -->
+<!-- ================================================================= -->
+<section id="sakura-wishes-section" style="padding: 50px 20px; background: linear-gradient(180deg, #fff1f2 0%, #ffe4e6 100%); font-family: 'Poppins', sans-serif;">
+  
+  <div style="text-align: center; margin-bottom: 30px;">
+    <h2 style="font-family: 'Playfair Display', Georgia, serif; color: #be185d; font-size: 2.2rem; margin-bottom: 8px;">🌸 Sakura Wish Tree</h2>
+    <p style="color: #9f1239; font-size: 1rem; margin: 0;">Write your heartfelt wish and watch it hang gently on the blooming branches!</p>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center; align-items: flex-start; max-width: 1100px; margin: 0 auto;">
+    
+    <!-- LEFT PANEL: WRITE YOUR WISH (NO NAME REQUIRED) -->
+    <div style="flex: 1; min-width: 290px; max-width: 420px; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; padding: 30px; box-shadow: 0 15px 35px rgba(225, 29, 72, 0.12); border: 1.5px solid #fecdd3;">
+      
+      <h3 style="color: #881337; margin-top: 0; margin-bottom: 18px; font-size: 1.35rem; display: flex; align-items: center; gap: 8px;">
+        <span>✍️</span> Write Your Wish
+      </h3>
+
+      <div style="margin-bottom: 18px; text-align: left;">
+        <label style="display: block; font-size: 0.8rem; font-weight: 700; color: #be185d; margin-bottom: 8px; letter-spacing: 0.5px;">YOUR WISH / MESSAGE</label>
+        <textarea id="directWishTextArea" rows="5" placeholder="Type your special wish here..." style="width: 100%; padding: 14px; border: 1.5px solid #fda4af; border-radius: 14px; outline: none; font-size: 14px; font-family: inherit; resize: none; box-sizing: border-box; background: #fff5f7; color: #881337; transition: border-color 0.3s ease;"></textarea>
+      </div>
+
+      <button onclick="hangUserWishOnTree()" style="width: 100%; padding: 14px; background: linear-gradient(135deg, #f43f5e, #be185d); color: white; border: none; border-radius: 14px; font-weight: bold; font-size: 1rem; cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0 6px 20px rgba(225, 29, 72, 0.3);">
+        🌸 Hang Wish on Tree
+      </button>
+
+      <div id="wishSuccessToast" style="display: none; margin-top: 14px; padding: 10px; background: #f0fdf4; border: 1px solid #bbf7d0; border-radius: 10px; color: #15803d; font-size: 13px; font-weight: 600; text-align: center;">
+        ✨ Your wish is now swaying on the Sakura Tree!
+      </div>
+
+      <!-- OWNER RESPONSE ACCESS BUTTON -->
+      <div style="margin-top: 25px; padding-top: 15px; border-top: 1px dashed #fecdd3; text-align: center;">
+        <button onclick="viewOwnerWishLog()" style="background: none; border: none; color: #9f1239; font-size: 12px; text-decoration: underline; cursor: pointer; font-weight: 600;">
+          🔑 Owner Vault: View All Received Wishes
+        </button>
+      </div>
+
+    </div>
+
+    <!-- RIGHT PANEL: ADVANCED SAKURA TREE CANVAS + HANGING CARDS -->
+    <div style="flex: 1.3; min-width: 320px; max-width: 620px; position: relative;">
+      <div id="sakuraCanvasWrapper" style="position: relative; width: 100%; height: 520px; background: linear-gradient(180deg, #fce7f3 0%, #fff1f2 100%); border-radius: 28px; overflow: hidden; box-shadow: 0 15px 40px rgba(0,0,0,0.1); border: 2px solid #fbcfe8;">
+        
+        <!-- Animated Sakura Canvas -->
+        <canvas id="advancedSakuraCanvas" width="600" height="520" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 1;"></canvas>
+        
+        <!-- Container Layer for Hanging Paper Cards -->
+        <div id="hangingCardsContainer" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 10; pointer-events: none;"></div>
+
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- STYLES FOR HANGING PAPER CARDS -->
+<style>
+  @keyframes swayCardInWind {
+    0% { transform: rotate(-5deg); }
+    100% { transform: rotate(5deg); }
+  }
+
+  .hanging-wish-card {
+    position: absolute;
+    pointer-events: auto;
+    background: #fef08a; /* Parchment yellow */
+    border: 1px solid #fde047;
+    padding: 8px 12px;
+    border-radius: 6px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.18);
+    font-family: 'Dancing Script', Georgia, cursive, serif;
+    font-size: 14px;
+    color: #713f12;
+    transform-origin: top center;
+    animation: swayCardInWind 3.4s ease-in-out infinite alternate;
+    cursor: pointer;
+    max-width: 125px;
+    text-align: center;
+    word-break: break-word;
+    transition: transform 0.3s ease, z-index 0.3s ease;
+  }
+
+  .hanging-wish-card:hover {
+    transform: scale(1.15) rotate(0deg) !important;
+    z-index: 99 !important;
+    box-shadow: 0 12px 25px rgba(0,0,0,0.3);
+  }
+
+  /* Golden Thread String attached to tree */
+  .hanging-wish-card::before {
+    content: '';
+    position: absolute;
+    top: -26px;
+    left: 50%;
+    width: 1.5px;
+    height: 26px;
+    background: #b45309;
+    transform: translateX(-50%);
+  }
+
+  /* Ring on top of note */
+  .hanging-wish-card::after {
+    content: '';
+    position: absolute;
+    top: -3px;
+    left: 50%;
+    width: 6px;
+    height: 6px;
+    background: #78350f;
+    border-radius: 50%;
+    transform: translateX(-50%);
+  }
+</style>
+
+<!-- SCRIPT FOR CANVAS TREE & LOGIC -->
+<script>
+(function() {
+  const canvas = document.getElementById('advancedSakuraCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+
+  // Preset Realistic Branch Positions for Hanging Notes (Percentages X, Y)
+  const branchCoords = [
+    { x: 35, y: 32 }, { x: 58, y: 28 }, { x: 44, y: 42 },
+    { x: 68, y: 36 }, { x: 28, y: 46 }, { x: 52, y: 52 },
+    { x: 62, y: 48 }, { x: 38, y: 24 }, { x: 74, y: 40 }
+  ];
+  let slotIndex = 0;
+
+  /* --- 1. DRAW ADVANCED SAKURA TREE --- */
+  function drawBranch(startX, startY, len, angle, branchWidth) {
+    ctx.beginPath();
+    ctx.save();
+    ctx.strokeStyle = '#5c3a21'; // Natural dark wood bark
+    ctx.lineWidth = branchWidth;
+    ctx.lineCap = 'round';
+    ctx.translate(startX, startY);
+    ctx.rotate(angle * Math.PI / 180);
+    ctx.moveTo(0, 0);
+    ctx.lineTo(0, -len);
+    ctx.stroke();
+
+    if (len < 10) {
+      // Draw Cherry Blossom Petal Clouds
+      ctx.beginPath();
+      ctx.arc(0, -len, 14 + Math.random() * 8, 0, Math.PI * 2);
+      ctx.fillStyle = Math.random() > 0.4 ? 'rgba(244, 114, 182, 0.75)' : 'rgba(251, 207, 232, 0.85)';
+      ctx.fill();
+      ctx.restore();
+      return;
+    }
+
+    // Branch splitting
+    drawBranch(0, -len, len * 0.78, angle + 22, branchWidth * 0.7);
+    drawBranch(0, -len, len * 0.78, angle - 22, branchWidth * 0.7);
+    ctx.restore();
+  }
+
+  function renderTreeScene() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    // Draw Glow Aura behind tree
+    const glow = ctx.createRadialGradient(300, 260, 20, 300, 260, 220);
+    glow.addColorStop(0, 'rgba(251, 207, 232, 0.6)');
+    glow.addColorStop(1, 'rgba(252, 231, 243, 0)');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    // Draw Main Trunk
+    drawBranch(300, 520, 110, 0, 18);
+  }
+
+  renderTreeScene();
+
+  /* --- 2. HANG WISH CARD ON TREE --- */
+  window.hangUserWishOnTree = function() {
+    const textarea = document.getElementById('directWishTextArea');
+    const wishText = textarea ? textarea.value.trim() : '';
+
+    if (!wishText) {
+      alert('Please write your wish in the box before hanging it!');
+      return;
+    }
+
+    // A. Save to Owner's Private Storage Log
+    let savedWishes = JSON.parse(localStorage.getItem('owner_wish_vault') || '[]');
+    savedWishes.push({ text: wishText, date: new Date().toLocaleString() });
+    localStorage.setItem('owner_wish_vault', JSON.stringify(savedWishes));
+
+    // B. Create Hanging Paper Card Element
+    const container = document.getElementById('hangingCardsContainer');
+    const card = document.createElement('div');
+    card.className = 'hanging-wish-card';
+
+    // Pick branch position
+    const slot = branchCoords[slotIndex % branchCoords.length];
+    slotIndex++;
+
+    const jitterX = (Math.random() - 0.5) * 5;
+    card.style.left = `calc(${slot.x}% + ${jitterX}px)`;
+    card.style.top = `${slot.y}%`;
+    card.style.animationDuration = `${(2.8 + Math.random() * 1.2).toFixed(1)}s`;
+
+    const shortText = wishText.length > 24 ? wishText.substring(0, 22) + '...' : wishText;
+    card.innerText = `📜 "${shortText}"`;
+
+    // Click note to view full wish
+    card.onclick = function() {
+      alert(`📜 Wish on Sakura Tree:\n\n"${wishText}"`);
+    };
+
+    container.appendChild(card);
+
+    // C. Show Feedback & Reset Input
+    textarea.value = '';
+    const toast = document.getElementById('wishSuccessToast');
+    if (toast) {
+      toast.style.display = 'block';
+      setTimeout(() => { toast.style.display = 'none'; }, 4000);
+    }
+  };
+
+  /* --- 3. OWNER VAULT ACCESS --- */
+  window.viewOwnerWishLog = function() {
+    let wishes = JSON.parse(localStorage.getItem('owner_wish_vault') || '[]');
+    if (wishes.length === 0) {
+      alert('🔒 Owner Vault: No wishes have been submitted on this device yet!');
+    } else {
+      let formatted = wishes.map((w, i) => `${i + 1}. [${w.date}]\n"${w.text}"`).join('\n\n------------------\n\n');
+      alert(`🔑 OWNER VAULT - ALL RECEIVED WISHES:\n\n${formatted}`);
+    }
+  };
+
+})();
+</script>
 </body>
 </html>

@@ -1,56 +1,60 @@
-/**
- * Celebration Verse - Three.js Interactive 3D Gift Box
- */
-class GiftBox3DEnhancer {
-  constructor() {
-    this.container = document.getElementById('giftBox3DContainer');
-    if (!this.container || typeof THREE === 'undefined') return;
-    this.init();
+/* ==========================================================================
+   FEATURE 6: PREMIUM GIFT BOX EXPERIENCE ENHANCER
+   ========================================================================== */
+(function () {
+  function init() {
+    const giftBox = document.getElementById('giftBox');
+    if (!giftBox) return;
+
+    giftBox.classList.add('premium-glowing');
+
+    // Non-destructive trigger hook on existing window.openGiftBox
+    const originalOpen = window.openGiftBox;
+    window.openGiftBox = function () {
+      giftBox.classList.add('premium-shaking');
+
+      if (window.SoundEngine) window.SoundEngine.play('giftOpening');
+
+      setTimeout(() => {
+        giftBox.classList.remove('premium-shaking');
+        if (typeof originalOpen === 'function') originalOpen();
+        triggerConfetti();
+        if (window.GuideCharacter) window.GuideCharacter.speak('Yay! What a surprise! 🎉');
+      }, 600);
+    };
   }
 
-  init() {
-    this.scene = new THREE.Scene();
-    this.camera = new THREE.PerspectiveCamera(45, this.container.clientWidth / this.container.clientHeight, 0.1, 1000);
-    this.camera.position.set(0, 2, 5);
+  function triggerConfetti() {
+    const fxCanvas = document.getElementById('fxCanvas');
+    if (!fxCanvas) return;
+    const ctx = fxCanvas.getContext('2d');
+    fxCanvas.width = window.innerWidth;
+    fxCanvas.height = window.innerHeight;
 
-    this.renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    this.renderer.setSize(this.container.clientWidth, this.container.clientHeight);
-    this.container.appendChild(this.renderer.domElement);
+    const particles = Array.from({ length: 80 }).map(() => ({
+      x: window.innerWidth / 2,
+      y: window.innerHeight / 2,
+      vx: (Math.random() - 0.5) * 12,
+      vy: (Math.random() - 0.8) * 12,
+      color: ['#ff4d6d', '#ffd166', '#06d6a0', '#118ab2'][Math.floor(Math.random() * 4)],
+      size: Math.random() * 8 + 4
+    }));
 
-    // Cube Geometry (Gift Box)
-    const geometry = new THREE.BoxGeometry(1.5, 1.5, 1.5);
-    const material = new THREE.MeshPhongMaterial({ color: 0xff4081, shininess: 100 });
-    this.boxMesh = new THREE.Mesh(geometry, material);
-    this.scene.add(this.boxMesh);
-
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-    this.scene.add(ambientLight);
-
-    const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-    dirLight.position.set(5, 5, 5);
-    this.scene.add(dirLight);
-
-    this.animate();
-
-    // Click trigger
-    this.container.addEventListener('click', () => this.openBox());
+    function draw() {
+      ctx.clearRect(0, 0, fxCanvas.width, fxCanvas.height);
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.2; // gravity
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+      });
+      if (particles.some(p => p.y < window.innerHeight)) {
+        requestAnimationFrame(draw);
+      }
+    }
+    draw();
   }
 
-  openBox() {
-    gsap.to(this.boxMesh.rotation, { y: Math.PI * 4, duration: 1.5 });
-    gsap.to(this.boxMesh.scale, { x: 1.3, y: 1.3, z: 1.3, duration: 0.5, yoyo: true, repeat: 1 });
-    if (window.celebrationAudio) window.celebrationAudio.playFanfare();
-    
-    const msg = document.getElementById('giftBoxMessage');
-    if (msg) msg.classList.remove('hidden');
-  }
-
-  animate() {
-    requestAnimationFrame(() => this.animate());
-    this.boxMesh.rotation.y += 0.005;
-    this.renderer.render(this.scene, this.camera);
-  }
-}
-
-window.GiftBox3DEnhancer = GiftBox3DEnhancer;
+  window.GiftBoxEnhancer = { init };
+})();

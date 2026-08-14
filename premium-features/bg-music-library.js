@@ -1,49 +1,31 @@
-/* ==========================================================================
-   FEATURE 4: ADVANCED BACKGROUND MUSIC LIBRARY ENGINE
-   ========================================================================== */
-(function () {
-  let audioEl = null;
+/**
+ * Celebration Verse - Background Audio Engine
+ */
+class BackgroundMusicLibrary {
+  constructor() {
+    this.audio = new Audio();
+    this.audio.loop = true;
+    this.isPlaying = false;
+    this.init();
+  }
 
-  function init() {
-    audioEl = document.getElementById('mainBgMusic');
-    if (!audioEl) {
-      audioEl = document.createElement('audio');
-      audioEl.id = 'mainBgMusic';
-      audioEl.loop = true;
-      document.body.appendChild(audioEl);
+  init() {
+    if (window.CELEBRATION_CONFIG && window.CELEBRATION_CONFIG.bgMusicUrl) {
+      this.audio.src = window.CELEBRATION_CONFIG.bgMusicUrl;
     }
   }
 
-  function setTrack(sourceType, value) {
-    if (!audioEl) init();
-
-    if (sourceType === 'audioUrl' || sourceType === 'uploadAudio') {
-      audioEl.src = value;
-      audioEl.play().catch(() => {});
-    } else if (sourceType === 'youtubeUrl') {
-      // Direct YouTube audio handling / Iframe fallback trigger
-      audioEl.pause();
-      const container = document.getElementById('youtubeEmbedContainer');
-      if (container) {
-        const reg = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-        const match = value.match(reg);
-        if (match && match[1]) {
-          container.style.display = 'block';
-          container.innerHTML = `<iframe src="https://www.youtube.com/embed/${match[1]}?autoplay=1&loop=1" allow="autoplay"></iframe>`;
-        }
-      }
+  toggle() {
+    if (this.isPlaying) {
+      this.audio.pause();
+      this.isPlaying = false;
+    } else {
+      this.audio.play().then(() => {
+        this.isPlaying = true;
+      }).catch(err => console.log("Audio playback blocked by browser policy:", err));
     }
+    return this.isPlaying;
   }
+}
 
-  function setVolume(volumePct) {
-    if (audioEl) {
-      audioEl.volume = Math.max(0, Math.min(1, volumePct / 100));
-    }
-  }
-
-  window.BgMusicLibrary = {
-    init,
-    setTrack,
-    setVolume
-  };
-})();
+window.bgMusicEngine = new BackgroundMusicLibrary();

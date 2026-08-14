@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CelebrationVerse — Cinematic Digital Celebrations</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: { 300: '#fde047', 400: '#facc15', 500: '#eab308', 600: '#ca8a04' },
+                        rose: { 400: '#fb7185', 500: '#f43f5e', 600: '#e11d48' },
+                        dark: { 900: '#090a0f', 800: '#121520', 700: '#1e2338' }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        cinematic: ['Cinzel', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Playfair+Display:ital,wght@0,400;0,600;0,800;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- External Helper Libraries -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <style>
+        /* Theme Variables Matrix */
+        :root {
+            --theme-bg-1: #090a0f;
+            --theme-bg-2: #171926;
+            --theme-accent: #f43f5e;
+            --theme-gold: #facc15;
+            --theme-text: #ffffff;
+            --theme-font: 'Playfair Display', serif;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+            --glass-border: rgba(255, 255, 255, 0.12);
+        }
+
+        /* Dynamic Theme Palette Override Definitions */
+        [data-theme="gold"] {
+            --theme-bg-1: #0f0c05;
+            --theme-bg-2: #261f0a;
+            --theme-accent: #eab308;
+            --theme-gold: #fef08a;
+            --theme-text: #fefce8;
+            --theme-font: 'Cinzel', serif;
+        }
+        [data-theme="pink"] {
+            --theme-bg-1: #1a0913;
+            --theme-bg-2: #331227;
+            --theme-accent: #ec4899;
+            --theme-gold: #fbcfe8;
+            --theme-text: #fff1f2;
+            --theme-font: 'Playfair Display', serif;
+        }
+        [data-theme="galaxy"] {
+            --theme-bg-1: #050515;
+            --theme-bg-2: #0f1035;
+            --theme-accent: #8b5cf6;
+            --theme-gold: #c084fc;
+            --theme-text: #f3e8ff;
+            --theme-font: 'Plus Jakarta Sans', sans-serif;
+        }
+        [data-theme="emerald"] {
+            --theme-bg-1: #021a12;
+            --theme-bg-2: #063828;
+            --theme-accent: #10b981;
+            --theme-gold: #6ee7b7;
+            --theme-text: #ecfdf5;
+            --theme-font: 'Cinzel', serif;
+        }
+
+        body {
+            background-color: var(--theme-bg-1);
+            color: var(--theme-text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow-x: hidden;
+            transition: background-color 0.8s ease, color 0.8s ease;
+        }
+
+        .glass-panel {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: var(--theme-accent);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--theme-accent); }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+        }
+        .animate-float { animation: float 6s ease-in-out infinite; }
+
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; filter: blur(20px); }
+            50% { opacity: 0.8; filter: blur(30px); }
+        }
+        .animate-glow { animation: pulseGlow 4s ease-in-out infinite; }
+
+        /* Envelope / Letter Wax Seal Styling */
+        .wax-seal {
+            background: radial-gradient(circle, #f43f5e 0%, #9f1239 100%);
+            box-shadow: 0 4px 15px rgba(244, 63, 94, 0.4), inset 0 2px 4px rgba(255,255,255,0.3);
+        }
+
+        /* 3D Flip Card Effect */
+        .perspective-1000 { perspective: 1000px; }
+        .transform-style-3d { transform-style: preserve-3d; }
+        .backface-hidden { backface-visibility: hidden; }
+        .rotate-y-180 { transform: rotateY(180deg); }
+
+        /* Active Chapter Transition */
+        .chapter-section {
+            display: none;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease, transform 0.8s ease;
+        }
+        .chapter-section.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Device Preview Frame Ratios */
+        .device-mobile { width: 375px; height: 780px; border-radius: 40px; border: 12px solid #222; }
+        .device-tablet { width: 768px; height: 900px; border-radius: 24px; border: 12px solid #222; }
+        .device-desktop { width: 100%; height: 100%; border-radius: 0; border: none; }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-rose-500 selection:text-white">
+
+    <!-- BACKGROUND CANVAS FOR CINEMATIC PARTICLES -->
+    <canvas id="particleCanvas" class="fixed inset-0 pointer-events-none z-0"></canvas>
+
+    <!-- TOP NAVIGATION BAR -->
+    <header class="sticky top-0 z-50 glass-panel border-b border-white/10 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center gap-3 cursor-pointer" onclick="App.router.navigate('landing')">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-rose-500 via-purple-500 to-amber-400 flex items-center justify-center text-white shadow-lg shadow-rose-500/30">
+                    <i class="fa-solid font-cinematic text-xl">✨</i>
+                </div>
+                <div>
+                    <span class="text-xl font-cinematic font-bold tracking-wider bg-clip-text text-transparent bg-gradient-to-r from-white via-rose-200 to-amber-200">CelebrationVerse</span>
+                    <span class="block text-[10px] text-amber-400 uppercase tracking-widest font-semibold">Cinematic Moments</span>
+                </div>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+                <button onclick="App.router.navigate('landing')" class="hover:text-rose-400 transition-colors">Home</button>
+                <button onclick="App.router.navigate('occasions')" class="hover:text-rose-400 transition-colors">Occasions</button>
+                <button onclick="App.router.navigate('templates')" class="hover:text-rose-400 transition-colors">Templates</button>
+                <button onclick="App.router.navigate('dashboard')" class="hover:text-rose-400 transition-colors">My Projects</button>
+            </nav>
+
+            <div class="flex items-center gap-4">
+                <button onclick="App.audioEngine.toggleAudio()" id="audioToggleBtn" class="p-2.5 rounded-full glass-card text-gray-300 hover:text-amber-400 transition-all" title="Toggle Ambient Music">
+                    <i class="fa-solid fa-volume-xmark text-lg"></i>
+                </button>
+                <button onclick="App.router.navigate('studio')" class="px-5 py-2.5 rounded-full bg-gradient-to-r from-rose-500 via-purple-600 to-amber-500 text-white font-semibold text-sm shadow-lg shadow-rose-500/25 hover:opacity-95 hover:scale-105 transition-all">
+                    <i class="fa-solid fa-wand-magic-sparkles mr-2"></i> Create Celebration
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN APP VIEW CONTAINER -->
+    <main id="appContainer" class="relative z-10 flex-grow">
+
+        <!-- ========================================== -->
+        <!-- VIEW 1: LANDING PAGE                       -->
+        <!-- ========================================== -->
+        <section id="view-landing" class="view-section py-12 md:py-20 px-6 max-w-7xl mx-auto space-y-24">
+            
+            <!-- Hero Banner -->
+            <div class="text-center space-y-8 relative">
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-rose-500/20 rounded-full animate-glow pointer-events-none"></div>
+                
+                <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full glass-card text-xs text-amber-300 font-semibold uppercase tracking-widest border border-amber-500/30">
+                    <i class="fa-solid fa-crown text-amber-400"></i> The #1 Premium Digital Celebration Platform
+                </div>
+
+                <h1 class="text-4xl md:text-7xl font-cinematic font-bold leading-tight max-w-4xl mx-auto">
+                    Transform Memories Into <span class="bg-clip-text text-transparent bg-gradient-to-r from-rose-400 via-amber-300 to-purple-400">Cinematic Experiences</span>
+                </h1>
+
+                <p class="text-lg md:text-xl text-gray-300 max-w-2xl mx-auto font-light leading-relaxed">
+                    Craft immersive, story-driven digital celebrations with interactive gift boxes, blooming bouquets, wax-sealed letters, mini-games, and grand fireworks. Shared with a single link. No app or account required.
+                </p>
+
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                    <button onclick="App.router.navigate('studio')" class="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-rose-500 to-amber-500 text-white font-bold text-lg shadow-xl shadow-rose-500/30 hover:scale-105 transition-all flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-sparkles"></i> Build Your Celebration Now
+                    </button>
+                    <button onclick="App.viewer.launchDemo()" class="w-full sm:w-auto px-8 py-4 rounded-full glass-panel text-white font-semibold text-lg hover:bg-white/10 transition-all flex items-center justify-center gap-3">
+                        <i class="fa-solid fa-play text-rose-400"></i> Experience Live Sample
+                    </button>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pt-12 max-w-4xl mx-auto">
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="text-3xl font-bold text-amber-400 font-cinematic">100%</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">No App / No Sign Up</div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="text-3xl font-bold text-rose-400 font-cinematic">12+</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Interactive Modules</div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="text-3xl font-bold text-purple-400 font-cinematic">20+</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Cinematic Themes</div>
+                    </div>
+                    <div class="glass-card p-6 rounded-2xl text-center">
+                        <div class="text-3xl font-bold text-emerald-400 font-cinematic">⚡ Instant</div>
+                        <div class="text-xs text-gray-400 uppercase tracking-wider mt-1">Single Link Share</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Core Features Matrix -->
+            <div class="space-y-12">
+                <div class="text-center space-y-4">
+                    <h2 class="text-3xl md:text-5xl font-cinematic font-bold">Unrivaled Experience Builder</h2>
+                    <p class="text-gray-400 max-w-xl mx-auto">Every celebration is structured like a movie chapter sequence designed to evoke emotion.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="glass-card p-8 rounded-3xl space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-box-open"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-serif">Luxury Gift Unboxing</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Multi-stage 3D unboxing experience with customizable ribbons, crystal chests, and surprise reveals.</p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-3xl space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-stamp"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-serif">Wax-Sealed Letters</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Interactive letters featuring authentic wax seal breaking sound effects, calligraphy fonts, and audio recordings.</p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-3xl space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-serif">Interactive Mini-Games</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Engage recipients with heart-popping games, memory matching, treasure hunts, and scratch cards.</p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-3xl space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-heart"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-serif">Proposals & Custom Q&A</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Ask life-changing questions like "Will You Marry Me?" or custom queries with playful runaway "No" buttons.</p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-3xl space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-calendar-check"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-serif">RSVP & Event Invitation</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Elegant event details with interactive RSVP form, venue maps, dress code notes, and countdown timer.</p>
+                    </div>
+
+                    <div class="glass-card p-8 rounded-3xl space-y-4">
+                        <div class="w-14 h-14 rounded-2xl bg-pink-500/20 text-pink-400 flex items-center justify-center text-2xl">
+                            <i class="fa-solid fa-volcano"></i>
+                        </div>
+                        <h3 class="text-xl font-bold font-serif">Grand Finale Showcases</h3>
+                        <p class="text-sm text-gray-400 leading-relaxed">Conclude with breathtaking canvas fireworks, sky lantern releases, or flower petal rain.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Occasion Selector Carousel Grid -->
+            <div class="space-y-8">
+                <div class="flex flex-col md:flex-row items-start md:items-end justify-between gap-4">
+                    <div>
+                        <h2 class="text-3xl font-cinematic font-bold">Celebrations For Every Milestone</h2>
+                        <p class="text-gray-400">Tailored templates and themes crafted for life's most precious occasions.</p>
+                    </div>
+                    <button onclick="App.router.navigate('studio')" class="text-amber-400 font-semibold hover:underline flex items-center gap-2">
+                        Explore All Occasions <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="occasionGrid">
+                    <!-- Populated dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 2: CREATOR STUDIO (EXPERIENCE BUILDER)-->
+        <!-- ========================================== -->
+        <section id="view-studio" class="view-section hidden py-8 px-6 max-w-7xl mx-auto">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Studio Sidebar: Module Reordering & Global Config -->
+                <div class="lg:col-span-4 space-y-6">
+                    <div class="glass-panel p-6 rounded-3xl space-y-6">
+                        <div class="flex items-center justify-between border-b border-white/10 pb-4">
+                            <h2 class="text-xl font-cinematic font-bold text-amber-300">Experience Builder</h2>
+                            <span class="text-xs px-3 py-1 rounded-full bg-rose-500/20 text-rose-300 border border-rose-500/30 font-medium">Live Studio</span>
+                        </div>
+
+                        <!-- Celebration Metadata Inputs -->
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Celebration Title</label>
+                                <input type="text" id="configTitle" value="Happy 25th Birthday, Sophia!" oninput="App.studio.updateConfigFromForm()" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-rose-500 focus:outline-none">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Recipient Name</label>
+                                <input type="text" id="configRecipient" value="Sophia" oninput="App.studio.updateConfigFromForm()" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-rose-500 focus:outline-none">
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Occasion</label>
+                                    <select id="configOccasion" onchange="App.studio.updateConfigFromForm()" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-sm focus:border-rose-500 focus:outline-none">
+                                        <option value="birthday">Birthday</option>
+                                        <option value="proposal">Proposal</option>
+                                        <option value="anniversary">Anniversary</option>
+                                        <option value="wedding">Wedding</option>
+                                        <option value="graduation">Graduation</option>
+                                        <option value="custom">Custom</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Atmosphere Theme</label>
+                                    <select id="configTheme" onchange="App.studio.updateConfigFromForm()" class="w-full bg-black/40 border border-white/10 rounded-xl px-3 py-2.5 text-sm focus:border-rose-500 focus:outline-none">
+                                        <option value="pink">Dreamy Pink</option>
+                                        <option value="gold">Luxury Gold</option>
+                                        <option value="galaxy">Midnight Galaxy</option>
+                                        <option value="emerald">Royal Emerald</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Story Engine Chapters (Reorderable / Toggleable) -->
+                        <div class="space-y-3">
+                            <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold">Story Sequence Modules</label>
+                            <div id="moduleList" class="space-y-2">
+                                <!-- Populated dynamically by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Action Controls -->
+                        <div class="pt-4 border-t border-white/10 flex flex-col gap-3">
+                            <button onclick="App.studio.launchPreview('desktop')" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-rose-600 text-white font-bold text-sm shadow-lg hover:opacity-90 transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-eye"></i> Full Screen Preview
+                            </button>
+                            <button onclick="App.publishModal.open()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-rose-500 text-white font-bold text-sm shadow-lg shadow-rose-500/20 hover:scale-[1.02] transition-all flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> Publish & Get Link
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Studio Main Content: Selected Module Editor & Live View Frame -->
+                <div class="lg:col-span-8 space-y-6">
+                    <!-- Module Editor Workspace -->
+                    <div class="glass-panel p-6 rounded-3xl min-h-[600px] flex flex-col justify-between" id="moduleEditorPanel">
+                        <div id="editorFieldsContainer" class="space-y-6">
+                            <!-- Dynamic Editor Inputs Inserted Here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 3: CINEMATIC RECIPIENT MULTIVERSE VIEW -->
+        <!-- ========================================== -->
+        <section id="view-viewer" class="view-section hidden fixed inset-0 z-50 bg-black overflow-hidden flex flex-col justify-between">
+            
+            <!-- Floating Top Viewer Bar -->
+            <div class="absolute top-6 left-6 right-6 z-50 flex items-center justify-between pointer-events-auto">
+                <div class="glass-panel px-4 py-2 rounded-full flex items-center gap-3">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                    <span id="viewerOccasionBadge" class="text-xs font-cinematic uppercase tracking-widest text-amber-300 font-bold">Birthday Experience</span>
+                </div>
+
+                <div class="flex items-center gap-3">
+                    <button onclick="App.audioEngine.toggleAudio()" class="w-10 h-10 rounded-full glass-panel flex items-center justify-center text-white hover:text-amber-400 transition-colors">
+                        <i class="fa-solid fa-music"></i>
+                    </button>
+                    <button onclick="App.router.navigate('studio')" class="px-4 py-2 rounded-full glass-panel text-xs text-gray-300 hover:text-white transition-colors">
+                        <i class="fa-solid fa-pen-to-square mr-1"></i> Edit
+                    </button>
+                </div>
+            </div>
+
+            <!-- Chapter Content Viewport -->
+            <div id="chapterViewport" class="w-full h-full flex items-center justify-center px-4 py-16 relative">
+                
+                <!-- CHAPTER 1: WELCOME INTRO -->
+                <div id="chapter-welcome" class="chapter-section flex-col items-center justify-center text-center max-w-2xl mx-auto space-y-8">
+                    <div class="w-24 h-24 rounded-full bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-4xl text-rose-400 animate-float shadow-2xl shadow-rose-500/50">
+                        🎁
+                    </div>
+                    <div class="space-y-4">
+                        <p class="text-sm text-amber-400 font-cinematic uppercase tracking-widest font-semibold" id="viewWelcomeSubtitle">A Special Surprise Prepared For You</p>
+                        <h1 class="text-4xl md:text-6xl font-cinematic font-bold" id="viewWelcomeTitle">Happy Birthday, Sophia!</h1>
+                        <p class="text-gray-300 font-light text-base md:text-lg leading-relaxed max-w-lg mx-auto" id="viewWelcomeMessage">
+                            Step inside your customized cinematic universe. We have gathered memories, surprises, and heartfelt notes just for you.
+                        </p>
+                    </div>
+                    <button onclick="App.viewer.nextChapter()" class="px-8 py-4 rounded-full bg-gradient-to-r from-rose-500 to-amber-500 text-white font-bold text-lg shadow-xl shadow-rose-500/30 hover:scale-105 transition-all">
+                        Begin Experience <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+
+                <!-- CHAPTER 2: LUXURY GIFT UNBOXING -->
+                <div id="chapter-gift" class="chapter-section flex-col items-center justify-center text-center max-w-xl mx-auto space-y-8">
+                    <div class="space-y-2">
+                        <span class="text-xs font-cinematic uppercase text-amber-400 tracking-widest">Chapter II — The Surprise</span>
+                        <h2 class="text-3xl font-cinematic font-bold">Unwrap Your Special Gift</h2>
+                    </div>
+
+                    <!-- Interactive Gift Box -->
+                    <div id="giftBoxElement" onclick="App.viewer.unwrapGift()" class="w-64 h-64 glass-panel rounded-3xl border-2 border-amber-400/40 flex flex-col items-center justify-center cursor-pointer relative hover:scale-105 transition-all group shadow-2xl shadow-amber-500/20">
+                        <div class="absolute inset-x-0 top-1/2 h-8 bg-gradient-to-r from-rose-500 to-amber-500 -translate-y-1/2 shadow-md"></div>
+                        <div class="absolute inset-y-0 left-1/2 w-8 bg-gradient-to-b from-rose-500 to-amber-500 -translate-x-1/2 shadow-md"></div>
+                        <div class="w-16 h-16 rounded-full bg-amber-400 text-black flex items-center justify-center text-2xl font-bold z-10 shadow-lg group-hover:rotate-12 transition-transform">
+                            🎁
+                        </div>
+                        <span class="absolute bottom-4 text-xs text-amber-300 font-semibold tracking-wider uppercase z-10">Tap Ribbon To Open</span>
+                    </div>
+
+                    <div id="giftRevealedMessage" class="hidden glass-card p-6 rounded-2xl border border-amber-400/30 space-y-3">
+                        <div class="text-amber-300 font-bold text-lg" id="viewGiftTitle">Exclusive VIP Concert Ticket</div>
+                        <p class="text-sm text-gray-300" id="viewGiftDesc">You are going to see your favorite artist live this summer!</p>
+                        <button onclick="App.viewer.nextChapter()" class="mt-4 px-6 py-2.5 rounded-full bg-amber-500 text-black font-bold text-sm">Continue Journey</button>
+                    </div>
+                </div>
+
+                <!-- CHAPTER 3: BLOOMING FLOWER BOUQUET -->
+                <div id="chapter-bouquet" class="chapter-section flex-col items-center justify-center text-center max-w-xl mx-auto space-y-8">
+                    <div class="space-y-2">
+                        <span class="text-xs font-cinematic uppercase text-rose-400 tracking-widest">Chapter III — Floral Garden</span>
+                        <h2 class="text-3xl font-cinematic font-bold">Touch A Flower To Reveal A Secret</h2>
+                    </div>
+
+                    <div class="grid grid-cols-3 gap-6" id="flowerBouquetContainer">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <div id="flowerSecretDisplay" class="min-h-[60px] glass-card p-4 rounded-xl text-sm text-rose-200 italic font-serif max-w-md mx-auto">
+                        Click any flower above to pluck a hidden memory snippet.
+                    </div>
+
+                    <button onclick="App.viewer.nextChapter()" class="px-8 py-3 rounded-full bg-rose-500 text-white font-bold text-sm shadow-lg">Proceed To Letter</button>
+                </div>
+
+                <!-- CHAPTER 4: WAX-SEALED LETTER -->
+                <div id="chapter-letter" class="chapter-section flex-col items-center justify-center text-center max-w-2xl mx-auto space-y-6">
+                    <div class="space-y-2">
+                        <span class="text-xs font-cinematic uppercase text-amber-400 tracking-widest">Chapter IV — Personal Note</span>
+                        <h2 class="text-3xl font-cinematic font-bold">Unseal The Sealed Letter</h2>
+                    </div>
+
+                    <div id="envelopeContainer" class="w-full max-w-lg glass-panel p-8 rounded-3xl relative border border-amber-500/30 shadow-2xl flex flex-col items-center justify-center">
+                        <div id="waxSeal" onclick="App.viewer.unsealLetter()" class="w-20 h-20 rounded-full wax-seal flex items-center justify-center cursor-pointer shadow-xl hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-stamp text-2xl text-white"></i>
+                        </div>
+                        <p id="unsealHint" class="text-xs text-amber-300 uppercase tracking-widest mt-4 font-semibold">Break Wax Seal To Read</p>
+
+                        <div id="letterContent" class="hidden text-left space-y-4 pt-4">
+                            <h3 class="text-2xl font-serif text-amber-300 italic" id="viewLetterHeading">Dearest Sophia,</h3>
+                            <p class="text-gray-200 font-serif leading-relaxed text-sm md:text-base" id="viewLetterBody">
+                                From all the late-night conversations to unforgettable adventures, having you in my life makes every moment infinitely brighter. I created this digital universe to remind you how deeply loved and cherished you are.
+                            </p>
+                            <p class="text-right font-serif text-amber-400 italic" id="viewLetterSign">- Forever Yours, Alex</p>
+                        </div>
+                    </div>
+
+                    <button onclick="App.viewer.nextChapter()" class="px-8 py-3 rounded-full bg-rose-500 text-white font-bold text-sm shadow-lg">Explore Memories</button>
+                </div>
+
+                <!-- CHAPTER 5: MEMORY GALLERY & SCRAPBOOK -->
+                <div id="chapter-memories" class="chapter-section flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-8">
+                    <div class="space-y-2">
+                        <span class="text-xs font-cinematic uppercase text-purple-400 tracking-widest">Chapter V — Memory Scrapbook</span>
+                        <h2 class="text-3xl font-cinematic font-bold">Precious Moments Frozen In Time</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 w-full" id="memoryCardsGrid">
+                        <!-- Populated by JS -->
+                    </div>
+
+                    <button onclick="App.viewer.nextChapter()" class="px-8 py-3 rounded-full bg-purple-600 text-white font-bold text-sm shadow-lg">Play Mini-Game</button>
+                </div>
+
+                <!-- CHAPTER 6: BALLOON POP MINI-GAME -->
+                <div id="chapter-game" class="chapter-section flex-col items-center justify-center text-center max-w-xl mx-auto space-y-6">
+                    <div class="space-y-2">
+                        <span class="text-xs font-cinematic uppercase text-rose-400 tracking-widest">Chapter VI — Interactive Game</span>
+                        <h2 class="text-3xl font-cinematic font-bold">Pop 5 Celebratory Balloons!</h2>
+                        <p class="text-sm text-gray-400">Score: <span id="gameScore" class="font-bold text-rose-400 text-lg">0</span> / 5</p>
+                    </div>
+
+                    <div id="balloonArena" class="w-full h-72 glass-panel rounded-3xl relative overflow-hidden flex items-center justify-center">
+                        <!-- Balloons spawned by JS -->
+                    </div>
+
+                    <button id="gameNextBtn" onclick="App.viewer.nextChapter()" class="hidden px-8 py-3 rounded-full bg-emerald-500 text-white font-bold text-sm shadow-lg">Victory! Continue</button>
+                </div>
+
+                <!-- CHAPTER 7: PROPOSAL / CUSTOM QUESTION -->
+                <div id="chapter-proposal" class="chapter-section flex-col items-center justify-center text-center max-w-xl mx-auto space-y-8">
+                    <div class="w-20 h-20 rounded-full bg-rose-500/20 border border-rose-500/40 flex items-center justify-center text-3xl text-rose-400 animate-pulse">
+                        💖
+                    </div>
+                    <div class="space-y-3">
+                        <span class="text-xs font-cinematic uppercase text-rose-400 tracking-widest">Chapter VII — The Core Question</span>
+                        <h2 class="text-3xl md:text-4xl font-cinematic font-bold" id="viewProposalQuestion">Will You Be My Valentine & Best Friend Forever?</h2>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-6 relative min-h-[80px] w-full" id="proposalBtnContainer">
+                        <button onclick="App.viewer.answerProposal(true)" class="px-8 py-4 rounded-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold text-lg shadow-xl shadow-emerald-500/30 transition-transform hover:scale-110">
+                            YES! Absolutely! 🎉
+                        </button>
+                        <button id="runawayNoBtn" onmouseover="App.viewer.dodgeNoBtn()" onclick="App.viewer.dodgeNoBtn()" class="px-8 py-4 rounded-full glass-panel text-gray-300 font-bold text-lg transition-all absolute">
+                            No 😢
+                        </button>
+                    </div>
+                </div>
+
+                <!-- CHAPTER 8: INVITATION & RSVP -->
+                <div id="chapter-rsvp" class="chapter-section flex-col items-center justify-center text-center max-w-lg mx-auto space-y-6">
+                    <div class="space-y-2">
+                        <span class="text-xs font-cinematic uppercase text-amber-400 tracking-widest">Chapter VIII — Official Invitation</span>
+                        <h2 class="text-3xl font-cinematic font-bold" id="viewRsvpTitle">Celebration Party Invitation</h2>
+                    </div>
+
+                    <div class="w-full glass-panel p-6 rounded-3xl space-y-4 text-left border border-amber-500/30">
+                        <div class="flex items-center gap-3 text-amber-300">
+                            <i class="fa-solid fa-calendar-day text-lg"></i>
+                            <div>
+                                <div class="text-xs text-gray-400 uppercase">Date & Time</div>
+                                <div class="font-bold text-sm" id="viewRsvpDate">Saturday, October 24, 2026 @ 7:00 PM</div>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center gap-3 text-amber-300">
+                            <i class="fa-solid fa-location-dot text-lg"></i>
+                            <div>
+                                <div class="text-xs text-gray-400 uppercase">Venue / Location</div>
+                                <div class="font-bold text-sm" id="viewRsvpVenue">The Grand Skylight Lounge, NY</div>
+                            </div>
+                        </div>
+
+                        <!-- RSVP Form -->
+                        <form onsubmit="App.viewer.submitRSVP(event)" class="space-y-3 pt-4 border-t border-white/10">
+                            <input type="text" placeholder="Your Full Name" required class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-amber-400 focus:outline-none">
+                            <select class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-amber-400 focus:outline-none">
+                                <option value="attending">Joyfully Attending 🎉</option>
+                                <option value="declining">Regretfully Declining 💔</option>
+                            </select>
+                            <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-rose-500 text-white font-bold text-sm shadow-lg">Confirm RSVP</button>
+                        </form>
+                    </div>
+
+                    <button onclick="App.viewer.nextChapter()" class="px-8 py-3 rounded-full bg-rose-500 text-white font-bold text-sm shadow-lg">Watch Grand Finale</button>
+                </div>
+
+                <!-- CHAPTER 9: GRAND FINALE -->
+                <div id="chapter-finale" class="chapter-section flex-col items-center justify-center text-center max-w-2xl mx-auto space-y-8">
+                    <div class="space-y-4">
+                        <span class="text-xs font-cinematic uppercase text-amber-400 tracking-widest">Grand Finale</span>
+                        <h1 class="text-4xl md:text-6xl font-cinematic font-bold bg-clip-text text-transparent bg-gradient-to-r from-rose-300 via-amber-200 to-purple-300">
+                            Thank You For Celebrating With Us!
+                        </h1>
+                        <p class="text-gray-300 font-light text-base leading-relaxed">
+                            May your life be continuously blessed with love, magic, and unforgettable milestones.
+                        </p>
+                    </div>
+
+                    <div class="flex items-center justify-center gap-4">
+                        <button onclick="App.viewer.triggerFireworks()" class="px-6 py-3 rounded-full bg-gradient-to-r from-rose-500 to-amber-500 text-white font-bold text-sm shadow-xl">
+                            <i class="fa-solid fa-fireworks mr-2"></i> Trigger Fireworks
+                        </button>
+                        <button onclick="App.router.navigate('studio')" class="px-6 py-3 rounded-full glass-panel text-white font-semibold text-sm">
+                            Create Your Own Universe
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Floating Bottom Chapter Navigation Bar -->
+            <div class="absolute bottom-6 left-1/2 -translate-x-1/2 z-50 glass-panel px-6 py-3 rounded-full flex items-center gap-6 border border-white/20">
+                <button onclick="App.viewer.prevChapter()" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-chevron-left text-lg"></i>
+                </button>
+                <span id="chapterProgressIndicator" class="text-xs font-cinematic uppercase tracking-widest text-amber-300 font-semibold">
+                    Chapter 1 / 9
+                </span>
+                <button onclick="App.viewer.nextChapter()" class="text-gray-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-chevron-right text-lg"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- VIEW 4: MY PROJECTS / DASHBOARD            -->
+        <!-- ========================================== -->
+        <section id="view-dashboard" class="view-section hidden py-12 px-6 max-w-7xl mx-auto space-y-8">
+            <div class="flex items-center justify-between border-b border-white/10 pb-6">
+                <div>
+                    <h1 class="text-3xl font-cinematic font-bold">My Celebrations Dashboard</h1>
+                    <p class="text-gray-400 text-sm">Manage, edit, and view analytics for your published universes.</p>
+                </div>
+                <button onclick="App.router.navigate('studio')" class="px-6 py-3 rounded-full bg-rose-500 text-white font-bold text-sm shadow-lg hover:scale-105 transition-all">
+                    + New Celebration
+                </button>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="dashboardProjectsGrid">
+                <!-- Projects rendered by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- PUBLISH & SHARE MODAL -->
+    <div id="publishModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden items-center justify-center p-6">
+        <div class="glass-panel max-w-md w-full p-8 rounded-3xl space-y-6 relative border border-amber-500/30">
+            <button onclick="App.publishModal.close()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+            <div class="text-center space-y-2">
+                <div class="w-12 h-12 rounded-full bg-emerald-500/20 text-emerald-400 mx-auto flex items-center justify-center text-2xl">
+                    <i class="fa-solid fa-globe"></i>
+                </div>
+                <h3 class="text-2xl font-cinematic font-bold">Your Universe Is Live!</h3>
+                <p class="text-xs text-gray-400">Share this single link with your recipient. No app or sign-up needed.</p>
+            </div>
+
+            <div class="space-y-4">
+                <div class="bg-black/50 p-3 rounded-xl border border-white/10 flex items-center justify-between gap-2">
+                    <input type="text" id="shareUrlInput" readonly class="bg-transparent text-xs text-amber-300 w-full focus:outline-none font-mono">
+                    <button onclick="App.publishModal.copyLink()" class="px-3 py-1.5 rounded-lg bg-amber-500 text-black text-xs font-bold hover:bg-amber-400">
+                        Copy
+                    </button>
+                </div>
+
+                <div class="flex justify-center p-4 bg-white rounded-2xl" id="qrcodeContainer"></div>
+            </div>
+
+            <button onclick="App.publishModal.close()" class="w-full py-3 rounded-xl glass-panel text-white font-bold text-sm">
+                Close & Return To Studio
+            </button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="glass-panel border-t border-white/10 py-8 px-6 text-center text-xs text-gray-400 relative z-10">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="font-cinematic font-bold text-amber-300">CelebrationVerse © 2026</div>
+            <div>Crafted with passion for cinema, memories, and emotional storytelling.</div>
+            <div class="flex items-center gap-4">
+                <a href="#" class="hover:text-white">Privacy</a>
+                <a href="#" class="hover:text-white">Terms</a>
+                <a href="#" class="hover:text-white">GitHub</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ========================================== -->
+    <!-- CORE JS APPLICATION ARCHITECTURE MATRIX    -->
+    <!-- ========================================== -->
+    <script>
+        /**
+         * CelebrationVerse Core Application Engine
+         * Built as a self-contained Single-Page State Machine.
+         */
+        const App = {
+            // Global State Schema
+            state: {
+                currentView: 'landing',
+                config: {
+                    id: 'cel_' + Date.now(),
+                    title: 'Happy 25th Birthday, Sophia!',
+                    recipient: 'Sophia',
+                    occasion: 'birthday',
+                    theme: 'pink',
+                    giftTitle: 'VIP Concert Ticket',
+                    giftDesc: 'You are going to see your favorite artist live this summer!',
+                    letterHeading: 'Dearest Sophia,',
+                    letterBody: 'From late night conversations to infinite laughter, having you in my life makes every day magical.',
+                    letterSign: '- Forever Yours, Alex',
+                    proposalQuestion: 'Will You Be My Valentine & Best Friend Forever?',
+                    rsvpDate: 'Saturday, October 24, 2026 @ 7:00 PM',
+                    rsvpVenue: 'The Grand Skylight Lounge, NY',
+                    activeModules: ['welcome', 'gift', 'bouquet', 'letter', 'memories', 'game', 'proposal', 'rsvp', 'finale']
+                },
+                currentChapterIndex: 0,
+                score: 0
+            },
+
+            // Initialization Engine
+            init() {
+                this.particleEngine.init();
+                this.router.init();
+                this.studio.init();
+                this.loadHashState();
+                console.log('✨ CelebrationVerse Engine Fully Initialized!');
+            },
+
+            // URL Hash Serialization (Zero-Backend State Persistence)
+            loadHashState() {
+                if (window.location.hash.startsWith('#experience=')) {
+                    try {
+                        const encodedData = window.location.hash.replace('#experience=', '');
+                        const decodedJson = atob(encodedData);
+                        this.state.config = JSON.parse(decodedJson);
+                        this.viewer.launchDemo();
+                    } catch (e) {
+                        console.error('Invalid Experience Link Data', e);
+                    }
+                }
+            },
+
+            getEncodedShareableUrl() {
+                const jsonString = JSON.stringify(this.state.config);
+                const encodedData = btoa(jsonString);
+                return `${window.location.origin}${window.location.pathname}#experience=${encodedData}`;
+            },
+
+            // Router Engine
+            router: {
+                init() {
+                    this.renderOccasions();
+                },
+                navigate(viewId) {
+                    document.querySelectorAll('.view-section').forEach(el => el.classList.add('hidden'));
+                    const targetView = document.getElementById(`view-${viewId}`);
+                    if (targetView) targetView.classList.remove('hidden');
+                    App.state.currentView = viewId;
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+                    if (viewId === 'dashboard') App.dashboard.render();
+                },
+                renderOccasions() {
+                    const grid = document.getElementById('occasionGrid');
+                    if (!grid) return;
+                    const occasions = [
+                        { name: 'Birthday', icon: '🎂', theme: 'pink' },
+                        { name: 'Proposal', icon: '💍', theme: 'gold' },
+                        { name: 'Anniversary', icon: '🥂', theme: 'emerald' },
+                        { name: 'Wedding', icon: '💒', theme: 'gold' },
+                        { name: 'Graduation', icon: '🎓', theme: 'galaxy' },
+                        { name: 'Festivals', icon: '🪔', theme: 'gold' },
+                        { name: 'Baby Shower', icon: '🧸', theme: 'pink' },
+                        { name: 'Custom', icon: '✨', theme: 'galaxy' }
+                    ];
+                    grid.innerHTML = occasions.map(o => `
+                        <div onclick="App.studio.selectOccasionPreset('${o.name.toLowerCase()}')" class="glass-card p-6 rounded-2xl cursor-pointer text-center space-y-3 hover:scale-105 transition-all">
+                            <div class="text-3xl">${o.icon}</div>
+                            <div class="font-bold text-sm font-cinematic text-amber-200">${o.name}</div>
+                        </div>
+                    `).join('');
+                }
+            },
+
+            // Studio / Experience Builder Engine
+            studio: {
+                init() {
+                    this.renderModuleList();
+                    this.renderEditorFields();
+                },
+                selectOccasionPreset(occ) {
+                    App.state.config.occasion = occ;
+                    document.getElementById('configOccasion').value = occ;
+                    App.router.navigate('studio');
+                },
+                updateConfigFromForm() {
+                    App.state.config.title = document.getElementById('configTitle').value;
+                    App.state.config.recipient = document.getElementById('configRecipient').value;
+                    App.state.config.occasion = document.getElementById('configOccasion').value;
+                    App.state.config.theme = document.getElementById('configTheme').value;
+                    document.body.setAttribute('data-theme', App.state.config.theme);
+                },
+                renderModuleList() {
+                    const container = document.getElementById('moduleList');
+                    if (!container) return;
+                    const allModules = [
+                        { id: 'welcome', name: '1. Welcome Chapter', icon: 'fa-sun' },
+                        { id: 'gift', name: '2. Unboxing Surprise', icon: 'fa-box-open' },
+                        { id: 'bouquet', name: '3. Blooming Garden', icon: 'fa-spa' },
+                        { id: 'letter', name: '4. Sealed Letter', icon: 'fa-envelope-open-text' },
+                        { id: 'memories', name: '5. Memory Scrapbook', icon: 'fa-images' },
+                        { id: 'game', name: '6. Mini-Game Arena', icon: 'fa-gamepad' },
+                        { id: 'proposal', name: '7. Proposal Question', icon: 'fa-heart' },
+                        { id: 'rsvp', name: '8. Event Invitation', icon: 'fa-calendar-check' },
+                        { id: 'finale', name: '9. Grand Finale', icon: 'fa-fireworks' }
+                    ];
+
+                    container.innerHTML = allModules.map(m => `
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10 text-xs">
+                            <div class="flex items-center gap-2 font-medium">
+                                <i class="fa-solid ${m.icon} text-amber-400"></i>
+                                <span>${m.name}</span>
+                            </div>
+                            <input type="checkbox" checked onchange="App.studio.toggleModule('${m.id}')" class="accent-rose-500 rounded cursor-pointer">
+                        </div>
+                    `).join('');
+                },
+                toggleModule(id) {
+                    const idx = App.state.config.activeModules.indexOf(id);
+                    if (idx > -1) App.state.config.activeModules.splice(idx, 1);
+                    else App.state.config.activeModules.push(id);
+                },
+                renderEditorFields() {
+                    const container = document.getElementById('editorFieldsContainer');
+                    if (!container) return;
+                    container.innerHTML = `
+                        <h3 class="text-xl font-cinematic font-bold text-amber-300 border-b border-white/10 pb-3">Customize Module Content</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Unboxing Gift Title</label>
+                                <input type="text" id="inputGiftTitle" value="${App.state.config.giftTitle}" oninput="App.state.config.giftTitle = this.value" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-rose-500 focus:outline-none">
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Gift Description / Voucher Text</label>
+                                <textarea id="inputGiftDesc" oninput="App.state.config.giftDesc = this.value" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-rose-500 focus:outline-none h-20">${App.state.config.giftDesc}</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Sealed Letter Message</label>
+                                <textarea id="inputLetterBody" oninput="App.state.config.letterBody = this.value" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-rose-500 focus:outline-none h-28">${App.state.config.letterBody}</textarea>
+                            </div>
+                            <div>
+                                <label class="block text-xs uppercase tracking-wider text-gray-400 font-semibold mb-2">Proposal / Core Question</label>
+                                <input type="text" id="inputProposalQuestion" value="${App.state.config.proposalQuestion}" oninput="App.state.config.proposalQuestion = this.value" class="w-full bg-black/40 border border-white/10 rounded-xl px-4 py-2.5 text-sm focus:border-rose-500 focus:outline-none">
+                            </div>
+                        </div>
+                    `;
+                },
+                launchPreview(mode) {
+                    App.viewer.launchDemo();
+                }
+            },
+
+            // Recipient Viewer Engine
+            viewer: {
+                launchDemo() {
+                    document.body.setAttribute('data-theme', App.state.config.theme || 'pink');
+                    App.router.navigate('viewer');
+                    this.updateDOMFromConfig();
+                    this.showChapter(0);
+                },
+                updateDOMFromConfig() {
+                    const cfg = App.state.config;
+                    document.getElementById('viewWelcomeTitle').innerText = cfg.title;
+                    document.getElementById('viewWelcomeSubtitle').innerText = `Prepared for ${cfg.recipient}`;
+                    document.getElementById('viewGiftTitle').innerText = cfg.giftTitle;
+                    document.getElementById('viewGiftDesc').innerText = cfg.giftDesc;
+                    document.getElementById('viewLetterBody').innerText = cfg.letterBody;
+                    document.getElementById('viewProposalQuestion').innerText = cfg.proposalQuestion;
+                    document.getElementById('viewRsvpDate').innerText = cfg.rsvpDate;
+                    document.getElementById('viewRsvpVenue').innerText = cfg.rsvpVenue;
+
+                    this.renderFlowers();
+                    this.renderMemories();
+                    this.setupGame();
+                },
+                showChapter(index) {
+                    const activeModules = App.state.config.activeModules;
+                    if (index < 0 || index >= activeModules.length) return;
+
+                    App.state.currentChapterIndex = index;
+                    const moduleId = activeModules[index];
+
+                    document.querySelectorAll('.chapter-section').forEach(el => el.classList.remove('active'));
+                    const chapterEl = document.getElementById(`chapter-${moduleId}`);
+                    if (chapterEl) chapterEl.classList.add('active');
+
+                    document.getElementById('chapterProgressIndicator').innerText = `Chapter ${index + 1} /${activeModules.length}`;
+                },
+                nextChapter() {
+                    this.showChapter(App.state.currentChapterIndex + 1);
+                },
+                prevChapter() {
+                    this.showChapter(App.state.currentChapterIndex - 1);
+                },
+                unwrapGift() {
+                    document.getElementById('giftBoxElement').classList.add('hidden');
+                    document.getElementById('giftRevealedMessage').classList.remove('hidden');
+                    confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                },
+                renderFlowers() {
+                    const container = document.getElementById('flowerBouquetContainer');
+                    if (!container) return;
+                    const flowers = ['🌹', '🌷', '🌸', '🌻', '🌺', '🌼'];
+                    const messages = [
+                        "Your smile illuminates every room.",
+                        "Thank you for endless warmth and support.",
+                        "Here's to a lifetime of happiness!",
+                        "You make every moment unforgettable.",
+                        "May all your dreams blossom into reality.",
+                        "A pure heart deserving of all joy."
+                    ];
+                    container.innerHTML = flowers.map((f, i) => `
+                        <button onclick="document.getElementById('flowerSecretDisplay').innerText = '${messages[i]}'" class="w-20 h-20 rounded-2xl glass-panel text-4xl flex items-center justify-center hover:scale-125 transition-all shadow-lg hover:rotate-12">
+                            ${f}
+                        </button>
+                    `).join('');
+                },
+                renderMemories() {
+                    const container = document.getElementById('memoryCardsGrid');
+                    if (!container) return;
+                    const memories = [
+                        { title: 'Golden Sunset Walk', date: 'Summer 2025', desc: 'That perfect evening by the harbor.', icon: '🌅' },
+                        { title: 'The Road Trip', date: 'Autumn 2025', desc: 'Lost without GPS, laughing all night.', icon: '🚗' },
+                        { title: 'Stargazing Night', date: 'Winter 2025', desc: 'Counting shooting stars under cold skies.', icon: '✨' }
+                    ];
+                    container.innerHTML = memories.map(m => `
+                        <div class="glass-card p-6 rounded-3xl space-y-3 text-left">
+                            <div class="text-4xl">${m.icon}</div>
+                            <h4 class="font-bold font-serif text-amber-300 text-lg">${m.title}</h4>
+                            <span class="text-xs text-rose-400 font-semibold uppercase">${m.date}</span>
+                            <p class="text-xs text-gray-300 leading-relaxed">${m.desc}</p>
+                        </div>
+                    `).join('');
+                },
+                unsealLetter() {
+                    document.getElementById('waxSeal').classList.add('hidden');
+                    document.getElementById('unsealHint').classList.add('hidden');
+                    document.getElementById('letterContent').classList.remove('hidden');
+                },
+                setupGame() {
+                    const arena = document.getElementById('balloonArena');
+                    if (!arena) return;
+                    arena.innerHTML = '';
+                    App.state.score = 0;
+                    document.getElementById('gameScore').innerText = '0';
+
+                    for (let i = 0; i < 5; i++) {
+                        const balloon = document.createElement('div');
+                        balloon.className = 'absolute w-12 h-16 rounded-full bg-rose-500 cursor-pointer flex items-center justify-center text-white text-xs font-bold animate-float';
+                        balloon.style.left = `${15 + i * 18}%`;
+                        balloon.style.top = `${20 + (i % 2) * 30}%`;
+                        balloon.innerText = '🎈';
+                        balloon.onclick = () => {
+                            balloon.remove();
+                            App.state.score++;
+                            document.getElementById('gameScore').innerText = App.state.score;
+                            confetti({ particleCount: 30, spread: 50, origin: { y: 0.5 } });
+                            if (App.state.score >= 5) {
+                                document.getElementById('gameNextBtn').classList.remove('hidden');
+                            }
+                        };
+                        arena.appendChild(balloon);
+                    }
+                },
+                dodgeNoBtn() {
+                    const btn = document.getElementById('runawayNoBtn');
+                    if (!btn) return;
+                    const randomX = (Math.random() - 0.5) * 300;
+                    const randomY = (Math.random() - 0.5) * 200;
+                    btn.style.transform = `translate(${randomX}px,${randomY}px)`;
+                },
+                answerProposal(accepted) {
+                    if (accepted) {
+                        confetti({ particleCount: 200, spread: 100, origin: { y: 0.5 } });
+                        alert("💖 She/He Said YES! Celebration unlocked!");
+                        this.nextChapter();
+                    }
+                },
+                submitRSVP(e) {
+                    e.preventDefault();
+                    confetti({ particleCount: 80, spread: 60 });
+                    alert("✨ Thank you! Your RSVP response has been recorded.");
+                    this.nextChapter();
+                },
+                triggerFireworks() {
+                    confetti({ particleCount: 300, spread: 120, origin: { y: 0.4 } });
+                }
+            },
+
+            // Publish Modal Handler
+            publishModal: {
+                open() {
+                    const modal = document.getElementById('publishModal');
+                    const urlInput = document.getElementById('shareUrlInput');
+                    const qrContainer = document.getElementById('qrcodeContainer');
+
+                    const shareUrl = App.getEncodedShareableUrl();
+                    urlInput.value = shareUrl;
+
+                    qrContainer.innerHTML = '';
+                    new QRCode(qrContainer, {
+                        text: shareUrl,
+                        width: 128,
+                        height: 128
+                    });
+
+                    modal.classList.remove('hidden');
+                    modal.classList.add('flex');
+                },
+                close() {
+                    const modal = document.getElementById('publishModal');
+                    modal.classList.add('hidden');
+                    modal.classList.remove('flex');
+                },
+                copyLink() {
+                    const input = document.getElementById('shareUrlInput');
+                    input.select();
+                    navigator.clipboard.writeText(input.value);
+                    alert("✨ Shareable link copied to clipboard!");
+                }
+            },
+
+            // Dashboard Engine
+            dashboard: {
+                render() {
+                    const grid = document.getElementById('dashboardProjectsGrid');
+                    if (!grid) return;
+                    grid.innerHTML = `
+                        <div class="glass-card p-6 rounded-3xl space-y-4 border border-rose-500/30">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-300 font-bold uppercase tracking-wider">Active</span>
+                                <span class="text-xs text-gray-400">Created Today</span>
+                            </div>
+                            <h3 class="font-bold text-lg font-cinematic text-amber-200">${App.state.config.title}</h3>
+                            <p class="text-xs text-gray-400">Recipient: ${App.state.config.recipient}</p>
+                            <div class="flex items-center justify-between pt-4 border-t border-white/10">
+                                <button onclick="App.viewer.launchDemo()" class="text-xs text-rose-400 font-bold hover:underline">View Live</button>
+                                <button onclick="App.publishModal.open()" class="text-xs text-amber-400 font-bold hover:underline">Share Link</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            },
+
+            // Ambient Audio Engine (Web Audio API Synthesizer)
+            audioEngine: {
+                isPlaying: false,
+                audioCtx: null,
+                toggleAudio() {
+                    this.isPlaying = !this.isPlaying;
+                    const btn = document.getElementById('audioToggleBtn');
+                    if (this.isPlaying) {
+                        btn.innerHTML = '<i class="fa-solid fa-volume-high text-amber-400"></i>';
+                        this.playAmbientChord();
+                    } else {
+                        btn.innerHTML = '<i class="fa-solid fa-volume-xmark text-gray-300"></i>';
+                    }
+                },
+                playAmbientChord() {
+                    if (!this.audioCtx) {
+                        this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+                    if (this.audioCtx.state === 'suspended') {
+                        this.audioCtx.resume();
+                    }
+                    const freqs = [261.63, 329.63, 392.00, 523.25]; // C Major chord tones
+                    freqs.forEach(f => {
+                        const osc = this.audioCtx.createOscillator();
+                        const gain = this.audioCtx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.value = f;
+                        gain.gain.setValueAtTime(0.02, this.audioCtx.currentTime);
+                        osc.connect(gain);
+                        gain.connect(this.audioCtx.destination);
+                        osc.start();
+                    });
+                }
+            },
+
+            // Canvas Background Particle Engine
+            particleEngine: {
+                canvas: null,
+                ctx: null,
+                particles: [],
+                init() {
+                    this.canvas = document.getElementById('particleCanvas');
+                    if (!this.canvas) return;
+                    this.ctx = this.canvas.getContext('2d');
+                    this.resize();
+                    window.addEventListener('resize', () => this.resize());
+
+                    for (let i = 0; i < 50; i++) {
+                        this.particles.push({
+                            x: Math.random() * this.canvas.width,
+                            y: Math.random() * this.canvas.height,
+                            radius: Math.random() * 2 + 1,
+                            vy: -Math.random() * 0.5 - 0.2,
+                            alpha: Math.random()
+                        });
+                    }
+                    this.animate();
+                },
+                resize() {
+                    this.canvas.width = window.innerWidth;
+                    this.canvas.height = window.innerHeight;
+                },
+                animate() {
+                    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+                    this.particles.forEach(p => {
+                        p.y += p.vy;
+                        if (p.y < 0) p.y = this.canvas.height;
+                        this.ctx.beginPath();
+                        this.ctx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                        this.ctx.fillStyle = `rgba(250, 204, 21, ${p.alpha})`;
+                        this.ctx.fill();
+                    });
+                    requestAnimationFrame(() => this.animate());
+                }
+            }
+        };
+
+        // Bootstrap Application on Window Load
+        window.addEventListener('DOMContentLoaded', () => App.init());
+    </script>
+</body>
+</html>

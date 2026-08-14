@@ -1,39 +1,28 @@
-/* ==========================================================================
-   FEATURE 8 & 9: OWNER EMAIL NOTIFICATIONS & TIME CAPSULE REMINDERS
-   ========================================================================== */
-(function () {
-  let webhookUrl = '';
+/**
+ * Celebration Verse - Webhook & Email Notification Dispatcher
+ */
+class NotificationDispatcher {
+  static async send(eventType, payload) {
+    const webhookUrl = window.CELEBRATION_CONFIG?.webhookUrl;
+    if (!webhookUrl) {
+      console.log(`[Notification Simulated]: ${eventType}`, payload);
+      return;
+    }
 
-  function init() {
-    loadConfig();
-  }
-
-  function sendAlert(eventName, payload = {}) {
-    if (!webhookUrl) return;
-
-    fetch(webhookUrl, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        event: eventName,
-        timestamp: new Date().toISOString(),
-        details: payload
-      })
-    }).catch(() => {});
-  }
-
-  function loadConfig() {
     try {
-      const saved = localStorage.getItem('PREMIUM_EMAIL_CONFIG');
-      if (saved) {
-        webhookUrl = JSON.parse(saved).webhookUrl || '';
-      }
-    } catch (e) {}
+      await fetch(webhookUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          event: eventType,
+          timestamp: new Date().toISOString(),
+          data: payload
+        })
+      });
+    } catch (err) {
+      console.error("Failed to send notification:", err);
+    }
   }
+}
 
-  window.EmailNotifications = {
-    init,
-    sendAlert,
-    setWebhook: (url) => { webhookUrl = url; }
-  };
-})();
+window.NotificationDispatcher = NotificationDispatcher;

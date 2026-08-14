@@ -1,49 +1,9 @@
 /* ==========================================================================
-   Celebration Verse 2026 - Commercial Styling Suite
+   PREMIUM SUITE MASTER STYLESHEET
    ========================================================================== */
 
-:root {
-  --primary-glow: #ff4081;
-  --secondary-glow: #7c4dff;
-  --glass-bg: rgba(255, 255, 255, 0.08);
-  --glass-border: rgba(255, 255, 255, 0.18);
-  --text-primary: #ffffff;
-  --text-subtle: #d0d0e0;
-  --font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  --dock-bg: rgba(20, 20, 35, 0.65);
-}
-
-[data-theme="sakura"] {
-  --primary-glow: #ff7aa2;
-  --secondary-glow: #ffb7c5;
-  --glass-bg: rgba(255, 240, 245, 0.15);
-  --glass-border: rgba(255, 182, 193, 0.4);
-}
-
-[data-theme="cyberpunk"] {
-  --primary-glow: #00f0ff;
-  --secondary-glow: #ff0055;
-  --glass-bg: rgba(10, 10, 25, 0.4);
-  --glass-border: rgba(0, 240, 255, 0.3);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  user-select: none;
-}
-
-body {
-  font-family: var(--font-family);
-  background-color: #0d0e15;
-  color: var(--text-primary);
-  overflow-x: hidden;
-  min-height: 100dvh;
-}
-
-/* Background & Foreground Canvas Overlays */
-#bgCanvas, #fxCanvas {
+/* --- Feature 1: Dynamic Background Overlays --- */
+#premiumBgCanvas {
   position: fixed;
   top: 0;
   left: 0;
@@ -53,242 +13,249 @@ body {
   z-index: 0;
 }
 
-#fxCanvas {
-  z-index: 1000;
-}
-
-/* Glassmorphism Navigation */
-.glass-nav {
+.premium-bg-video {
   position: fixed;
-  top: 1rem;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 90%;
-  max-width: 1100px;
-  padding: 0.75rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--glass-border);
-  border-radius: 999px;
-  z-index: 500;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+  opacity: 0.85;
+  transition: opacity 1s ease;
 }
 
-.nav-links {
-  display: flex;
-  gap: 1rem;
-  overflow-x: auto;
-}
-
-.nav-item {
-  color: var(--text-subtle);
-  text-decoration: none;
-  font-size: 0.85rem;
-  transition: all 0.3s ease;
-  padding: 0.4rem 0.8rem;
-  border-radius: 20px;
-}
-
-.nav-item.active, .nav-item:hover {
-  color: var(--text-primary);
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 10px var(--primary-glow);
-}
-
-/* Chapters Layout Stack */
-#appContainer {
-  position: relative;
-  z-index: 10;
-  padding: 6rem 1rem 4rem 1rem;
-  max-width: 1000px;
-  margin: 0 auto;
-}
-
-.chapter-section {
-  min-height: 80dvh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 4rem;
-  opacity: 0.2;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-
-.chapter-section.active-chapter {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Glass Card Component */
-.glass-card {
-  width: 100%;
-  background: var(--glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
-  border-radius: 24px;
-  padding: 2.5rem;
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  transition: transform 0.2s ease-out;
-}
-
-.glow-title {
-  font-size: 2.5rem;
-  background: linear-gradient(135deg, var(--primary-glow), var(--secondary-glow));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  margin-bottom: 1rem;
-}
-
-.primary-btn, .secondary-btn {
-  padding: 0.8rem 1.8rem;
-  border-radius: 999px;
-  border: none;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-.primary-btn {
-  background: linear-gradient(135deg, var(--primary-glow), var(--secondary-glow));
-  color: white;
-  box-shadow: 0 4px 15px rgba(255, 64, 129, 0.4);
-}
-
-.primary-btn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 20px rgba(255, 64, 129, 0.6);
-}
-
-/* Floating Dock Controls */
-.floating-dock {
+/* --- Feature 3: Interactive Guide Character --- */
+#premiumGuideContainer {
   position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
+  bottom: 25px;
+  left: 25px;
+  z-index: 9000;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  z-index: 600;
-}
-
-.dock-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: var(--dock-bg);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--glass-border);
-  color: white;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 0.2s;
+  pointer-events: auto;
+  user-select: none;
+  transition: transform 0.15s ease-out, filter 0.3s ease;
+  cursor: grab;
 }
 
-.dock-btn:hover {
-  transform: scale(1.15);
+#premiumGuideContainer:active {
+  cursor: grabbing;
 }
 
-/* 3D Viewport Containers */
-.canvas-3d-viewport {
-  width: 100%;
-  height: 350px;
-  border-radius: 16px;
-  overflow: hidden;
-  margin: 1.5rem 0;
+.premium-guide-speech {
+  position: absolute;
+  bottom: 110%;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.8));
+  color: var(--text-main, #333);
+  padding: 0.75rem 1.1rem;
+  border-radius: 18px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  max-width: 260px;
+  text-align: center;
 }
 
-/* Photo Wall Grid */
-.photo-wall {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+.premium-guide-speech.visible {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
-.polaroid-card {
-  background: white;
-  padding: 0.8rem 0.8rem 1.5rem 0.8rem;
-  border-radius: 8px;
-  color: #222;
-  transform: rotate(-2deg);
+.premium-guide-speech::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 8px;
+  border-style: solid;
+  border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent;
+}
+
+.premium-guide-avatar {
+  width: 90px;
+  height: 90px;
+  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
   transition: transform 0.3s ease;
 }
 
-.polaroid-card:nth-child(even) {
-  transform: rotate(3deg);
+.premium-guide-avatar:hover {
+  transform: scale(1.08);
 }
 
-.polaroid-card img {
-  width: 100%;
-  height: 200px;
-  object-fit: cover;
-  border-radius: 4px;
+.premium-guide-controls {
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  display: none;
+  gap: 4px;
 }
 
-.polaroid-card .caption {
-  text-align: center;
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  font-weight: 500;
+#premiumGuideContainer:hover .premium-guide-controls {
+  display: flex;
 }
 
-/* Full-Body Mascot Guide Styling */
-.mascot-container {
+.premium-guide-btn {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.65);
+  color: #fff;
+  border: none;
+  font-size: 0.7rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- Feature 5: Cinematic Chapter Overlay --- */
+#premiumCinematicOverlay {
   position: fixed;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  z-index: 700;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at center, rgba(15,23,42,0.92) 0%, rgba(0,0,0,0.98) 100%);
+  z-index: 99999;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.6s ease;
+  color: #fff;
+  text-align: center;
+  padding: 2rem;
 }
 
-.speech-bubble {
-  background: white;
-  color: #111;
-  padding: 0.8rem 1.2rem;
-  border-radius: 18px;
-  max-width: 240px;
+#premiumCinematicOverlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.cinematic-badge {
   font-size: 0.85rem;
-  margin-bottom: 0.5rem;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-  position: relative;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--accent, #ffd166);
+  margin-bottom: 1rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cinematicFadeUp 0.8s 0.2s forwards;
 }
 
-.mascot-avatar {
-  width: 80px;
-  height: 80px;
-  background-size: contain;
-  background-repeat: no-repeat;
+.cinematic-title {
+  font-family: var(--font-heading, serif);
+  font-size: clamp(2.2rem, 6vw, 4rem);
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cinematicFadeUp 0.8s 0.4s forwards;
+  background: linear-gradient(135deg, #ffffff, #f0c27b);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.cinematic-subtitle {
+  font-family: var(--font-handwriting, cursive);
+  font-size: clamp(1.4rem, 4vw, 2.2rem);
+  color: var(--primary-light, #ff758f);
+  margin-bottom: 2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: cinematicFadeUp 0.8s 0.6s forwards;
+}
+
+.cinematic-skip-btn {
+  position: absolute;
+  bottom: 40px;
+  padding: 0.6rem 1.4rem;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.3);
+  color: #fff;
+  font-size: 0.85rem;
   cursor: pointer;
-  transition: transform 0.2s;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
 }
 
-.mascot-avatar.cat-mode {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='40' fill='%23ff9800'/%3E%3Cpolygon points='20,20 35,40 15,45' fill='%23ff9800'/%3E%3Cpolygon points='80,20 65,40 85,45' fill='%23ff9800'/%3E%3Ccircle cx='35' cy='45' r='5' fill='%23fff'/%3E%3Ccircle cx='65' cy='45' r='5' fill='%23fff'/%3E%3C/svg%3E");
+.cinematic-skip-btn:hover {
+  background: rgba(255,255,255,0.3);
+  transform: scale(1.05);
 }
 
-/* Hidden Utility Class */
-.hidden {
-  display: none !important;
+@keyframes cinematicFadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-/* Responsive Viewport Optimizations */
-@media (max-width: 768px) {
-  .glass-nav {
-    width: 95%;
-    padding: 0.5rem 1rem;
-  }
-  .nav-links {
-    font-size: 0.75rem;
-  }
-  .glow-title {
-    font-size: 1.8rem;
-  }
+/* --- Feature 6: Enhanced Gift Box Animations --- */
+.gift-box.premium-glowing {
+  animation: giftPulseGlow 2s infinite alternate, giftFloat 3s ease-in-out infinite alternate !important;
+}
+
+.gift-box.premium-shaking {
+  animation: giftShake 0.5s ease-in-out infinite !important;
+}
+
+@keyframes giftPulseGlow {
+  0% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4)); }
+  100% { filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.9)); }
+}
+
+@keyframes giftShake {
+  0%, 100% { transform: rotate(0deg) scale(1.05); }
+  20% { transform: rotate(-6deg) scale(1.07); }
+  40% { transform: rotate(6deg) scale(1.07); }
+  60% { transform: rotate(-4deg) scale(1.06); }
+  80% { transform: rotate(4deg) scale(1.06); }
+}
+
+/* --- Feature 7: Mini-Game HUD Overlay --- */
+.premium-game-hud {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 12px;
+  padding: 0.6rem 1rem;
+  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.premium-game-score {
+  color: var(--primary, #e63946);
+  font-size: 1.1rem;
+}
+
+/* --- Feature 10: Owner Settings Injection --- */
+.premium-settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.premium-settings-card {
+  background: rgba(0,0,0,0.02);
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 12px;
+  padding: 1rem;
 }

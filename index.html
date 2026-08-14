@@ -2434,5 +2434,94 @@ window.addEventListener('DOMContentLoaded', () => {
 <script src="premium-features/email-notifications.js"></script>
 <script src="premium-features/owner-settings-panel.js"></script>
 <script src="premium-features/premium-suite.js"></script>
+ <!DOCTYPE html>
+<html lang="en" data-theme="romantic-rose">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Celebration Verse - Interactive Experience</title>
+    
+    <!-- Existing Stylesheets -->
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- 2026 Upgrade Extension Styles -->
+    <link rel="stylesheet" href="premium-features/premium-suite.css">
+    
+    <!-- External WebGL & Motion Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <!-- Background Canvas Layers -->
+    <canvas id="bgCanvas"></canvas>
+    <canvas id="fxCanvas"></canvas>
+
+    <!-- Floating Navigation Bar -->
+    <nav id="mainNav" class="glass-nav">
+        <a href="#intro">Home</a>
+        <a href="#gift">Gift</a>
+        <a href="#bouquet">Bouquet</a>
+        <a href="#letter">Letter</a>
+        <a href="#memories">Memories</a>
+        <a href="#retrotv">Retro TV</a>
+        <a href="#arcade">Arcade</a>
+        <a href="#wishtree">Wish Tree</a>
+        <a href="#secretvault">Vault</a>
+        <a href="#proposal">Proposal</a> <!-- Reordered: Directly before Invitation -->
+        <a href="#invitation">Invitation</a>
+    </nav>
+
+    <!-- Main Narrative Chapters Container -->
+    <main id="appContainer">
+        <section id="intro" class="chapter-section">...</section>
+        <section id="gift" class="chapter-section">
+            <div id="three-gift-container" class="three-viewport"></div>
+        </section>
+        <section id="bouquet" class="chapter-section">...</section>
+        <section id="letter" class="chapter-section">...</section>
+        <section id="memories" class="chapter-section">...</section>
+        <section id="retrotv" class="chapter-section">...</section>
+        <section id="arcade" class="chapter-section">...</section>
+        <section id="wishtree" class="chapter-section">...</section>
+        <section id="secretvault" class="chapter-section">...</section>
+        
+        <!-- Reordered Narrative Chapters -->
+        <section id="proposal" class="chapter-section">
+            <!-- Proposal Chapter Content -->
+            <h2>A Special Question...</h2>
+            <div class="proposal-card glass-card">
+                <p id="proposalMessage">Will you make this memory everlasting with me?</p>
+                <div class="proposal-actions">
+                    <button id="btnProposalYes" class="btn-glow">Yes, Absolutely!</button>
+                    <button id="btnProposalNo" class="btn-subtle">Let me think...</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="invitation" class="chapter-section">
+            <!-- Invitation Chapter Content -->
+            <h2>You're Invited!</h2>
+            <div class="invite-card glass-card">
+                <p>Join us for our special event!</p>
+                <form id="rsvpForm">
+                    <input type="text" placeholder="Your Name" required>
+                    <button type="submit" class="btn-glow">Send RSVP</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- 2026 Core Engine Extension Scripts (Loaded in strict dependency order) -->
+    <script src="premium-features/sound-engine.js"></script>
+    <script src="premium-features/dynamic-background.js"></script>
+    <script src="premium-features/guide-character.js"></script>
+    <script src="premium-features/gift-box-enhancer.js"></script>
+    <script src="premium-features/mini-game-enhancer.js"></script>
+    <script src="premium-features/owner-settings-panel.js"></script>
+    <script src="premium-features/premium-suite.js"></script>
+</body>
+</html>
 </body>
 </html>

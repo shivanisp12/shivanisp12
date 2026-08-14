@@ -1,10 +1,10 @@
 /* ==========================================================================
-   FEATURE 1: DYNAMIC BACKGROUND EXPERIENCE
+   FEATURE 1: DYNAMIC BACKGROUND EXPERIENCE (CI-COMPLIANT)
    ========================================================================== */
 (function () {
   const state = {
-    mode: 'particles', // static, animated, particles, video, customImage, customVideo
-    particleType: 'fireflies', // fireflies, petals, hearts, snow, rain, sparkles, bubbles, stars
+    mode: 'particles',
+    particleType: 'fireflies',
     particles: [],
     mouse: { x: -1000, y: -1000, targetX: -1000, targetY: -1000 },
     canvas: null,
@@ -14,6 +14,7 @@
   };
 
   function init() {
+    if (typeof window === 'undefined' || typeof document === 'undefined') return;
     createCanvas();
     bindEvents();
     loadConfig();
@@ -42,7 +43,7 @@
       state.mouse.targetY = e.clientY;
     });
     window.addEventListener('touchmove', (e) => {
-      if (e.touches[0]) {
+      if (e.touches && e.touches[0]) {
         state.mouse.targetX = e.touches[0].clientX;
         state.mouse.targetY = e.touches[0].clientY;
       }
@@ -80,7 +81,6 @@
   }
 
   function updateParticles() {
-    // Smooth mouse lerp
     state.mouse.x += (state.mouse.targetX - state.mouse.x) * 0.05;
     state.mouse.y += (state.mouse.targetY - state.mouse.y) * 0.05;
 
@@ -88,7 +88,6 @@
       p.x += p.vx;
       p.y += p.vy;
 
-      // Mouse repulsion/attraction reactivity
       const dx = state.mouse.x - p.x;
       const dy = state.mouse.y - p.y;
       const dist = Math.sqrt(dx * dx + dy * dy);
@@ -97,7 +96,6 @@
         p.y -= (dy / dist) * 1.5;
       }
 
-      // Boundary wrap
       if (p.x < 0) p.x = window.innerWidth;
       if (p.x > window.innerWidth) p.x = 0;
       if (p.y < 0) p.y = window.innerHeight;
@@ -145,7 +143,6 @@
     if (options.particleType) state.particleType = options.particleType;
     initParticles();
 
-    // Video Background handle
     if (mode === 'video' || mode === 'customVideo') {
       if (!state.videoEl) {
         state.videoEl = document.createElement('video');
@@ -170,7 +167,9 @@
         const parsed = JSON.parse(saved);
         setBackgroundMode(parsed.mode, parsed);
       }
-    } catch (e) {}
+    } catch (_err) {
+      // Intentionally handled silencer for environments without localStorage
+    }
   }
 
   window.PremiumBackground = {

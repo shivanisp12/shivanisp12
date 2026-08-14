@@ -1,75 +1,66 @@
-/**
- * OWNER SETTINGS INJECTOR
- * Appends the controls for the new Premium Features into your Owner Settings UI.
- */
-document.addEventListener('DOMContentLoaded', () => {
-  const existingSettingsContainer = 
-    document.querySelector('.owner-settings-container') || 
-    document.querySelector('#owner-settings') || 
-    document.body; // Fallback insertion
+/* ==========================================================================
+   OWNER SETTINGS TAB INJECTION MODULE
+   ========================================================================== */
+(function () {
+  function init() {
+    const tabGroup = document.querySelector('#creatorModal .tab-btn-group');
+    if (!tabGroup || tabGroup.querySelector('#tabPremiumBtn')) return;
 
-  const settingsCard = document.createElement('div');
-  settingsCard.className = 'pf-settings-panel';
-  settingsCard.innerHTML = `
-    <h3 style="margin-top:0;">✨ Premium Suite Settings</h3>
-    
-    <!-- Background Experience -->
-    <div style="margin-bottom:15px;">
-      <label><b>Background Theme:</b></label>
-      <select id="pf-set-bg" class="pf-input" style="width:100%; padding:8px; margin-top:5px;">
-        <option value="fireflies">Floating Fireflies</option>
-        <option value="hearts">Floating Hearts</option>
-        <option value="snow">Falling Snow</option>
-        <option value="video">Custom Looping Video</option>
-      </select>
-    </div>
+    // Inject New Premium Tab Button
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn';
+    btn.id = 'tabPremiumBtn';
+    btn.innerText = '✨ Premium Suite';
+    btn.onclick = () => switchTab();
+    tabGroup.appendChild(btn);
 
-    <!-- UI Sound Effects -->
-    <div style="margin-bottom:15px;">
-      <label>
-        <input type="checkbox" id="pf-set-sound" checked> <b>Enable UI Sound Effects</b>
-      </label>
-    </div>
+    // Inject New Tab Panel Content
+    const panel = document.createElement('div');
+    panel.id = 'tabPremiumContent';
+    panel.className = 'tab-content';
+    panel.innerHTML = `
+      <h3>✨ Premium Features Suite Controls</h3>
+      <div class="premium-settings-grid">
+        <div class="premium-settings-card">
+          <h4>Dynamic Background</h4>
+          <label>Mode:</label>
+          <select id="pBgMode" class="form-control" onchange="PremiumSettings.updateBg()">
+            <option value="particles">Interactive Particles</option>
+            <option value="video">Looping Video</option>
+          </select>
+        </div>
+        <div class="premium-settings-card">
+          <h4>Guide Character</h4>
+          <label>Mascot:</label>
+          <select id="pGuideMascot" class="form-control" onchange="PremiumSettings.updateGuide()">
+            <option value="cat">Cute Cat</option>
+            <option value="puppy">Puppy</option>
+            <option value="cinnamoroll">Cinnamoroll</option>
+            <option value="fairy">Fairy</option>
+            <option value="bunny">Bunny</option>
+          </select>
+        </div>
+      </div>
+    `;
+    document.querySelector('#creatorModal .creator-panel').appendChild(panel);
+  }
 
-    <!-- Interactive Guide Character -->
-    <div style="margin-bottom:15px;">
-      <label><b>Guide Character Mascot:</b></label>
-      <select id="pf-set-mascot" class="pf-input" style="width:100%; padding:8px; margin-top:5px;">
-        <option value="cat">Cute Anime Cat 🐱</option>
-        <option value="puppy">Cute Puppy 🐶</option>
-        <option value="bunny">Magical Bunny 🐰</option>
-        <option value="fox">Fox 🦊</option>
-        <option value="fairy">Fairy Guide 🧚‍♀️</option>
-      </select>
-    </div>
+  function switchTab() {
+    document.querySelectorAll('#creatorModal .tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('#creatorModal .tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tabPremiumContent').classList.add('active');
+    document.getElementById('tabPremiumBtn').classList.add('active');
+  }
 
-    <!-- Email Webhook Endpoint -->
-    <div style="margin-bottom:15px;">
-      <label><b>Email Notification Webhook URL (EmailJS / Zapier):</b></label>
-      <input type="url" id="pf-set-webhook" placeholder="https://api.emailjs.com/..." style="width:100%; padding:8px; margin-top:5px;">
-    </div>
-
-    <button id="pf-save-settings-btn" style="background:#4A90E2; color:#fff; border:none; padding:10px 20px; border-radius:8px; cursor:pointer;">
-      Save Premium Settings
-    </button>
-  `;
-
-  existingSettingsContainer.appendChild(settingsCard);
-
-  // Bind settings saving logic
-  document.getElementById('pf-save-settings-btn').addEventListener('click', () => {
-    const bg = document.getElementById('pf-set-bg').value;
-    const sound = document.getElementById('pf-set-sound').checked;
-    const mascot = document.getElementById('pf-set-mascot').value;
-    const webhook = document.getElementById('pf-set-webhook').value;
-
-    window.PremiumSuite.Background.applyBackground(bg);
-    localStorage.setItem('pf_sound_enabled', sound);
-    localStorage.setItem('pf_guide_mascot', mascot);
-    localStorage.setItem('pf_email_config', JSON.stringify({ webhookUrl: webhook }));
-
-    window.PremiumSuite.Guide.updateCharacter();
-    window.PremiumSuite.Sound.play('success');
-    alert('Premium settings saved successfully!');
-  });
-});
+  window.PremiumSettings = {
+    init,
+    updateBg: () => {
+      const mode = document.getElementById('pBgMode').value;
+      if (window.PremiumBackground) window.PremiumBackground.setBackgroundMode(mode);
+    },
+    updateGuide: () => {
+      const mascot = document.getElementById('pGuideMascot').value;
+      if (window.GuideCharacter) window.GuideCharacter.setMascot(mascot);
+    }
+  };
+})();

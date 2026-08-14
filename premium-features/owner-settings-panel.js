@@ -1,54 +1,66 @@
-/**
- * Celebration Verse - Owner Administrative Settings Panel
- */
-class OwnerSettingsPanel {
-  constructor() {
-    this.container = document.getElementById('ownerModalContainer');
-    this.init();
+/* ==========================================================================
+   OWNER SETTINGS TAB INJECTION MODULE
+   ========================================================================== */
+(function () {
+  function init() {
+    const tabGroup = document.querySelector('#creatorModal .tab-btn-group');
+    if (!tabGroup || tabGroup.querySelector('#tabPremiumBtn')) return;
+
+    // Inject New Premium Tab Button
+    const btn = document.createElement('button');
+    btn.className = 'tab-btn';
+    btn.id = 'tabPremiumBtn';
+    btn.innerText = '✨ Premium Suite';
+    btn.onclick = () => switchTab();
+    tabGroup.appendChild(btn);
+
+    // Inject New Tab Panel Content
+    const panel = document.createElement('div');
+    panel.id = 'tabPremiumContent';
+    panel.className = 'tab-content';
+    panel.innerHTML = `
+      <h3>✨ Premium Features Suite Controls</h3>
+      <div class="premium-settings-grid">
+        <div class="premium-settings-card">
+          <h4>Dynamic Background</h4>
+          <label>Mode:</label>
+          <select id="pBgMode" class="form-control" onchange="PremiumSettings.updateBg()">
+            <option value="particles">Interactive Particles</option>
+            <option value="video">Looping Video</option>
+          </select>
+        </div>
+        <div class="premium-settings-card">
+          <h4>Guide Character</h4>
+          <label>Mascot:</label>
+          <select id="pGuideMascot" class="form-control" onchange="PremiumSettings.updateGuide()">
+            <option value="cat">Cute Cat</option>
+            <option value="puppy">Puppy</option>
+            <option value="cinnamoroll">Cinnamoroll</option>
+            <option value="fairy">Fairy</option>
+            <option value="bunny">Bunny</option>
+          </select>
+        </div>
+      </div>
+    `;
+    document.querySelector('#creatorModal .creator-panel').appendChild(panel);
   }
 
-  init() {
-    const btn = document.getElementById('ownerPanelBtn');
-    if (btn) btn.addEventListener('click', () => this.promptPasscode());
+  function switchTab() {
+    document.querySelectorAll('#creatorModal .tab-content').forEach(el => el.classList.remove('active'));
+    document.querySelectorAll('#creatorModal .tab-btn').forEach(el => el.classList.remove('active'));
+    document.getElementById('tabPremiumContent').classList.add('active');
+    document.getElementById('tabPremiumBtn').classList.add('active');
   }
 
-  promptPasscode() {
-    const input = prompt("Enter Owner Passcode:");
-    if (input === window.CELEBRATION_CONFIG.ownerPasscode) {
-      this.openPanel();
-    } else {
-      alert("Incorrect passcode!");
+  window.PremiumSettings = {
+    init,
+    updateBg: () => {
+      const mode = document.getElementById('pBgMode').value;
+      if (window.PremiumBackground) window.PremiumBackground.setBackgroundMode(mode);
+    },
+    updateGuide: () => {
+      const mascot = document.getElementById('pGuideMascot').value;
+      if (window.GuideCharacter) window.GuideCharacter.setMascot(mascot);
     }
-  }
-
-  openPanel() {
-    this.container.innerHTML = `
-      <div class="glass-card modal-card" style="max-width:500px; margin: 10% auto;">
-        <h2>⚙️ Owner Settings</h2>
-        <div style="margin:1rem 0;">
-          <label>Recipient Name:</label>
-          <input type="text" id="ownerRecipient" value="${window.CELEBRATION_CONFIG.recipientName}" style="width:100%; padding:0.5rem; margin-top:0.4rem;"/>
-        </div>
-        <div style="margin:1rem 0;">
-          <label>Webhook URL:</label>
-          <input type="text" id="ownerWebhook" value="${window.CELEBRATION_CONFIG.webhookUrl || ''}" style="width:100%; padding:0.5rem; margin-top:0.4rem;"/>
-        </div>
-        <button id="saveOwnerSettings" class="primary-btn">Save Changes</button>
-        <button id="closeOwnerPanel" class="secondary-btn">Close</button>
-      </div>`;
-    this.container.classList.remove('hidden');
-
-    document.getElementById('saveOwnerSettings').onclick = () => {
-      window.CELEBRATION_CONFIG.recipientName = document.getElementById('ownerRecipient').value;
-      window.CELEBRATION_CONFIG.webhookUrl = document.getElementById('ownerWebhook').value;
-      alert("Settings Saved Successfully!");
-      this.container.classList.add('hidden');
-    };
-
-    document.getElementById('closeOwnerPanel').onclick = () => {
-      this.container.classList.add('hidden');
-    };
-  }
-}
-
-window.OwnerSettingsPanel = OwnerSettingsPanel;
+  };
+})();

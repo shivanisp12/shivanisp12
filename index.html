@@ -1,2098 +1,2427 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="dreamy-pink">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
-  <title>Celebration Verse - Premium Interactive Story</title>
-  <meta name="description" content="A dreamy, romantic, interactive digital celebration experience." />
-  
-  <!-- CSS Suite & Fonts -->
-  <link rel="stylesheet" href="premium-features/premium-suite.css" onerror="this.remove()">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    /* ======= THEMES & CSS VARIABLES (21 THEMES) ======= */
-    :root {
-      --font-heading: 'Playfair Display', Georgia, serif;
-      --font-handwriting: 'Dancing Script', cursive;
-      --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      /* Theme 1: Dreamy Pink (Default) */
-      --bg-grad-start: #fff0f5; --bg-grad-end: #fcd5ce; --primary: #e63946; --primary-light: #ff758f; --accent: #ffb703; --text-main: #3d0c11; --text-muted: #723d46; --card-bg: rgba(255, 255, 255, 0.82); --card-border: rgba(255, 255, 255, 0.95); --glass-shadow: 0 12px 32px 0 rgba(230, 57, 70, 0.12); --gold-glow: rgba(255, 183, 3, 0.4);
-      --radius-lg: 24px; --radius-md: 16px; --radius-sm: 8px;
-      --transition-smooth: cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    [data-theme="lavender-moon"] {
-      --bg-grad-start: #1a1829; --bg-grad-end: #3b2d54;
-      --primary: #b5e2fa; --primary-light: #c8b6ff; --accent: #ffd166;
-      --text-main: #f8f9fa; --text-muted: #d0c7eb;
-      --card-bg: rgba(45, 38, 74, 0.75); --card-border: rgba(181, 226, 250, 0.2);
-      --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.4);
-    }
-    [data-theme="cloudy-blue"] {
-      --bg-grad-start: #e0f2fe; --bg-grad-end: #bae6fd;
-      --primary: #0284c7; --primary-light: #38bdf8; --accent: #f59e0b;
-      --text-main: #0c4a6e; --text-muted: #0369a1;
-      --card-bg: rgba(255, 255, 255, 0.82); --card-border: rgba(255, 255, 255, 0.95);
-      --glass-shadow: 0 12px 32px 0 rgba(2, 132, 199, 0.15);
-    }
-    [data-theme="peach-sunset"] {
-      --bg-grad-start: #ffedd5; --bg-grad-end: #fbcfe8;
-      --primary: #ea580c; --primary-light: #fb923c; --accent: #f43f5e;
-      --text-main: #431407; --text-muted: #9a3412;
-      --card-bg: rgba(255, 255, 255, 0.8); --card-border: rgba(255, 255, 255, 0.9); --glass-shadow: 0 12px 32px 0 rgba(234, 88, 12, 0.15);
-    }
-    [data-theme="sakura-dream"] { 
-      --bg-grad-start: #fdf2f8; --bg-grad-end: #fbcfe8; --primary: #db2777; --primary-light: #f472b6; --accent: #facc15;
-      --text-main: #701a75; --text-muted: #9d174d;
-      --card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(255, 255, 255, 0.95);
-      --glass-shadow: 0 12px 32px 0 rgba(219, 39, 119, 0.15);
-    }
-    [data-theme="soft-garden"] {
-      --bg-grad-start: #f0fdf4; --bg-grad-end: #bbf7d0;
-      --primary: #16a34a; --primary-light: #4ade80; --accent: #facc15;
-      --text-main: #052e16; --text-muted: #166534;
-      --card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(255, 255, 255, 0.9);
-      --glass-shadow: 0 12px 32px 0 rgba(22, 163, 74, 0.15);
-    }
-    [data-theme="cream-champagne"] {
-      --bg-grad-start: #fefce8; --bg-grad-end: #fef08a;
-      --primary: #ca8a04; --primary-light: #fde047; --accent: #a16207;
-      --text-main: #422006; --text-muted: #713f12;
-      --card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(250, 204, 21, 0.3);
-      --glass-shadow: 0 12px 32px 0 rgba(202, 138, 4, 0.15);
-    }
-    [data-theme="midnight-romance"] {
-      --bg-grad-start: #0f172a; --bg-grad-end: #881337;
-      --primary: #fb7185; --primary-light: #fda4af; --accent: #fef08a;
-      --text-main: #fff1f2; --text-muted: #fecdd3;
-      --card-bg: rgba(30, 27, 46, 0.78); --card-border: rgba(251, 113, 133, 0.25);
-      --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.5); 
-    }
-    [data-theme="cozy-coffee"] { 
-      --bg-grad-start: #fdf8f6; --bg-grad-end: #e7d8c9;
-      --primary: #8c6d58; --primary-light: #b69d8a; --accent: #d4a373;
-      --text-main: #3e2723; --text-muted: #5d4037;
-      --card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(212, 163, 115, 0.3);
-      --glass-shadow: 0 12px 32px 0 rgba(140, 109, 88, 0.15);
-    }
-    [data-theme="fairy-garden"] {
-      --bg-grad-start: #ecfdf5; --bg-grad-end: #fbcfe8;
-      --primary: #059669; --primary-light: #f472b6; --accent: #facc15;
-      --text-main: #064e3b; --text-muted: #047857;
-      --card-bg: rgba(255, 255, 255, 0.82); --card-border: rgba(255, 255, 255, 0.9);
-      --glass-shadow: 0 12px 32px 0 rgba(5, 150, 105, 0.15);
-    }
-    [data-theme="vintage-love-letter"] {
-      --bg-grad-start: #fbf8f1; --bg-grad-end: #e5d9c5;
-      --primary: #9b2226; --primary-light: #bb3e03; --accent: #ee9b00;
-      --text-main: #2b1e1a; --text-muted: #6b4d3e;
-      --card-bg: rgba(250, 246, 238, 0.9); --card-border: rgba(210, 190, 165, 0.5);
-      --glass-shadow: 0 12px 32px 0 rgba(155, 34, 38, 0.15);
-    }
-    [data-theme="celestial-dream"] {
-      --bg-grad-start: #0b091a; --bg-grad-end: #1a1c38;
-      --primary: #818cf8; --primary-light: #c084fc; --accent: #fef08a;
-      --text-main: #f8fafc; --text-muted: #cbd5e1; --card-bg: rgba(23, 22, 48, 0.8); --card-border: rgba(129, 140, 248, 0.3);
-      --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.6); 
-    }
-    [data-theme="soft-wedding"] {
-      --bg-grad-start: #fafaf9; --bg-grad-end: #f5f5f4;
-      --primary: #78716c; --primary-light: #a8a29e; --accent: #d4af37;
-      --text-main: #1c1917; --text-muted: #57534e;
-      --card-bg: rgba(255, 255, 255, 0.9); --card-border: rgba(212, 175, 55, 0.25);
-      --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.08);
-    }
-    [data-theme="dreamy-birthday"] {
-      --bg-grad-start: #f0f9ff; --bg-grad-end: #fbcfe8;
-      --primary: #0284c7; --primary-light: #f472b6; --accent: #facc15;
-      --text-main: #0c4a6e; --text-muted: #0369a1;
-      --card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(255, 255, 255, 0.95);
-      --glass-shadow: 0 12px 32px 0 rgba(2, 132, 199, 0.15);
-    }
-    [data-theme="luxury-gold"] {
-      --bg-grad-start: #141414; --bg-grad-end: #2a2415;
-      --primary: #d4af37; --primary-light: #f3e5ab; --accent: #ffffff;
-      --text-main: #f5f5f7; --text-muted: #d4af37;
-      --card-bg: rgba(35, 30, 20, 0.82); --card-border: rgba(212, 175, 55, 0.35);
-      --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.6);
-    }
-    [data-theme="galaxy"] {
-      --bg-grad-start: #090a0f; --bg-grad-end: #1b1425; --primary: #d8b4fe; --primary-light: #818cf8; --accent: #f472b6;
-      --text-main: #f3e8ff; --text-muted: #c084fc; --card-bg: rgba(23, 15, 38, 0.8); --card-border: rgba(216, 180, 254, 0.25);
-      --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.7);
-    }
-    [data-theme="aurora"] {
-      --bg-grad-start: #061e27; --bg-grad-end: #113f38;
-      --primary: #2dd4bf; --primary-light: #a7f3d0; --accent: #facc15;
-      --text-main: #f0fdf4; --text-muted: #99f6e4;
-      --card-bg: rgba(13, 43, 49, 0.8); --card-border: rgba(45, 212, 191, 0.3);
-      --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.6);
-    }
-    [data-theme="ocean"] {
-      --bg-grad-start: #0f172a; --bg-grad-end: #0369a1;
-      --primary: #38bdf8; --primary-light: #7dd3fc; --accent: #fde047;
-      --text-main: #f0f9ff; --text-muted: #bae6fd;
-      --card-bg: rgba(15, 30, 54, 0.8); --card-border: rgba(56, 189, 248, 0.3);
-      --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.5);
-    }
-    [data-theme="forest"] {
-      --bg-grad-start: #051c14; --bg-grad-end: #14382c;
-      --primary: #34d399; --primary-light: #a7f3d0; --accent: #fbbf24;
-      --text-main: #ecfdf5; --text-muted: #6ee7b7;
-      --card-bg: rgba(10, 36, 26, 0.82); --card-border: rgba(52, 211, 153, 0.25);
-      --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.6);
-    } 
-    [data-theme="scrapbook"] {
-      --bg-grad-start: #fef3c7; --bg-grad-end: #fde68a;
-      --primary: #d97706; --primary-light: #fbbf24; --accent: #ef4444; --text-main: #451a03; --text-muted: #92400e;
-      --card-bg: rgba(255, 251, 235, 0.9); --card-border: rgba(217, 119, 6, 0.3);
-      --glass-shadow: 0 12px 32px 0 rgba(217, 119, 6, 0.12);
-    }
-    [data-theme="polaroid"] {
-      --bg-grad-start: #f1f5f9; --bg-grad-end: #cbd5e1;
-      --primary: #475569; --primary-light: #94a3b8; --accent: #f43f5e;
-      --text-main: #0f172a; --text-muted: #334155;
-      --card-bg: rgba(255, 255, 255, 0.92); --card-border: rgba(203, 213, 225, 0.8);
-      --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.1);
-    }
-
-    /* Reset & Base Styles */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
-    body {
-      font-family: var(--font-body);
-      background: linear-gradient(135deg, var(--bg-grad-start), var(--bg-grad-end));
-      color: var(--text-main);
-      min-height: 100vh;
-      overflow-x: hidden;
-      transition: background 0.8s ease, color 0.5s ease;
-      line-height: 1.6; -webkit-font-smoothing: antialiased;
-    }
-
-    /* Canvas Overlays */
-    #bgCanvas, #fxCanvas {
-      position: fixed; top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      pointer-events: none;
-      z-index: 1;
-    }
-    #fxCanvas { z-index: 9999; }
-
-    /* Universal Typography & UI Elements */
-    h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height: 1.2; }
-    .handwriting { font-family: var(--font-handwriting); }
-    .glass-card {
-      background: var(--card-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--glass-shadow);
-      padding: 2rem;
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    } 
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.6rem;
-      padding: 0.85rem 1.8rem;
-      font-family: var(--font-body);
-      font-weight: 600; font-size: 1rem;
-      border-radius: 50px;
-      border: none;
-      cursor: pointer;
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      color: #ffffff;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-      transition: transform 0.25s var(--transition-smooth), box-shadow 0.25s ease, filter 0.2s;
-      text-decoration: none;
-      user-select: none;
-    }
-    .btn:hover {
-      transform: translateY(-3px) scale(1.02);
-      box-shadow: 0 10px 25px rgba(0,0,0,0.22);
-      filter: brightness(1.05);
-    }
-    .btn:active { transform: translateY(0) scale(0.98); }
-    .btn-secondary { 
-      background: rgba(255, 255, 255, 0.4);
-      color: var(--text-main);
-      border: 1px solid var(--card-border);
-    }
-    .btn-icon {
-      width: 44px; height: 44px;
-      padding: 0; border-radius: 50%;
-      display: inline-flex; align-items: center; justify-content: center;
-    }
-
-    /* Fixed Navigation Bar */
-    #mainNav {
-      position: fixed;
-      top: 15px; left: 50%;
-      transform: translateX(-50%);
-      z-index: 1000;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      padding: 0.5rem 1rem;
-      background: rgba(255, 255, 255, 0.35);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid var(--card-border);
-      border-radius: 40px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.1); max-width: 95vw;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    #mainNav::-webkit-scrollbar { display: none; }
-    .nav-link {
-      padding: 0.45rem 0.85rem;
-      font-size: 0.82rem;
-      font-weight: 600;
-      color: var(--text-main);
-      border-radius: 20px; text-decoration: none;
-      white-space: nowrap;
-      transition: all 0.3s ease;
-      cursor: pointer;
-    }
-    .nav-link:hover, .nav-link.active {
-      background: var(--primary);
-      color: #fff;
-    }
-
-    /* Top Controls Floating Right */
-    #quickControls {
-      position: fixed;
-      top: 15px; right: 20px;
-      z-index: 1001; display: flex;
-      gap: 0.5rem;
-    }
-
-    /* Chapters Container & Layout */
-    main { position: relative; z-index: 2; width: 100%; }
-    .chapter-section {
-      min-height: 100vh;
-      padding: 6rem 1.5rem 4rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative; opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    .chapter-section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .section-title {
-      font-size: clamp(2rem, 5vw, 3.2rem);
-      text-align: center;
-      margin-bottom: 0.5rem; color: var(--text-main);
-      text-shadow: 0 2px 10px rgba(0,0,0,0.05);
-    }
-    .section-subtitle {
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      font-family: var(--font-handwriting);
-      color: var(--primary);
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-
-    /* CHAPTER 1: INTRO */
-    #intro { text-align: center; justify-content: center; min-height: 100vh; }
-    .intro-badge {
-      display: inline-block;
-      padding: 0.4rem 1.2rem; border-radius: 30px;
-      background: rgba(255,255,255,0.5);
-      border: 1px solid var(--card-border);
-      font-size: 0.9rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin-bottom: 1.5rem;
-      color: var(--primary);
-      animation: pulseGlow 2.5s infinite alternate; 
-    }
-    .intro-title {
-      font-size: clamp(2.8rem, 8vw, 5rem);
-      margin-bottom: 1rem;
-      line-height: 1.1;
-    }
-    .intro-msg {
-      max-width: 650px;
-      font-size: clamp(1.1rem, 3vw, 1.4rem);
-      margin: 0 auto 2.5rem auto;
-      color: var(--text-muted);
-    }
-
-    /* CHAPTER 2: GIFT BOX */
-    .gift-container {
-      perspective: 1000px;
-      width: 260px; height: 260px;
-      margin: 2rem auto; position: relative;
-      cursor: pointer;
-    }
-    .gift-box {
-      width: 100%; height: 100%;
-      position: relative;
-      transform-style: preserve-3d;
-      transition: transform 0.6s var(--transition-smooth); 
-      animation: giftFloat 3s ease-in-out infinite alternate;
-    }
-    .gift-box:hover { transform: scale(1.05) rotateY(10deg); }
-    .gift-face {
-      position: absolute; width: 220px; height: 220px;
-      left: 20px; top: 20px;
-      background: linear-gradient(135deg, var(--primary), var(--primary-light));
-      border: 2px solid rgba(255,255,255,0.4);
-      border-radius: 12px;
-      box-shadow: inset 0 0 20px rgba(0,0,0,0.15), 0 15px 35px rgba(0,0,0,0.2);
-    }
-    .gift-ribbon-v, .gift-ribbon-h {
-      position: absolute;
-      background: linear-gradient(to right, #ffd166, #facc15);
-      box-shadow: 0 0 10px rgba(255, 209, 102, 0.6);
-      z-index: 2;
-    }
-    .gift-ribbon-v { width: 40px; height: 100%; left: 90px; top: 0; } 
-    .gift-ribbon-h { width: 100%; height: 40px; left: 0; top: 90px; }
-    .gift-bow {
-      position: absolute;
-      top: -25px; left: 50%;
-      transform: translateX(-50%);
-      width: 80px; height: 50px;
-      z-index: 3;
-      transition: all 0.5s ease; 
-    }
-    .gift-bow::before, .gift-bow::after {
-      content: ""; position: absolute;
-      width: 45px; height: 45px;
-      border: 6px solid #ffd166;
-      border-radius: 50% 50% 0 50%;
-      transform: rotate(45deg);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-    }
-    .gift-bow::after {
-      right: 0;
-      border-radius: 50% 50% 50% 0;
-      transform: rotate(-45deg);
-    }
-    .gift-box.opened .gift-bow { transform: translateX(-50%) translateY(-100px) scale(0); opacity: 0; }
-    .gift-box.opened { animation: giftOpen 1s forwards; }
-    .gift-reveal-card {
-      display: none; max-width: 500px;
-      text-align: center;
-      margin-top: 2rem;
-      animation: popin 0.6s var(--transition-smooth) forwards;
-    }
-
-    /* CHAPTER 3: BOUQUET */ 
-    .bouquet-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 1.5rem;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    .flower-item {
-      width: 130px; height: 230px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      cursor: pointer;
-      position: relative;
-      transition: transform 0.3s ease;
-    }
-    .flower-item:hover { transform: translateY(-10px) scale(1.08); }
-    .flower-head {
-      width: 100px; height: 100px;
-      position: relative; transition: transform 0.5s var(--transition-smooth);
-    }
-    .flower-stem {
-      width: 6px; height: 110px;
-      background: linear-gradient(to bottom, #4ade80, #15803d); border-radius: 4px;
-      position: relative;
-    }
-    .flower-leaf {
-      position: absolute;
-      width: 24px; height: 12px;
-      background: #22c55e;
-      border-radius: 15px 0 15px 0;
-    }
-    .flower-leaf.left { left: -20px; top: 30px; transform: rotate(-30deg); }
-    .flower-leaf.right { right: -20px; top: 60px; transform: rotate(30deg) scaleX(-1); }
-    .flower-item.bloomed .flower-head { transform: scale(1.25) rotate(15deg); }
-    .flower-note-pop {
-      position: absolute;
-      bottom: -35px;
-      background: rgba(255,255,255,0.95);
-      padding: 0.4rem 0.8rem;
-      border-radius: 12px;
-      font-size: 0.8rem;
-      font-weight: 600;
-      white-space: nowrap;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.15); opacity: 0;
-      transform: translateY(10px);
-      transition: all 0.3s ease;
-      pointer-events: none; z-index: 10;
-    }
-    .flower-item.bloomed .flower-note-pop { opacity: 1; transform: translateY(0); }
-
-    /* CHAPTER 4: ENVELOPE + LETTER */
-    .letter-stage {
-      perspective: 1200px;
-      width: 100%; max-width: 680px;
-      margin: 0 auto;
-    }
-    .envelope {
-      width: 100%; max-width: 480px;
-      height: 280px;
-      margin: 0 auto;
-      background: #fdf6e2;
-      border-radius: 12px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
-      position: relative;
-      cursor: pointer;
-      border: 1px solid #e2d2b4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.4s ease; 
-    }
-    .envelope:hover { transform: scale(1.02); } 
-    .wax-seal {
-      width: 70px; height: 70px;
-      background: linear-gradient(135deg, #b91c1c, #991b1b);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fef08a;
-      font-family: var(--font-handwriting);
-      font-size: 1.8rem;
-      box-shadow: 0 6px 16px rgba(185, 28, 28, 0.4);
-      border: 2px dashed #fef08a;
-      z-index: 5;
-      transition: transform 0.4s var(--transition-smooth);
-    }
-    .envelope.opened .wax-seal { transform: scale(0); opacity: 0; }
-    .letter-paper {
-      display: none;
-      background: #fffdfa;
-      background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
-      background-size: 100% 2rem;
-      line-height: 2rem;
-      padding: 3rem 2.5rem;
-      border-radius: 16px;
-      box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid #f3f4f6; font-family: var(--font-handwriting);
-      font-size: 1.6rem;
-      color: #374151;
-      position: relative;
-      animation: paperUnfold 0.8s var(--transition-smooth) forwards;
-    }
-    .letter-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 1.5rem;
-      font-family: var(--font-body);
-      font-size: 0.9rem;
-    }
-
-    /* CHAPTER 5: MEMORIES */
-    .memory-carousel {
-      width: 100%; max-width: 800px;
-      position: relative;
-      overflow: hidden;
-      border-radius: var(--radius-lg);
-    }
-    .polaroid-card {
-      background: #fff;
-      padding: 1.2rem 1.2rem 2.5rem 1.2rem;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.12); border-radius: 4px;
-      transform: rotate(-2deg); transition: transform 0.3s ease;
-      max-width: 380px;
-      margin: 0 auto;
-    }
-    .polaroid-card:hover { transform: rotate(0deg) scale(1.03); }
-    .polaroid-img {
-      width: 100%; height: 260px;
-      object-fit: cover;
-      border-radius: 2px;
-      background: #f3f4f6;
-    }
-    .polaroid-caption {
-      font-family: var(--font-handwriting);
-      font-size: 1.5rem;
-      text-align: center;
-      margin-top: 1rem;
-      color: #333;
-    }
-    .photo-wall {
-      width: 100%; height: 380px;
-      position: relative;
-      background: rgba(255,255,255,0.2);
-      border-radius: var(--radius-lg);
-      border: 2px dashed var(--card-border); overflow: hidden;
-      margin-top: 2rem;
-    } 
-    .floating-photo {
-      position: absolute;
-      width: 130px;
-      padding: 8px 8px 18px 8px;
-      background: #fff;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-      cursor: grab;
-      user-select: none;
-      transition: box-shadow 0.2s;
-    }
-    .floating-photo:active { cursor: grabbing; box-shadow: 0 12px 30px rgba(0,0,0,0.25); z-index: 100 !important; }
-    .floating-photo img { width: 100%; height: 100px; object-fit: cover; }
-
-    /* PINTEREST MASONRY GALLERY */
-    .pinterest-grid {
-      column-count: 3;
-      column-gap: 1.2rem;
-      width: 100%;
-      max-width: 1000px;
-      margin: 0 auto;
-    }
-    @media (max-width: 768px) { .pinterest-grid { column-count: 2; } } 
-    @media (max-width: 480px) { .pinterest-grid { column-count: 1; } }
-    .pin-card {
-      break-inside: avoid;
-      margin-bottom: 1.2rem;
-      background: var(--card-bg); border: 1px solid var(--card-border);
-      border-radius: var(--radius-md);
-      overflow: hidden;
-      box-shadow: var(--glass-shadow);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-      position: relative;
-    }
-    .pin-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
-    .pin-card img { width: 100%; height: auto; display: block; border-radius: var(--radius-md) var(--radius-md) 0 0; }
-    .pin-caption { padding: 0.8rem 1rem; font-size: 0.95rem; font-weight: 600; text-align: left; }
-
-    /* RETRO TV BIG SCREEN (v2.0.1) */
-    .retro-tv-wrapper {
-      position: relative;
-      width: 100%;
-      max-width: 720px;
-      margin: 0 auto;
-      background: #2d2422;
-      border: 14px solid #543d35;
-      border-radius: 36px; padding: 25px;
-      box-shadow: inset 0 0 20px #000, 0 20px 40px rgba(0,0,0,0.4);
-    }
-    .tv-screen-frame {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16/9; background: #0a0a0a;
-      border-radius: 20px;
-      overflow: hidden;
-      border: 4px solid #1a1a1a;
-      box-shadow: inset 0 0 30px rgba(255,255,255,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .tv-screen-frame video, .tv-screen-frame img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .tv-scanlines {
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-      background-size: 100% 4px; pointer-events: none;
-      z-index: 5;
-      opacity: 0.6;
-    }
-    .tv-controls {
-      display: flex;
-      justify-content: space-between;
-      align-items: center; margin-top: 15px;
-      padding: 12px 18px;
-      background: #1a1514;
-      border-radius: 18px;
-      border: 1px solid rgba(255,255,255,0.05);
-    }
-    .tv-knob {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: radial-gradient(circle, #888, #222);
-      border: 2px solid #111;
-      cursor: pointer;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.4);
-      transition: transform 0.3s ease;
-    }
-    .tv-knob:active { transform: rotate(45deg); }
-
-    /* CHAPTER 6: TIMELINE & COUNTDOWN */
-    .timeline-container {
-      position: relative;
-      max-width: 750px;
-      margin: 0 auto;
-      padding-left: 2rem;
-    }
-    .timeline-container::before {
-      content: "";
-      position: absolute; left: 7px; top: 0; bottom: 0;
-      width: 4px;
-      background: var(--primary-light);
-      border-radius: 2px;
-    }
-    .timeline-item {
-      position: relative;
-      margin-bottom: 2.5rem;
-      padding-left: 1.5rem;
-    }
-    .timeline-dot {
-      position: absolute;
-      left: -2rem; top: 5px;
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: var(--primary); border: 4px solid #fff;
-      box-shadow: 0 0 10px var(--primary);
-    }
-    .countdown-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 1rem;
-      max-width: 550px;
-      margin: 1.5rem auto;
-    }
-    .count-box { 
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-md);
-      padding: 1rem 0.5rem;
-      text-align: center;
-      box-shadow: var(--glass-shadow);
-    }
-    .count-num { font-size: 2.2rem; font-weight: 700; color: var(--primary); line-height: 1; }
-    .count-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-top: 0.3rem; }
-
-    /* CHAPTER 7: ARCADE GAMES HUB */
-    .games-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem;
-      width: 100%; max-width: 950px;
-    }
-    .game-card {
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      border-radius: var(--radius-md);
-      padding: 1.5rem 1rem;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s var(--transition-smooth);
-    }
-    .game-card:hover { transform: translateY(-5px); background: #ffffff; } 
-    .game-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
-    .game-modal {
-      display: none;
-      position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.65);
-      backdrop-filter: blur(8px);
-      z-index: 2000;
-      align-items: center; justify-content: center;
-      padding: 1rem;
-    }
-    .game-modal-content {
-      background: #fff; border-radius: var(--radius-lg);
-      width: 100%; max-width: 550px;
-      padding: 2rem;
-      position: relative;
-      max-height: 90vh;
-      overflow-y: auto;
-    }
-    .close-modal {
-      position: absolute; top: 1rem; right: 1rem;
-      font-size: 1.5rem; cursor: pointer; border: none; background: none; color: #666;
-    }
-    .memory-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr); gap: 0.6rem;
-      margin-top: 1rem;
-    }
-    .memory-tile {
-      aspect-ratio: 1;
-      background: var(--primary-light);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.8rem;
-      cursor: pointer;
-      user-select: none;
-      transition: transform 0.3s; 
-    }
-    .memory-tile.flipped { background: #fff; transform: rotateY(180deg); }
-
-    /* CHAPTER 8: WISH TREE, GUESTBOOK & CAPSULE */
-    .tree-canvas-wrap {
-      width: 100%; max-width: 600px; height: 350px;
-      position: relative; margin: 0 auto;
-    }
-    #treeCanvas { width: 100%; height: 100%; border-radius: var(--radius-lg); }
-    .guestbook-list {
-      max-height: 250px; overflow-y: auto;
-      margin-top: 1rem; display: flex; flex-direction: column; gap: 0.8rem;
-    }
-    .guestbook-item {
-      background: rgba(255,255,255,0.6);
-      padding: 0.8rem 1rem; border-radius: 12px;
-      font-size: 0.9rem;
-    }
-
-    /* CHAPTER 9: SECRETS */
-    .vault-box { text-align: center; max-width: 450px; margin: 0 auto; }
-    .pin-input {
-      letter-spacing: 10px; font-size: 2rem; text-align: center;
-      width: 180px; padding: 0.5rem; border-radius: 12px;
-      border: 2px solid var(--primary-light); margin: 1rem 0; 
-    }
-
-    /* CHAPTER 10: INVITATION */
-    .invite-card {
-      background: linear-gradient(135deg, #ffffff, #fffdfa);
-      border: 2px solid var(--primary-light);
-      border-radius: var(--radius-lg);
-      padding: 2.5rem 1.8rem;
-      text-align: center;
-      max-width: 520px;
-      margin: 0 auto;
-      position: relative;
-      box-shadow: var(--glass-shadow);
-    }
-    .invite-card::before {
-      content: "";
-      position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
-      border: 1px dashed var(--primary-light);
-      border-radius: calc(var(--radius-lg) - 6px); pointer-events: none;
-    }
-
-    /* CHAPTER 11: PLAYFUL PROPOSAL & FINALE */
-    .proposal-wrap {
-      text-align: center;
-      position: relative; min-height: 320px;
-      display: flex; flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-    }
-    .proposal-title {
-      font-size: clamp(2.2rem, 6vw, 3.8rem);
-      margin-bottom: 2rem;
-    }
-    .proposal-btn-group {
-      display: flex;
-      gap: 1.5rem;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      width: 100%;
-      max-width: 400px;
-      min-height: 80px;
-    }
-    #btnNo { 
-      position: relative;
-      transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      z-index: 10;
-    } 
-
-    /* Creator Modal & Owner Security Panels */
-    #creatorModal, #ownerAuthModal {
-      display: none;
-      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
-      z-index: 3000;
-      align-items: center; justify-content: center;
-      padding: 1.5rem;
-    }
-    .creator-panel {
-      background: #fff; width: 100%; max-width: 750px;
-      max-height: 85vh; overflow-y: auto;
-      border-radius: var(--radius-lg); padding: 2rem;
-      position: relative;
-    }
-    .form-group { margin-bottom: 1rem; text-align: left; }
-    .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem; }
-    .form-control {
-      width: 100%; padding: 0.6rem 0.9rem; border-radius: 8px;
-      border: 1px solid #ccc; font-family: inherit; font-size: 0.95rem;
-    }
-    .tab-btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.2rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem; } 
-    .tab-btn { padding: 0.4rem 0.8rem; font-weight: 600; border-radius: 6px; border: none; background: #f0f0f0; cursor: pointer; font-size: 0.85rem; }
-    .tab-btn.active { background: var(--primary); color: #fff; }
-    .tab-content { display: none; } 
-    .tab-content.active { display: block; }
-
-    /* Toast Notification */
-    #toast {
-      position: fixed; bottom: 25px; left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: var(--text-main); color: #fff;
-      padding: 0.7rem 1.5rem; border-radius: 30px;
-      font-size: 0.9rem; font-weight: 500;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-      z-index: 9999; opacity: 0;
-      transition: all 0.4s var(--transition-smooth);
-    }
-    #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
-
-    /* Keyframes */
-    @keyframes pulseGlow { 0% { box-shadow: 0 0 5px var(--gold-glow); } 100% { box-shadow: 0 0 20px var(--gold-glow); } }
-    @keyframes giftFloat { 0% { transform: translateY(0); } 100% { transform: translateY(-12px); } }
-    @keyframes giftOpen { 0% { transform: scale(1); } 50% { transform: scale(1.1) rotate(5deg); } 100% { transform: scale(0.9); opacity: 0.3; } }
-    @keyframes popin { 0% { opacity: 0; transform: scale(0.8) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
-    @keyframes paperUnfold { 0% { opacity: 0; transform: scaleY(0.3); } 100% { opacity: 1; transform: scaleY(1); } } 
-
-    /* Responsive */
-    @media (max-width: 640px) { 
-      .chapter-section { padding-top: 5rem; }
-      .countdown-grid { grid-template-columns: repeat(2, 1fr); }
-      #mainNav { bottom: 15px; top: auto; }
-      .envelope { height: 220px; }
-      .wax-seal { width: 55px; height: 55px; font-size: 1.4rem; }
-    }
-
-    /* APPENDED STYLES FOR SAKURA TREE & BG MUSIC */
-    #sakuraCanvas {
-      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-      pointer-events: none; border-radius: var(--radius-lg); z-index: 3;
-    }
-    .music-player-bar {
-      display: flex; align-items: center; gap: 1rem;
-      background: rgba(255,255,255,0.85); padding: 0.8rem 1.2rem;
-      border-radius: 30px; border: 1px solid var(--card-border);
-      box-shadow: var(--glass-shadow); margin-top: 1rem;
-    }
-    .youtube-embed-container {
-      position: relative; width: 100%; aspect-ratio: 16/9; max-height: 200px;
-      border-radius: 12px; overflow: hidden; margin-top: 0.8rem; display: none;
-    }
-    .youtube-embed-container iframe { width: 100%; height: 100%; border: none; }
-    .sakura-wish-paper {
-      position: absolute; background: #fff0f5; border: 1px solid #ffb7c5;
-      border-radius: 4px; padding: 4px 8px; font-family: var(--font-handwriting);
-      font-size: 0.85rem; color: #8b0000; box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-      cursor: pointer; transform-origin: top center; animation: gentleSway 3s ease-in-out infinite alternate;
-      z-index: 10; max-width: 90px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-      user-select: none; transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .sakura-wish-paper::before {
-      content: ""; position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
-      width: 1px; height: 12px; background: #d2691e;
-    }
-    .sakura-wish-paper:hover {
-      transform: scale(1.15) rotate(0deg) !important; z-index: 100;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.25); white-space: normal; max-width: 180px;
-    }
-    @keyframes gentleSway { 0% { transform: rotate(-5deg); } 100% { transform: rotate(5deg); } }
-    .owner-close-btn {
-      position: absolute; top: 1rem; right: 1rem; font-size: 1.6rem; font-weight: bold;
-      color: #666; background: none; border: none; cursor: pointer; width: 36px; height: 36px;
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      transition: background 0.2s ease, color 0.2s ease; z-index: 10;
-    }
-    .owner-close-btn:hover { background: #f0f0f0; color: #111; }
-    .response-badge {
-      background: #e63946; color: #fff; font-size: 0.75rem; font-weight: bold;
-      padding: 2px 7px; border-radius: 12px; margin-left: 6px; display: inline-block;
-    }
-    .response-item {
-      background: rgba(255,255,255,0.85); border: 1px solid var(--card-border);
-      border-radius: 10px; padding: 0.8rem 1rem; margin-bottom: 0.8rem;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05); text-align: left;
-    }
-    .response-item.unread { border-left: 4px solid var(--primary); background: #fff8f8; }
-    .response-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 0.4rem; font-size: 0.8rem; color: var(--text-muted);
-    }
-    .response-type { font-weight: bold; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
-    .tc-live-countdown {
-      display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.4rem;
-      margin-top: 1rem; text-align: center;
-    }
-    .tc-time-unit {
-      background: rgba(255,255,255,0.7); border: 1px solid var(--card-border);
-      border-radius: 8px; padding: 0.4rem 0.2rem;
-    }
-    .tc-time-val { font-size: 1.1rem; font-weight: bold; color: var(--primary); }
-    .tc-time-lbl { font-size: 0.65rem; text-transform: uppercase; color: var(--text-muted); }
-  </style>
+<!-- Append after all your existing CSS links -->
+<link rel="stylesheet" href="premium-features/premium-suite.css">
+<audio id="mainBgMusic" src="music.mp3" loop autoplay></audio>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+<title>Celebration Verse - Premium Interactive Story</title>
+<meta name="description" content="A dreamy, romantic, interactive digital celebration experience." />
+<!-- Fonts -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ======= THEMES & CSS VARIABLES (21 THEMES) ======= */
+:root {
+--font-heading: 'Playfair Display', Georgia, serif;
+--font-handwriting: 'Dancing Script', cursive;
+--font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+/* Theme 1: Dreamy Pink (Default) */
+--bg-grad-start: #fff0f5; --bg-grad-end: #fcd5ce; --primary: #e63946; --primary-light: #ff758f; --accent: #ffb703; --text-main: #3d0c11; --text-muted: #723d46;
+--card-bg: rgba(255, 255, 255, 0.82); --card-border: rgba(255, 255, 255, 0.95); --glass-shadow: 0 12px 32px 0 rgba(230, 57, 70, 0.12); --gold-glow: rgba(255, 183, 3, 0.4);
+--radius-lg: 24px; --radius-md: 16px; --radius-sm: 8px;
+--transition-smooth: cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+[data-theme="lavender-moon"] {
+--bg-grad-start: #1a1829; --bg-grad-end: #3b2d54;
+--primary: #b5e2fa; --primary-light: #c8b6ff; --accent: #ffd166;
+--text-main: #f8f9fa; --text-muted: #d0c7eb;
+--card-bg: rgba(45, 38, 74, 0.75); --card-border: rgba(181, 226, 250, 0.2);
+--glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.4);
+}
+[data-theme="cloudy-blue"] {
+--bg-grad-start: #e0f2fe; --bg-grad-end: #bae6fd;
+--primary: #0284c7; --primary-light: #38bdf8; --accent: #f59e0b;
+--text-main: #0c4a6e; --text-muted: #0369a1;
+--card-bg: rgba(255, 255, 255, 0.82); --card-border: rgba(255, 255, 255, 0.95);
+--glass-shadow: 0 12px 32px 0 rgba(2, 132, 199, 0.15);
+}
+[data-theme="peach-sunset"] {
+--bg-grad-start: #ffedd5; --bg-grad-end: #fbcfe8;
+--primary: #ea580c; --primary-light: #fb923c; --accent: #f43f5e;
+--text-main: #431407; --text-muted: #9a3412;
+--card-bg: rgba(255, 255, 255, 0.8); --card-border: rgba(255, 255, 255, 0.9); --glass-shadow: 0 12px 32px 0 rgba(234, 88, 12, 0.15);
+}
+[data-theme="sakura-dream"] { --bg-grad-start: #fdf2f8; --bg-grad-end: #fbcfe8;
+--primary: #db2777; --primary-light: #f472b6; --accent: #facc15;
+--text-main: #701a75; --text-muted: #9d174d;
+--card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(255, 255, 255, 0.95);
+--glass-shadow: 0 12px 32px 0 rgba(219, 39, 119, 0.15);
+}
+[data-theme="soft-garden"] {
+--bg-grad-start: #f0fdf4; --bg-grad-end: #bbf7d0;
+--primary: #16a34a; --primary-light: #4ade80; --accent: #facc15;
+--text-main: #052e16; --text-muted: #166534;
+--card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(255, 255, 255, 0.9);
+--glass-shadow: 0 12px 32px 0 rgba(22, 163, 74, 0.15);
+}
+[data-theme="cream-champagne"] {
+--bg-grad-start: #fefce8; --bg-grad-end: #fef08a;
+--primary: #ca8a04; --primary-light: #fde047; --accent: #a16207;
+--text-main: #422006; --text-muted: #713f12;
+--card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(250, 204, 21, 0.3);
+--glass-shadow: 0 12px 32px 0 rgba(202, 138, 4, 0.15);
+}
+[data-theme="midnight-romance"] {
+--bg-grad-start: #0f172a; --bg-grad-end: #881337;
+--primary: #fb7185; --primary-light: #fda4af; --accent: #fef08a;
+--text-main: #fff1f2; --text-muted: #fecdd3;
+--card-bg: rgba(30, 27, 46, 0.78); --card-border: rgba(251, 113, 133, 0.25);
+--glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.5); }
+[data-theme="cozy-coffee"] {
+--bg-grad-start: #fdf8f6; --bg-grad-end: #e7d8c9;
+--primary: #8c6d58; --primary-light: #b69d8a; --accent: #d4a373;
+--text-main: #3e2723; --text-muted: #5d4037;
+--card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(212, 163, 115, 0.3);
+--glass-shadow: 0 12px 32px 0 rgba(140, 109, 88, 0.15);
+}
+[data-theme="fairy-garden"] {
+--bg-grad-start: #ecfdf5; --bg-grad-end: #fbcfe8;
+--primary: #059669; --primary-light: #f472b6; --accent: #facc15;
+--text-main: #064e3b; --text-muted: #047857;
+--card-bg: rgba(255, 255, 255, 0.82); --card-border: rgba(255, 255, 255, 0.9);
+--glass-shadow: 0 12px 32px 0 rgba(5, 150, 105, 0.15);
+}
+[data-theme="vintage-love-letter"] {
+--bg-grad-start: #fbf8f1; --bg-grad-end: #e5d9c5;
+--primary: #9b2226; --primary-light: #bb3e03; --accent: #ee9b00;
+--text-main: #2b1e1a; --text-muted: #6b4d3e;
+--card-bg: rgba(250, 246, 238, 0.9); --card-border: rgba(210, 190, 165, 0.5);
+--glass-shadow: 0 12px 32px 0 rgba(155, 34, 38, 0.15);
+}
+[data-theme="celestial-dream"] {
+--bg-grad-start: #0b091a; --bg-grad-end: #1a1c38;
+--primary: #818cf8; --primary-light: #c084fc; --accent: #fef08a;
+--text-main: #f8fafc; --text-muted: #cbd5e1; --card-bg: rgba(23, 22, 48, 0.8); --card-border: rgba(129, 140, 248, 0.3);
+--glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.6);
+}
+[data-theme="soft-wedding"] {
+--bg-grad-start: #fafaf9; --bg-grad-end: #f5f5f4;
+--primary: #78716c; --primary-light: #a8a29e; --accent: #d4af37;
+--text-main: #1c1917; --text-muted: #57534e;
+--card-bg: rgba(255, 255, 255, 0.9); --card-border: rgba(212, 175, 55, 0.25);
+--glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.08);
+}
+[data-theme="dreamy-birthday"] {
+--bg-grad-start: #f0f9ff; --bg-grad-end: #fbcfe8;
+--primary: #0284c7; --primary-light: #f472b6; --accent: #facc15;
+--text-main: #0c4a6e; --text-muted: #0369a1;
+--card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(255, 255, 255, 0.95);
+--glass-shadow: 0 12px 32px 0 rgba(2, 132, 199, 0.15);
+}
+[data-theme="luxury-gold"] {
+--bg-grad-start: #141414; --bg-grad-end: #2a2415;
+--primary: #d4af37; --primary-light: #f3e5ab; --accent: #ffffff;
+--text-main: #f5f5f7; --text-muted: #d4af37;
+--card-bg: rgba(35, 30, 20, 0.82); --card-border: rgba(212, 175, 55, 0.35);
+--glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.6);
+}
+[data-theme="galaxy"] {
+--bg-grad-start: #090a0f; --bg-grad-end: #1b1425; --primary: #d8b4fe; --primary-light: #818cf8; --accent: #f472b6;
+--text-main: #f3e8ff; --text-muted: #c084fc;
+--card-bg: rgba(23, 15, 38, 0.8); --card-border: rgba(216, 180, 254, 0.25);
+--glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.7);
+}
+[data-theme="aurora"] {
+--bg-grad-start: #061e27; --bg-grad-end: #113f38;
+--primary: #2dd4bf; --primary-light: #a7f3d0; --accent: #facc15;
+--text-main: #f0fdf4; --text-muted: #99f6e4;
+--card-bg: rgba(13, 43, 49, 0.8); --card-border: rgba(45, 212, 191, 0.3);
+--glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.6);
+}
+[data-theme="ocean"] {
+--bg-grad-start: #0f172a; --bg-grad-end: #0369a1;
+--primary: #38bdf8; --primary-light: #7dd3fc; --accent: #fde047;
+--text-main: #f0f9ff; --text-muted: #bae6fd;
+--card-bg: rgba(15, 30, 54, 0.8); --card-border: rgba(56, 189, 248, 0.3);
+--glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.5);
+}
+[data-theme="forest"] {
+--bg-grad-start: #051c14; --bg-grad-end: #14382c;
+--primary: #34d399; --primary-light: #a7f3d0; --accent: #fbbf24;
+--text-main: #ecfdf5; --text-muted: #6ee7b7;
+--card-bg: rgba(10, 36, 26, 0.82); --card-border: rgba(52, 211, 153, 0.25);
+--glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.6);
+} [data-theme="scrapbook"] {
+--bg-grad-start: #fef3c7; --bg-grad-end: #fde68a;
+--primary: #d97706; --primary-light: #fbbf24; --accent: #ef4444;
+--text-main: #451a03; --text-muted: #92400e;
+--card-bg: rgba(255, 251, 235, 0.9); --card-border: rgba(217, 119, 6, 0.3);
+--glass-shadow: 0 12px 32px 0 rgba(217, 119, 6, 0.12);
+}
+[data-theme="polaroid"] {
+--bg-grad-start: #f1f5f9; --bg-grad-end: #cbd5e1;
+--primary: #475569; --primary-light: #94a3b8; --accent: #f43f5e;
+--text-main: #0f172a; --text-muted: #334155;
+--card-bg: rgba(255, 255, 255, 0.92); --card-border: rgba(203, 213, 225, 0.8);
+--glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.1);
+}
+/* Reset & Base Styles */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
+body {
+font-family: var(--font-body);
+background: linear-gradient(135deg, var(--bg-grad-start), var(--bg-grad-end));
+color: var(--text-main);
+min-height: 100vh;
+overflow-x: hidden;
+transition: background 0.8s ease, color 0.5s ease;
+line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+/* Canvas Overlays */
+#bgCanvas, #fxCanvas {
+position: fixed;
+top: 0; left: 0;
+width: 100vw; height: 100vh;
+pointer-events: none;
+z-index: 1;
+}
+#fxCanvas { z-index: 9999; }
+/* Universal Typography & UI Elements */
+h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height: 1.2; }
+.handwriting { font-family: var(--font-handwriting); }
+.glass-card {
+background: var(--card-bg);
+backdrop-filter: blur(16px);
+-webkit-backdrop-filter: blur(16px);
+border: 1px solid var(--card-border);
+border-radius: var(--radius-lg);
+box-shadow: var(--glass-shadow);
+padding: 2rem;
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+} .btn {
+display: inline-flex;
+align-items: center;
+justify-content: center;
+gap: 0.6rem;
+padding: 0.85rem 1.8rem;
+font-family: var(--font-body);
+font-weight: 600;
+font-size: 1rem;
+border-radius: 50px;
+border: none;
+cursor: pointer;
+background: linear-gradient(135deg, var(--primary), var(--primary-light));
+color: #ffffff;
+box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+transition: transform 0.25s var(--transition-smooth), box-shadow 0.25s ease, filter 0.2s;
+text-decoration: none;
+user-select: none;
+}
+.btn:hover {
+transform: translateY(-3px) scale(1.02);
+box-shadow: 0 10px 25px rgba(0,0,0,0.22);
+filter: brightness(1.05);
+}
+.btn:active { transform: translateY(0) scale(0.98); }
+.btn-secondary { background: rgba(255, 255, 255, 0.4);
+color: var(--text-main);
+border: 1px solid var(--card-border);
+}
+.btn-icon {
+width: 44px; height: 44px;
+padding: 0; border-radius: 50%;
+display: inline-flex; align-items: center; justify-content: center;
+}
+/* Fixed Navigation Bar */
+#mainNav {
+position: fixed;
+top: 15px; left: 50%;
+transform: translateX(-50%);
+z-index: 1000;
+display: flex;
+align-items: center;
+gap: 0.4rem;
+padding: 0.5rem 1rem;
+background: rgba(255, 255, 255, 0.35);
+backdrop-filter: blur(20px);
+-webkit-backdrop-filter: blur(20px);
+border: 1px solid var(--card-border);
+border-radius: 40px;
+box-shadow: 0 8px 32px rgba(0,0,0,0.1); max-width: 95vw;
+overflow-x: auto;
+scrollbar-width: none;
+}
+#mainNav::-webkit-scrollbar { display: none; }
+.nav-link {
+padding: 0.45rem 0.85rem;
+font-size: 0.82rem;
+font-weight: 600;
+color: var(--text-main);
+border-radius: 20px;
+text-decoration: none;
+white-space: nowrap;
+transition: all 0.3s ease;
+cursor: pointer;
+}
+.nav-link:hover, .nav-link.active {
+background: var(--primary);
+color: #fff;
+}
+/* Top Controls Floating Right */
+#quickControls {
+position: fixed;
+top: 15px; right: 20px;
+z-index: 1001; display: flex;
+gap: 0.5rem;
+}
+/* Chapters Container & Layout */
+main { position: relative; z-index: 2; width: 100%; }
+.chapter-section {
+min-height: 100vh;
+padding: 6rem 1.5rem 4rem 1.5rem;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+position: relative;
+opacity: 0;
+transform: translateY(30px);
+transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.chapter-section.visible {
+opacity: 1;
+transform: translateY(0);
+}
+.section-title {
+font-size: clamp(2rem, 5vw, 3.2rem);
+text-align: center;
+margin-bottom: 0.5rem; color: var(--text-main);
+text-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.section-subtitle {
+font-size: clamp(1rem, 2.5vw, 1.3rem);
+font-family: var(--font-handwriting);
+color: var(--primary);
+text-align: center;
+margin-bottom: 2.5rem;
+}
+/* CHAPTER 1: INTRO */
+#intro { text-align: center; justify-content: center; min-height: 100vh; }
+.intro-badge {
+display: inline-block;
+padding: 0.4rem 1.2rem;
+border-radius: 30px;
+background: rgba(255,255,255,0.5);
+border: 1px solid var(--card-border);
+font-size: 0.9rem;
+font-weight: 600;
+letter-spacing: 2px;
+text-transform: uppercase;
+margin-bottom: 1.5rem;
+color: var(--primary);
+animation: pulseGlow 2.5s infinite alternate; }
+.intro-title {
+font-size: clamp(2.8rem, 8vw, 5rem);
+margin-bottom: 1rem;
+line-height: 1.1;
+}
+.intro-msg {
+max-width: 650px;
+font-size: clamp(1.1rem, 3vw, 1.4rem);
+margin: 0 auto 2.5rem auto;
+color: var(--text-muted);
+}
+/* CHAPTER 2: GIFT BOX */
+.gift-container {
+perspective: 1000px;
+width: 260px; height: 260px;
+margin: 2rem auto;
+position: relative;
+cursor: pointer;
+}
+.gift-box {
+width: 100%; height: 100%;
+position: relative;
+transform-style: preserve-3d;
+transition: transform 0.6s var(--transition-smooth); animation: giftFloat 3s ease-in-out infinite alternate;
+}
+.gift-box:hover { transform: scale(1.05) rotateY(10deg); }
+.gift-face {
+position: absolute; width: 220px; height: 220px;
+left: 20px; top: 20px;
+background: linear-gradient(135deg, var(--primary), var(--primary-light));
+border: 2px solid rgba(255,255,255,0.4);
+border-radius: 12px;
+box-shadow: inset 0 0 20px rgba(0,0,0,0.15), 0 15px 35px rgba(0,0,0,0.2);
+}
+.gift-ribbon-v, .gift-ribbon-h {
+position: absolute;
+background: linear-gradient(to right, #ffd166, #facc15);
+box-shadow: 0 0 10px rgba(255, 209, 102, 0.6);
+z-index: 2;
+}
+.gift-ribbon-v { width: 40px; height: 100%; left: 90px; top: 0; }
+.gift-ribbon-h { width: 100%; height: 40px; left: 0; top: 90px; }
+.gift-bow {
+position: absolute;
+top: -25px; left: 50%;
+transform: translateX(-50%);
+width: 80px; height: 50px;
+z-index: 3;
+transition: all 0.5s ease; }
+.gift-bow::before, .gift-bow::after {
+content: ""; position: absolute;
+width: 45px; height: 45px;
+border: 6px solid #ffd166;
+border-radius: 50% 50% 0 50%;
+transform: rotate(45deg);
+box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.gift-bow::after {
+right: 0;
+border-radius: 50% 50% 50% 0;
+transform: rotate(-45deg);
+}
+.gift-box.opened .gift-bow { transform: translateX(-50%) translateY(-100px) scale(0); 
+opacity: 0; }
+.gift-box.opened { animation: giftOpen 1s forwards; }
+.gift-reveal-card {
+display: none;
+max-width: 500px;
+text-align: center;
+margin-top: 2rem;
+animation: popin 0.6s var(--transition-smooth) forwards;
+}
+/* CHAPTER 3: BOUQUET */ .bouquet-wrapper {
+display: flex;
+flex-wrap: wrap;
+justify-content: center;
+gap: 1.5rem;
+max-width: 1000px;
+margin: 0 auto;
+}
+.flower-item {
+width: 130px; height: 230px;
+display: flex;
+flex-direction: column;
+align-items: center;
+cursor: pointer;
+position: relative;
+transition: transform 0.3s ease;
+}
+.flower-item:hover { transform: translateY(-10px) scale(1.08); }
+.flower-head {
+width: 100px; height: 100px;
+position: relative;
+transition: transform 0.5s var(--transition-smooth);
+}
+.flower-stem {
+width: 6px; height: 110px;
+background: linear-gradient(to bottom, #4ade80, #15803d); border-radius: 4px;
+position: relative;
+}
+.flower-leaf {
+position: absolute;
+width: 24px; height: 12px;
+background: #22c55e;
+border-radius: 15px 0 15px 0;
+}
+.flower-leaf.left { left: -20px; top: 30px; transform: rotate(-30deg); }
+.flower-leaf.right { right: -20px; top: 60px; transform: rotate(30deg) scaleX(-1); }
+.flower-item.bloomed .flower-head { transform: scale(1.25) rotate(15deg); }
+.flower-note-pop {
+position: absolute;
+bottom: -35px;
+background: rgba(255,255,255,0.95);
+padding: 0.4rem 0.8rem;
+border-radius: 12px;
+font-size: 0.8rem;
+font-weight: 600;
+white-space: nowrap;
+box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+opacity: 0;
+transform: translateY(10px);
+transition: all 0.3s ease;
+pointer-events: none; z-index: 10;
+}
+.flower-item.bloomed .flower-note-pop { opacity: 1; transform: translateY(0); }
+/* CHAPTER 4: ENVELOPE + LETTER */
+.letter-stage {
+perspective: 1200px;
+width: 100%; max-width: 680px;
+margin: 0 auto;
+}
+.envelope {
+width: 100%; max-width: 480px;
+height: 280px;
+margin: 0 auto;
+background: #fdf6e2;
+border-radius: 12px;
+box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+position: relative;
+cursor: pointer;
+border: 1px solid #e2d2b4;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: transform 0.4s ease;
+}
+.envelope:hover { transform: scale(1.02); } .wax-seal {
+width: 70px; height: 70px;
+background: linear-gradient(135deg, #b91c1c, #991b1b);
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+color: #fef08a;
+font-family: var(--font-handwriting);
+font-size: 1.8rem;
+box-shadow: 0 6px 16px rgba(185, 28, 28, 0.4);
+border: 2px dashed #fef08a;
+z-index: 5;
+transition: transform 0.4s var(--transition-smooth);
+}
+.envelope.opened .wax-seal { transform: scale(0); opacity: 0; }
+.letter-paper {
+display: none;
+background: #fffdfa;
+background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
+background-size: 100% 2rem;
+line-height: 2rem;
+padding: 3rem 2.5rem;
+border-radius: 16px;
+box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+border: 1px solid #f3f4f6; font-family: var(--font-handwriting);
+font-size: 1.6rem;
+color: #374151;
+position: relative;
+animation: paperUnfold 0.8s var(--transition-smooth) forwards;
+}
+.letter-controls {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-top: 1.5rem;
+font-family: var(--font-body);
+font-size: 0.9rem;
+}
+/* CHAPTER 5: MEMORIES */
+.memory-carousel {
+width: 100%; max-width: 800px;
+position: relative;
+overflow: hidden;
+border-radius: var(--radius-lg);
+}
+.polaroid-card {
+background: #fff;
+padding: 1.2rem 1.2rem 2.5rem 1.2rem;
+box-shadow: 0 10px 30px rgba(0,0,0,0.12); border-radius: 4px;
+transform: rotate(-2deg);
+transition: transform 0.3s ease;
+max-width: 380px;
+margin: 0 auto;
+}
+.polaroid-card:hover { transform: rotate(0deg) scale(1.03); }
+.polaroid-img {
+width: 100%; height: 260px;
+object-fit: cover;
+border-radius: 2px;
+background: #f3f4f6;
+}
+.polaroid-caption {
+font-family: var(--font-handwriting);
+font-size: 1.5rem;
+text-align: center;
+margin-top: 1rem;
+color: #333;
+}
+.photo-wall {
+width: 100%; height: 380px;
+position: relative;
+background: rgba(255,255,255,0.2);
+border-radius: var(--radius-lg);
+border: 2px dashed var(--card-border); overflow: hidden;
+margin-top: 2rem;
+}
+.floating-photo {
+position: absolute;
+width: 130px;
+padding: 8px 8px 18px 8px;
+background: #fff;
+box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+cursor: grab;
+user-select: none;
+transition: box-shadow 0.2s;
+}
+.floating-photo:active { cursor: grabbing; box-shadow: 0 12px 30px rgba(0,0,0,0.25); z-index: 100 !important; }
+.floating-photo img { width: 100%; height: 100px; object-fit: cover; }
+/* PINTEREST MASONRY GALLERY */
+.pinterest-grid {
+column-count: 3;
+column-gap: 1.2rem;
+width: 100%;
+max-width: 1000px;
+margin: 0 auto;
+}
+@media (max-width: 768px) { .pinterest-grid { column-count: 2; } } @media (max-width: 480px) { .pinterest-grid { column-count: 1; } }
+.pin-card {
+break-inside: avoid;
+margin-bottom: 1.2rem;
+background: var(--card-bg);
+border: 1px solid var(--card-border);
+border-radius: var(--radius-md);
+overflow: hidden;
+box-shadow: var(--glass-shadow);
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+position: relative;
+}
+.pin-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+.pin-card img { width: 100%; height: auto; display: block; border-radius: var(--radius-md) var(--radius-md) 0 0; }
+.pin-caption { padding: 0.8rem 1rem; font-size: 0.95rem; font-weight: 600; text-align: left; }
+/* RETRO TV BIG SCREEN (v2.0.1) */
+.retro-tv-wrapper {
+position: relative;
+width: 100%;
+max-width: 720px;
+margin: 0 auto;
+background: #2d2422;
+border: 14px solid #543d35;
+border-radius: 36px; padding: 25px;
+box-shadow: inset 0 0 20px #000, 0 20px 40px rgba(0,0,0,0.4);
+}
+.tv-screen-frame {
+position: relative;
+width: 100%;
+aspect-ratio: 16/9;
+background: #0a0a0a;
+border-radius: 20px;
+overflow: hidden;
+border: 4px solid #1a1a1a;
+box-shadow: inset 0 0 30px rgba(255,255,255,0.1);
+display: flex;
+align-items: center;
+justify-content: center;
+}
+.tv-screen-frame video, .tv-screen-frame img {
+width: 100%;
+height: 100%;
+object-fit: cover;
+}
+.tv-scanlines {
+position: absolute;
+top: 0; left: 0; right: 0; bottom: 0;
+background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+background-size: 100% 4px; pointer-events: none;
+z-index: 5;
+opacity: 0.6;
+}
+.tv-controls {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-top: 15px;
+padding: 12px 18px;
+background: #1a1514;
+border-radius: 18px;
+border: 1px solid rgba(255,255,255,0.05);
+}
+.tv-knob {
+width: 42px;
+height: 42px;
+border-radius: 50%;
+background: radial-gradient(circle, #888, #222);
+border: 2px solid #111;
+cursor: pointer;
+box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+transition: transform 0.3s ease;
+}
+.tv-knob:active { transform: rotate(45deg); } /* CHAPTER 6: TIMELINE & COUNTDOWN */
+.timeline-container {
+position: relative;
+max-width: 750px;
+margin: 0 auto;
+padding-left: 2rem;
+}
+.timeline-container::before {
+content: "";
+position: absolute;
+left: 7px; top: 0; bottom: 0;
+width: 4px;
+background: var(--primary-light);
+border-radius: 2px;
+}
+.timeline-item {
+position: relative;
+margin-bottom: 2.5rem;
+padding-left: 1.5rem;
+}
+.timeline-dot {
+position: absolute;
+left: -2rem; top: 5px;
+width: 18px; height: 18px;
+border-radius: 50%;
+background: var(--primary); border: 4px solid #fff;
+box-shadow: 0 0 10px var(--primary);
+}
+.countdown-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 1rem;
+max-width: 550px;
+margin: 1.5rem auto;
+}
+.count-box {
+background: var(--card-bg);
+border: 1px solid var(--card-border);
+border-radius: var(--radius-md);
+padding: 1rem 0.5rem;
+text-align: center;
+box-shadow: var(--glass-shadow);
+}
+.count-num { font-size: 2.2rem; font-weight: 700; color: var(--primary); line-height: 1; }
+.count-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-top: 0.3rem; }
+/* CHAPTER 7: ARCADE GAMES HUB */
+.games-grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem;
+width: 100%; max-width: 950px;
+}
+.game-card {
+background: var(--card-bg);
+border: 1px solid var(--card-border);
+border-radius: var(--radius-md);
+padding: 1.5rem 1rem;
+text-align: center;
+cursor: pointer;
+transition: all 0.3s var(--transition-smooth);
+}
+.game-card:hover { transform: translateY(-5px); background: #ffffff; }
+.game-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+.game-modal {
+display: none;
+position: fixed;
+top: 0; left: 0; width: 100vw; height: 100vh;
+background: rgba(0,0,0,0.65);
+backdrop-filter: blur(8px);
+z-index: 2000;
+align-items: center; justify-content: center;
+padding: 1rem;
+}
+.game-modal-content {
+background: #fff; border-radius: var(--radius-lg);
+width: 100%; max-width: 550px;
+padding: 2rem;
+position: relative;
+max-height: 90vh;
+overflow-y: auto;
+}
+.close-modal {
+position: absolute; top: 1rem; right: 1rem;
+font-size: 1.5rem; cursor: pointer; border: none; background: none; color: #666;
+}
+.memory-grid {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 0.6rem;
+margin-top: 1rem;
+}
+.memory-tile {
+aspect-ratio: 1;
+background: var(--primary-light);
+border-radius: 8px;
+display: flex; align-items: center; justify-content: center;
+font-size: 1.8rem;
+cursor: pointer;
+user-select: none;
+transition: transform 0.3s; }
+.memory-tile.flipped { background: #fff; transform: rotateY(180deg); }
+/* CHAPTER 8: WISH TREE, GUESTBOOK & CAPSULE */
+.tree-canvas-wrap {
+width: 100%; max-width: 600px; height: 350px;
+position: relative; margin: 0 auto;
+}
+#treeCanvas { width: 100%; height: 100%; border-radius: var(--radius-lg); }
+.guestbook-list {
+max-height: 250px; overflow-y: auto;
+margin-top: 1rem; display: flex; flex-direction: column; gap: 0.8rem;
+}
+.guestbook-item {
+background: rgba(255,255,255,0.6);
+padding: 0.8rem 1rem;
+border-radius: 12px;
+font-size: 0.9rem;
+}
+/* CHAPTER 9: SECRETS */
+.vault-box { text-align: center; max-width: 450px; margin: 0 auto; }
+.pin-input {
+letter-spacing: 10px; font-size: 2rem; text-align: center;
+width: 180px; padding: 0.5rem; border-radius: 12px;
+border: 2px solid var(--primary-light); margin: 1rem 0; }
+/* CHAPTER 10: INVITATION */
+.invite-card {
+background: linear-gradient(135deg, #ffffff, #fffdfa);
+border: 2px solid var(--primary-light);
+border-radius: var(--radius-lg);
+padding: 2.5rem 1.8rem;
+text-align: center;
+max-width: 520px;
+margin: 0 auto;
+position: relative;
+box-shadow: var(--glass-shadow);
+}
+.invite-card::before {
+content: "";
+position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+border: 1px dashed var(--primary-light);
+border-radius: calc(var(--radius-lg) - 6px);
+pointer-events: none;
+}
+/* CHAPTER 11: PLAYFUL PROPOSAL & FINALE */
+.proposal-wrap {
+text-align: center;
+position: relative; min-height: 320px;
+display: flex; flex-direction: column;
+align-items: center;
+justify-content: center;
+width: 100%;
+}
+.proposal-title {
+font-size: clamp(2.2rem, 6vw, 3.8rem);
+margin-bottom: 2rem;
+}
+.proposal-btn-group {
+display: flex;
+gap: 1.5rem;
+align-items: center;
+justify-content: center;
+position: relative;
+width: 100%;
+max-width: 400px;
+min-height: 80px;
+}
+#btnNo {
+position: relative;
+transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+z-index: 10;
+} /* Creator Modal & Owner Security Panels */
+#creatorModal, #ownerAuthModal {
+display: none;
+position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
+z-index: 3000;
+align-items: center; justify-content: center;
+padding: 1.5rem;
+}
+.creator-panel {
+background: #fff; width: 100%; max-width: 750px;
+max-height: 85vh; overflow-y: auto;
+border-radius: var(--radius-lg); padding: 2rem;
+position: relative;
+}
+.form-group { margin-bottom: 1rem; text-align: left; }
+.form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem; }
+.form-control {
+width: 100%; padding: 0.6rem 0.9rem; border-radius: 8px;
+border: 1px solid #ccc; font-family: inherit; font-size: 0.95rem;
+}
+.tab-btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.2rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem; }
+.tab-btn { padding: 0.4rem 0.8rem; font-weight: 600; border-radius: 6px; border: none; background: #f0f0f0; cursor: pointer; font-size: 0.85rem; }
+.tab-btn.active { background: var(--primary); color: #fff; }
+.tab-content { display: none; } .tab-content.active { display: block; }
+/* Toast Notification */
+#toast {
+position: fixed; bottom: 25px; left: 50%;
+transform: translateX(-50%) translateY(100px);
+background: var(--text-main); color: #fff;
+padding: 0.7rem 1.5rem; border-radius: 30px;
+font-size: 0.9rem; font-weight: 500;
+box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+z-index: 9999; opacity: 0;
+transition: all 0.4s var(--transition-smooth);
+}
+#toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+/* Keyframes */
+@keyframes pulseGlow { 0% { box-shadow: 0 0 5px var(--gold-glow); } 100% { box-shadow: 0 0 20px var(--gold-glow); } }
+@keyframes giftFloat { 0% { transform: translateY(0); } 100% { transform: translateY(-12px); } }
+@keyframes giftOpen { 0% { transform: scale(1); } 50% { transform: scale(1.1) rotate(5deg); } 100% { transform: scale(0.9); opacity: 0.3; } }
+@keyframes popin { 0% { opacity: 0; transform: scale(0.8) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+@keyframes paperUnfold { 0% { opacity: 0; transform: scaleY(0.3); } 100% { opacity: 1; transform: scaleY(1); } } /* Responsive */
+@media (max-width: 640px) {
+.chapter-section { padding-top: 5rem; }
+.countdown-grid { grid-template-columns: repeat(2, 1fr); }
+#mainNav { bottom: 15px; top: auto; }
+.envelope { height: 220px; }
+.wax-seal { width: 55px; height: 55px; font-size: 1.4rem; }
+}
+/* ======================================================================
+ NEW APPENDED STYLES FOR FEATURE 1 (SAKURA TREE) & FEATURE 2 (BG MUSIC)
+ ====================================================================== 
+*/
+#sakuraCanvas {
+position: absolute;
+top: 0; left: 0;
+width: 100%; height: 100%;
+pointer-events: none;
+border-radius: var(--radius-lg);
+z-index: 3;
+}
+.music-player-bar {
+display: flex;
+align-items: center;
+gap: 1rem;
+background: rgba(255,255,255,0.85); padding: 0.8rem 1.2rem;
+border-radius: 30px;
+border: 1px solid var(--card-border);
+box-shadow: var(--glass-shadow);
+margin-top: 1rem;
+}
+.youtube-embed-container {
+position: relative;
+width: 100%;
+aspect-ratio: 16/9;
+max-height: 200px;
+border-radius: 12px;
+overflow: hidden;
+margin-top: 0.8rem;
+display: none;
+}
+.youtube-embed-container iframe {
+width: 100%;
+height: 100%;
+border: none;
+}
+/* APPENDED STYLES: HANGING WISH PAPERS, TIME CAPSULE COUNTDOWN & RESPONSES */
+.sakura-wish-paper {
+position: absolute;
+background: #fff0f5;
+border: 1px solid #ffb7c5;
+border-radius: 4px;
+padding: 4px 8px;
+font-family: var(--font-handwriting);
+font-size: 0.85rem;
+color: #8b0000;
+box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+cursor: pointer;
+transform-origin: top center;
+animation: gentleSway 3s ease-in-out infinite alternate;
+z-index: 10;
+max-width: 90px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+user-select: none;
+transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.sakura-wish-paper::before {
+content: "";
+position: absolute;
+top: -12px;
+left: 50%;
+transform: translateX(-50%);
+width: 1px;
+height: 12px;
+background: #d2691e;
+}
+.sakura-wish-paper:hover {
+transform: scale(1.15) rotate(0deg) !important;
+z-index: 100;
+box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+white-space: normal;
+max-width: 180px;
+}
+@keyframes gentleSway {
+0% { transform: rotate(-5deg); }
+100% { transform: rotate(5deg); }
+}
+.owner-close-btn {
+position: absolute;
+top: 1rem;
+right: 1rem;
+font-size: 1.6rem;
+font-weight: bold;
+color: #666;
+background: none;
+border: none;
+cursor: pointer;
+width: 36px;
+height: 36px;
+border-radius: 50%;
+display: flex;
+align-items: center;
+justify-content: center;
+transition: background 0.2s ease, color 0.2s ease;
+z-index: 10;
+}
+.owner-close-btn:hover {
+background: #f0f0f0;
+color: #111;
+}
+.response-badge {
+background: #e63946;
+color: #fff;
+font-size: 0.75rem;
+font-weight: bold;
+padding: 2px 7px;
+border-radius: 12px;
+margin-left: 6px;
+display: inline-block;
+}
+.response-item {
+background: rgba(255,255,255,0.85);
+border: 1px solid var(--card-border);
+border-radius: 10px;
+padding: 0.8rem 1rem;
+margin-bottom: 0.8rem;
+box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+text-align: left;
+}
+.response-item.unread {
+border-left: 4px solid var(--primary);
+background: #fff8f8;
+}
+.response-header {
+display: flex;
+justify-content: space-between;
+align-items: center;
+margin-bottom: 0.4rem;
+font-size: 0.8rem;
+color: var(--text-muted);
+}
+.response-type {
+font-weight: bold;
+color: var(--primary);
+text-transform: uppercase;
+letter-spacing: 0.5px;
+}
+.tc-live-countdown {
+display: grid;
+grid-template-columns: repeat(6, 1fr);
+gap: 0.4rem;
+margin-top: 1rem;
+text-align: center;
+}
+.tc-time-unit {
+background: rgba(255,255,255,0.7);
+border: 1px solid var(--card-border);
+border-radius: 8px;
+padding: 0.4rem 0.2rem;
+}
+.tc-time-val {
+font-size: 1.1rem;
+font-weight: bold;
+color: var(--primary);
+}
+.tc-time-lbl {
+font-size: 0.65rem;
+text-transform: uppercase;
+color: var(--text-muted);
+}
+</style>
 </head>
 <body>
-  <!-- Canvas Overlays -->
-  <canvas id="bgCanvas"></canvas> 
-  <canvas id="fxCanvas"></canvas>
-
-  <!-- Audio Element -->
-  <audio id="mainBgMusic" loop></audio>
-
-  <!-- Navigation Bar -->
-  <nav id="mainNav" aria-label="Main Navigation">
-    <a class="nav-link active" onclick="scrollToSection('intro')">Intro</a>
-    <a class="nav-link" onclick="scrollToSection('gift')">Gift</a>
-    <a class="nav-link" onclick="scrollToSection('bouquet')">Bouquet</a>
-    <a class="nav-link" onclick="scrollToSection('letter')">Letter</a>
-    <a class="nav-link" onclick="scrollToSection('memories')">Memories</a> 
-    <a class="nav-link" onclick="scrollToSection('pinterest')">Pinterest</a>
-    <a class="nav-link" onclick="scrollToSection('retrotv')">Retro TV</a>
-    <a class="nav-link" onclick="scrollToSection('timeline')">Timeline</a>
-    <a class="nav-link" onclick="scrollToSection('games')">Arcade</a>
-    <a class="nav-link" onclick="scrollToSection('tree')">Wishes</a>
-    <a class="nav-link" onclick="scrollToSection('secrets')">Vault</a>
-    <a class="nav-link" onclick="scrollToSection('invitation')">Invite</a>
-    <a class="nav-link" onclick="scrollToSection('proposal')">Proposal</a>
-  </nav>
-
-  <!-- Quick Floating Controls -->
-  <div id="quickControls">
-    <button class="btn btn-secondary btn-icon" id="btnAudioToggle" title="Audio Options & Synth" onclick="cycleAudioPreset()">🎵</button>
-    <button class="btn btn-secondary btn-icon" title="Cycle Themes (21 Available)" onclick="cycleTheme()">🎨</button>
-    <button class="btn btn-secondary btn-icon" title="Customize Experience (Owner Only)" onclick="openCreatorModal()">⚙️ <span id="ownerControlBadge"></span></button> 
-  </div>
-
-  <main>
-    <!-- CHAPTER 1: CINEMATIC INTRO -->
-    <section id="intro" class="chapter-section visible">
-      <span class="intro-badge" id="cfgOccasion">SPECIAL CELEBRATION</span>
-      <h1 class="intro-title" id="cfgIntroHeading">Happy Celebration, <br><span class="handwriting" style="color:var(--primary)" id="cfgRecipientName">Sophia</span>!</h1>
-      <p class="intro-msg" id="cfgMainMessage">A dreamy personalized gift crafted with love, memory fragments, and joyful secrets just for you.</p>
-      <button class="btn" onclick="startStoryExperience()"> Begin The Journey
-        <svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </button>
-    </section>
-
-    <!-- CHAPTER 2: INTERACTIVE GIFT BOX -->
-    <section id="gift" class="chapter-section">
-      <h2 class="section-title">A Special Surprise</h2>
-      <p class="section-subtitle">Tap the golden ribbon to untie the present</p>
-      <div class="gift-container" onclick="openGiftBox()">
-        <div class="gift-box" id="giftBox">
-          <div class="gift-face"></div>
-          <div class="gift-ribbon-v"></div>
-          <div class="gift-ribbon-h"></div> 
-          <div class="gift-bow"></div>
-        </div>
-      </div>
-      <div class="glass-card gift-reveal-card" id="giftRevealCard">
-        <h3 class="handwriting" style="font-size:2.2rem; color:var(--primary);" id="cfgGiftTitle">You Unlocked The Surprise Gift!</h3>
-        <p style="margin:1rem 0;" id="cfgGiftText">May your day be filled with warm smiles, sweet moments, and unlimited happiness.</p>
-        <button class="btn" onclick="scrollToSection('bouquet')">Explore Next Surprise</button>
-      </div>
-    </section>
-
-    <!-- CHAPTER 3: INTERACTIVE REALISTIC BOUQUET -->
-    <section id="bouquet" class="chapter-section">
-      <h2 class="section-title">Interactive Floral Bouquet</h2> 
-      <p class="section-subtitle">Click on each distinctive blossom to reveal sweet hidden messages</p>
-      <div class="bouquet-wrapper" id="flowerContainer"></div>
-    </section>
-
-    <!-- CHAPTER 4: ENVELOPE & LOVE LETTER -->
-    <section id="letter" class="chapter-section">
-      <h2 class="section-title">A Heartfelt Note</h2>
-      <p class="section-subtitle">Break the wax seal to read the letter</p>
-      <div class="letter-stage"> 
-        <div class="envelope" id="envelope" onclick="openLetter()">
-          <div class="wax-seal" id="waxSeal">✉️</div>
-        </div>
-        <div class="letter-paper" id="letterPaper">
-          <div id="letterContent"></div>
-          <div class="letter-controls">
-            <button class="btn btn-secondary" onclick="prevLetterPage()" id="btnPrevPage">Previous</button>
-            <button class="btn btn-secondary" onclick="speakLetterPage()">Read Aloud</button>
-            <span id="pageIndicator">Page 1/1</span>
-            <button class="btn btn-secondary" onclick="nextLetterPage()" id="btnNextPage">Next</button>
-          </div>
-          <p style="text-align:right; margin-top:1.5rem;" class="handwriting" id="cfgSenderSign">With all my love, Julian</p>
-        </div>
-      </div> 
-    </section>
-
-    <!-- CHAPTER 5: MEMORIES & FLOATING PHOTO WALL -->
-    <section id="memories" class="chapter-section">
-      <h2 class="section-title">Treasured Memories</h2>
-      <p class="section-subtitle">Snapshots of our favorite chapters</p>
-      <div class="memory-carousel">
-        <div class="polaroid-card">
-          <img src="" id="memoryImg" class="polaroid-img" alt="Memory photo" />
-          <p class="polaroid-caption" id="memoryCaption">Our first spontaneous trip</p> 
-        </div>
-        <div style="display: flex; justify-content:center; gap: 1rem; margin-top:1rem;">
-          <button class="btn btn-secondary btn-icon" onclick="changeMemory(-1)">&lt;</button>
-          <button class="btn btn-secondary btn-icon" onclick="changeMemory(1)">&gt;</button>
-        </div>
-      </div>
-      <h3 style="margin-top:3rem; font-size: 1.4rem;">Interactive Photo Wall</h3>
-      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1rem;">Drag Polaroid photos anywhere on the wall!</p>
-      <div class="photo-wall" id="photoWall"></div>
-    </section>
-
-    <!-- CHAPTER: PINTEREST AESTHETIC COLLAGE -->
-    <section id="pinterest" class="chapter-section">
-      <h2 class="section-title">Pinterest Gallery</h2>
-      <p class="section-subtitle">Aesthetic memory collage board</p>
-      <div class="pinterest-grid" id="pinterestGrid"></div>
-    </section>
-
-    <!-- RETRO TV BIG SCREEN (v2.0.1) -->
-    <section id="retrotv" class="chapter-section">
-      <h2 class="section-title">Retro TV Experience</h2> 
-      <p class="section-subtitle">Watch warm video memories & big screen photos</p>
-      <div class="retro-tv-wrapper">
-        <div class="tv-screen-frame" id="tvScreenFrame">
-          <div class="tv-scanlines"></div>
-        </div>
-        <div class="tv-controls">
-          <button class="btn btn-secondary" onclick="prevTvMedia()">Prev Channel</button>
-          <div style="display: flex; gap: 12px; align-items:center;">
-            <div class="tv-knob" onclick="cycleTvChannel()" title="Switch Channel"></div>
-            <span id="tvChannelLabel" style="color:#d4af37; font-weight:bold; font-family:monospace;">CH 01</span>
-          </div>
-          <button class="btn btn-secondary" onclick="nextTvMedia()">Next Channel</button>
-        </div>
-      </div>
-    </section>
-
-    <!-- CHAPTER 6: TIMELINE & COUNTDOWN -->
-    <section id="timeline" class="chapter-section">
-      <h2 class="section-title">Milestones & Countdown</h2>
-      <p class="section-subtitle">Counting down to our next big celebration</p>
-      <div class="countdown-grid"> 
-        <div class="count-box"><div class="count-num" id="cdDays">00</div><div class="count-label">Days</div></div>
-        <div class="count-box"><div class="count-num" id="cdHours">00</div><div class="count-label">Hours</div></div> 
-        <div class="count-box"><div class="count-num" id="cdMins">00</div><div class="count-label">Mins</div></div>
-        <div class="count-box"><div class="count-num" id="cdSecs">00</div><div class="count-label">Secs</div></div>
-      </div>
-      <div class="timeline-container" id="timelineList" style="margin-top:3rem;"></div>
-    </section>
-
-    <!-- CHAPTER 7: ARCADE GAMES HUB -->
-    <section id="games" class="chapter-section">
-      <h2 class="section-title">Celebration Arcade</h2>
-      <p class="section-subtitle">Play interactive mini-games to unlock secret rewards</p>
-      <div class="games-grid">
-        <div class="game-card" onclick="openGame('scratch')">
-          <div class="game-icon">🎰</div>
-          <h3>Scratch Card</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Scratch overlay to reveal secret note</p>
-        </div>
-        <div class="game-card" onclick="openGame('match')">
-          <div class="game-icon">🎴</div>
-          <h3>Memory Match</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Match pairs of celebratory icons</p> 
-        </div>
-        <div class="game-card" onclick="openGame('wheel')"> 
-          <div class="game-icon">🎡</div>
-          <h3>Lucky Wheel</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Spin for sweet compliments</p>
-        </div>
-        <div class="game-card" onclick="openGame('quiz')">
-          <div class="game-icon">❓</div>
-          <h3>Love Quiz</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Test how well you know our story</p>
-        </div>
-        <div class="game-card" onclick="openGame('balloon')">
-          <div class="game-icon">🎈</div>
-          <h3>Balloon Pop</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Pop floating balloons for points</p>
-        </div>
-        <div class="game-card" onclick="openGame('hearts')">
-          <div class="game-icon">💖</div>
-          <h3>Catch My Heart</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Catch falling hearts in time</p>
-        </div>
-        <div class="game-card" onclick="openGame('puzzle')">
-          <div class="game-icon">🧩</div>
-          <h3>Photo Puzzle</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Arrange sliding puzzle tiles</p>
-        </div>
-        <div class="game-card" onclick="openGame('magic')"> 
-          <div class="game-icon">✨</div> 
-          <h3>Magic Reveal</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Wave cursor to reveal magical surface</p>
-        </div>
-        <div class="game-card" onclick="openGame('target')">
-          <div class="game-icon">🎯</div>
-          <h3>Target Game</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Tap moving targets to score</p>
-        </div>
-        <div class="game-card" onclick="openGame('hunt')">
-          <div class="game-icon">🗺️</div>
-          <h3>Treasure Hunt</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted);">Solve clues to find the treasure</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- CHAPTER 8: WISH TREE, GUESTBOOK & TIME CAPSULE -->
-    <section id="tree" class="chapter-section">
-      <h2 class="section-title">Wishes & Time Capsule</h2>
-      <p class="section-subtitle">Leave a wish or seal a message for the future</p>
-      <div class="tree-canvas-wrap" id="treeCanvasWrap">
-        <canvas id="treeCanvas"></canvas>
-        <canvas id="sakuraCanvas"></canvas>
-        <div id="sakuraHangingWishes"></div>
-      </div> 
-      <div style="display: flex; gap: 1.5rem; flex-wrap:wrap; justify-content:center; width:100%; max-width: 900px; margin-top:2rem;">
-        <div class="glass-card" style="flex: 1; min-width:300px;">
-          <h3>Digital Guestbook</h3>
-          <div style="display: flex; flex-direction:column; gap:0.5rem; margin-top:0.8rem;">
-            <input type="text" id="gbName" placeholder="Your Name" class="form-control" />
-            <input type="text" id="gbMsg" placeholder="Leave a sweet wish..." class="form-control" />
-            <button class="btn" onclick="addGuestbookEntry()">Post Wish</button>
-          </div>
-          <div class="guestbook-list" id="guestbookList"></div>
-        </div>
-        <div class="glass-card" style="flex: 1; min-width:300px;">
-          <h3>Future Time Capsule</h3>
-          <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;">Seal a message to unlock on a future date.</p>
-          <div style="display: flex; flex-direction:column; gap:0.5rem;">
-            <input type="date" id="tcDate" class="form-control" />
-            <textarea id="tcMsg" placeholder="Your future message..." class="form-control" rows="3"></textarea>
-            <button class="btn btn-secondary" onclick="saveTimeCapsule()">Seal Time Capsule</button>
-          </div>
-          <div id="tcLiveCountdown" class="tc-live-countdown"></div>
-          <div id="tcStatus" style="font-size:0.85rem; margin-top:0.8rem; color:var(--primary); font-weight:600;"></div>
-        </div>
-      </div> 
-    </section> 
-
-    <!-- CHAPTER 9: SECRETS & TREASURE HUNT -->
-    <section id="secrets" class="chapter-section">
-      <h2 class="section-title">Secret Vault</h2>
-      <p class="section-subtitle">Enter the secret 4-digit PIN code to unlock hidden content</p>
-      <div class="glass-card vault-box">
-        <div style="font-size:3rem; margin-bottom:0.5rem;">🔒</div>
-        <input type="password" maxlength="4" class="pin-input" id="vaultPin" placeholder="...." />
-        <br>
-        <button class="btn" onclick="unlockVault()">Unlock Vault</button>
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem;" id="vaultHint">Hint: The year we first met or anniversary year (e.g. 2024)</p>
-      </div>
-    </section>
-
-    <!-- CHAPTER 10: INVITATION & RSVP -->
-    <section id="invitation" class="chapter-section">
-      <h2 class="section-title">Save The Date</h2>
-      <p class="section-subtitle">You are cordially invited to celebrate together</p>
-      <div class="invite-card">
-        <span style="letter-spacing:2px; font-size:0.8rem; color:var(--primary); font-weight:700;">OFFICIAL INVITATION</span>
-        <h3 style="font-size:2.2rem; margin:0.5rem 0;" id="cfgEventTitle">Special Celebration Dinner</h3> 
-        <p style="color:var(--text-muted); margin-bottom: 1.5rem;" id="cfgEventDesc">Join us for an intimate evening of food, laughter, and memories.</p>
-        <div style="text-align:left; max-width:300px; margin:0 auto 1.5rem auto; font-size:0.95rem; line-height: 1.8;">
-          <div><strong>Date:</strong> <span id="cfgEventDate">October 14, 2026</span></div>
-          <div><strong>Time:</strong> <span id="cfgEventTime">7:00 PM EST</span></div> 
-          <div><strong>Venue:</strong> <span id="cfgVenue">The Starlight Rooftop Garden</span></div>
-        </div>
-        <div style="display: flex; justify-content:center; gap:0.5rem; flex-wrap:wrap;">
-          <button class="btn" onclick="submitRSVP('Yes')">RSVP: Attending</button>
-          <button class="btn btn-secondary" onclick="submitRSVP('Maybe')">Maybe</button>
-          <button class="btn btn-secondary" onclick="downloadICS()">Add To Calendar</button>
-        </div>
-        <p id="rsvpStatus" style="font-size:0.85rem; margin-top: 1rem; color:var(--primary); font-weight:600;"></p>
-      </div>
-    </section>
-
-    <!-- CHAPTER 11: PLAYFUL PROPOSAL QUESTION & FINALE -->
-    <section id="proposal" class="chapter-section">
-      <div class="proposal-wrap">
-        <span style="font-size:3rem; margin-bottom: 1rem;">💍</span>
-        <h2 class="proposal-title" id="cfgProposalQuestion">Will you go out with me?</h2>
-        <div style="margin-bottom:1rem; font-size:0.85rem; color:var(--text-muted);">
-          <label><input type="checkbox" id="chkAccMode" onchange="toggleAccessibilityMode(this.checked)" /> Accessibility Mode (Disable escaping NO button)</label> 
-        </div>
-        <div class="proposal-btn-group">
-          <button class="btn" id="btnYes" style="padding: 1rem 2.5rem; font-size:1.2rem;" onclick="triggerYesCelebration()">YES! Forever</button>
-          <button class="btn btn-secondary" id="btnNo" onmouseenter="escapeNoButton()" onclick="escapeNoButton()">No</button>
-        </div> 
-        <div id="proposalResultCard" style="display:none; margin-top:1.5rem; padding:1.5rem 2rem; background:var(--card-bg); border-radius:var(--radius-lg); border:2px solid var(--primary); box-shadow:var(--glass-shadow); animation:popin 0.5s ease;">
-          <h3 style="font-size:2.2rem; color:var(--primary);">SHE SAID YES!</h3>
-          <p style="margin-top:0.5rem; font-weight:600;">The absolute best decision ever made!</p>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Game Modal Wrapper -->
-  <div class="game-modal" id="gameModal">
-    <div class="game-modal-content">
-      <button class="close-modal" onclick="closeGameModal()">×</button>
-      <div id="gameContainer"></div>
-    </div>
-  </div>
-
-  <!-- OWNER SECURITY AUTH MODAL --> 
-  <div id="ownerAuthModal">
-    <div class="creator-panel" style="max-width:400px; text-align:center;">
-      <button class="owner-close-btn" onclick="closeOwnerAuthModal()">✕</button>
-      <h3>🔐 Owner Authentication</h3>
-      <p style="font-size:0.85rem; color:var(--text-muted); margin: 0.8rem 0;">Enter Owner Security Passcode to edit site content. Recipients cannot edit site settings.</p>
-      <input type="password" id="ownerPasscodePrompt" class="form-control" placeholder="Enter Owner Passcode" style="text-align:center; font-size:1.2rem; margin-bottom:1rem;" />
-      <div style="display: flex; gap:0.5rem; justify-content:center;">
-        <button class="btn" onclick="verifyOwnerAccess()">Unlock Settings</button> 
-        <button class="btn btn-secondary" onclick="closeOwnerAuthModal()">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- CREATOR MODAL EDITOR -->
-  <div id="creatorModal">
-    <div class="creator-panel">
-      <button class="owner-close-btn" onclick="closeCreatorModal()" title="Close Owner Settings">✕</button>
-      <div style="display: flex; justify-space-between; align-items:center; margin-bottom:1rem;">
-        <h2>🛠️ Owner Control Center</h2>
-      </div>
-      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Edit texts, media, responses, and settings below. Changes take effect instantly.</p>
-      
-      <div class="tab-btn-group">
-        <button class="tab-btn active" onclick="switchCreatorTab('tabGeneral')">General</button>
-        <button class="tab-btn" onclick="switchCreatorTab('tabSurprises')">Letter & Gift</button>
-        <button class="tab-btn" onclick="switchCreatorTab('tabBouquet')">Bouquet & Photos</button>
-        <button class="tab-btn" onclick="switchCreatorTab('tabMedia')">Media (Pinterest & TV)</button>
-        <button class="tab-btn" onclick="switchCreatorTab('tabTimeline')">Timeline & RSVP</button>
-        <button class="tab-btn" onclick="switchCreatorTab('tabSecrets')">Vault & Quiz</button> 
-        <button class="tab-btn" onclick="switchCreatorTab('tabMusic')">Background Music</button>
-        <button class="tab-btn" onclick="switchCreatorTab('tabResponses')">Responses <span id="tabResponseBadge" class="response-badge" style="display:none;">0</span></button>
-        <button class="tab-btn" onclick="switchCreatorTab('tabSecurity')">Owner Passcode</button>
-      </div>
-
-      <!-- TAB 1: General & Intro -->
-      <div id="tabGeneral" class="tab-content active">
-        <div class="form-group"><label>Recipient Name</label><input type="text" id="edtRecipient" class="form-control" /></div>
-        <div class="form-group"><label>Sender Name</label><input type="text" id="edtSender" class="form-control" /></div>
-        <div class="form-group"><label>Occasion Tag</label><input type="text" id="edtOccasion" class="form-control" /></div>
-        <div class="form-group"><label>Intro Heading Text</label><input type="text" id="edtIntroHeading" class="form-control" /></div>
-        <div class="form-group"><label>Main Intro Message</label><textarea id="edtMainMessage" class="form-control" rows="2"></textarea></div>
-      </div> 
-
-      <!-- TAB 2: Surprises & Letter -->
-      <div id="tabSurprises" class="tab-content">
-        <div class="form-group"><label>Gift Box Title</label><input type="text" id="edtGiftTitle" class="form-control" /></div>
-        <div class="form-group"><label>Gift Box Text</label><textarea id="edtGiftText" class="form-control" rows="2"></textarea></div>
-        <div class="form-group"><label>Love Letter Pages (JSON Array)</label><textarea id="edtLetterPages" class="form-control" rows="4"></textarea></div>
-      </div>
-
-      <!-- TAB 3: Bouquet & Memories Wall --> 
-      <div id="tabBouquet" class="tab-content">
-        <div class="form-group"><label>Flower Pop-up Messages (JSON Array)</label><textarea id="edtFlowers" class="form-control" rows="4"></textarea></div>
-        <div class="form-group"><label>Memories Carousel (JSON Array)</label><textarea id="edtMemories" class="form-control" rows="4"></textarea></div>
-      </div>
-
-      <!-- TAB 4: Pinterest & Retro TV Media Manager -->
-      <div id="tabMedia" class="tab-content">
-        <h3 style="margin-bottom:0.5rem; font-size:1.1rem;">Pinterest Collage Photos</h3>
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;">Add photos via URL Link or upload directly from your Device.</p>
-        <div style="display: flex; gap:0.5rem; margin-bottom:0.5rem;">
-          <input type="text" id="pinPhotoUrl" placeholder="Image URL (e.g. https://...)" class="form-control" />
-          <input type="text" id="pinPhotoCaption" placeholder="Caption" class="form-control" /> 
-          <button class="btn" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="addPinterestPhotoFromLink()">Add Link</button>
-        </div>
-        <div style="margin-bottom:1rem;">
-          <label style="font-size:0.8em; font-weight:600; display:block; margin-bottom:0.3rem;">Or Upload Photo from Device:</label>
-          <input type="file" id="filePinterestPhoto" accept="image/*" class="form-control" onchange="uploadPinterestPhoto(event)" />
-        </div>
-        <div id="pinterestManagerList" style="max-height: 140px; overflow-y:auto; border:1px solid #ddd; padding:0.5rem; border-radius:8px; margin-bottom:1.5rem; background:#fafafa;"></div> 
-        
-        <h3 style="margin-bottom:0.5rem; font-size:1.1rem;">Retro TV Media</h3>
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;">Add media items (videos/images) via URL Link.</p>
-        <div style="display: flex; gap:0.5rem; margin-bottom:0.5rem;">
-          <input type="text" id="retroVideoUrl" placeholder="Media URL (e.g. https://...)" class="form-control" />
-          <input type="text" id="retroVideoTitleInput" placeholder="Media Title" class="form-control" />
-          <button class="btn" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="addRetroVideoFromLink()">Add Link</button>
-        </div>
-      </div>
-
-      <!-- TAB 5: Timeline & RSVP -->
-      <div id="tabTimeline" class="tab-content"> 
-        <div class="form-group"><label>Target Countdown ISO Date</label><input type="text" id="edtCountdown" class="form-control" /></div>
-        <div class="form-group"><label>Timeline Items (JSON Array)</label><textarea id="edtTimeline" class="form-control" rows="4"></textarea></div>
-        <div class="form-group"><label>RSVP Event Title</label><input type="text" id="edtEventTitle" class="form-control" /></div>
-        <div class="form-group"><label>RSVP Event Date</label><input type="text" id="edtEventDate" class="form-control" /></div>
-        <div class="form-group"><label>RSVP Event Time</label><input type="text" id="edtEventTime" class="form-control" /></div>
-        <div class="form-group"><label>RSVP Venue</label><input type="text" id="edtVenue" class="form-control" /></div>
-      </div>
-
-      <!-- TAB 6: Vault & Quiz -->
-      <div id="tabSecrets" class="tab-content"> 
-        <div class="form-group"><label>Secret Vault 4-Digit PIN</label><input type="text" id="edtPin" maxlength="4" class="form-control" /></div>
-        <div class="form-group"><label>Secret Vault Unlocked Message</label><input type="text" id="edtSecretMsg" class="form-control" /></div>
-        <div class="form-group"><label>Love Quiz Question</label><input type="text" id="edtQuizQuestion" class="form-control" /></div>
-        <div class="form-group"><label>Quiz Correct Option Text</label><input type="text" id="edtQuizCorrect" class="form-control" /></div>
-        <div class="form-group"><label>Quiz Wrong Option Text</label><input type="text" id="edtQuizWrong" class="form-control" /></div>
-        <div class="form-group">
-          <label>Proposal Question (Locked)</label> 
-          <input type="text" value="Will you go out with me?" disabled class="form-control" style="background:#eee; cursor:not-allowed;" />
-        </div>
-        <div class="form-group">
-          <label>Celebration Finale Effect</label>
-          <select id="edtFinale" class="form-control">
-            <option value="confetti">Confetti Explosion</option>
-            <option value="fireworks">Fireworks Display</option>
-            <option value="flowerStorm">Flower Petal Storm</option>
-            <option value="starfield">Starfield Burst</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- TAB: BACKGROUND MUSIC -->
-      <div id="tabMusic" class="tab-content">
-        <h3 style="margin-bottom:0.5rem; font-size:1.1rem;">Background Music Settings</h3> 
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;">Configure audio playback sources, volume, and looping preferences.</p>
-        <div class="form-group">
-          <label>Music Source Type</label>
-          <select id="edtMusicSourceType" class="form-control" onchange="toggleMusicSourceInputs(this.value)">
-            <option value="none">None (Disabled)</option>
-            <option value="uploadAudio">Upload Audio File (MP3, WAV, OGG, AAC, M4A, FLAC)</option>
-            <option value="uploadVideo">Upload Video File (MP4, MOV, MKV, AVI, WebM)</option>
-            <option value="audioUrl">Direct Audio URL</option>
-            <option value="videoUrl">Direct Video URL</option>
-            <option value="youtubeUrl">YouTube URL / Embed</option>
-          </select>
-        </div>
-        <div class="form-group" id="groupMusicUpload" style="display:none;">
-          <label id="lblMusicUpload">Upload Media File</label>
-          <input type="file" id="fileMusicUpload" class="form-control" accept="audio/*,video/*" onchange="handleMusicFileUpload(event)" />
-        </div>
-        <div class="form-group" id="groupMusicUrl" style="display:none;">
-          <label id="lblMusicUrl">Media / YouTube URL</label>
-          <input type="text" id="edtMusicUrlInput" class="form-control" placeholder="https://..." />
-        </div>
-        <div class="form-group">
-          <label>Volume (<span id="volValDisplay">80</span>%)</label> 
-          <input type="range" id="edtMusicVol" min="0" max="100" value="80" class="form-control" oninput="document.getElementById('volValDisplay').innerText=this.value" />
-        </div>
-        <div style="display:flex; gap:1.5rem; margin-bottom:1rem;">
-          <label><input type="checkbox" id="edtMusicLoop" checked /> Loop Track</label>
-          <label><input type="checkbox" id="edtMusicAutoplay" checked /> Autoplay</label>
-          <label><input type="checkbox" id="edtMusicEnabled" checked /> Enable Music</label>
-        </div>
-        <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;">
-          <button class="btn" onclick="previewBackgroundMusic()">▶ Preview / Play</button>
-          <button class="btn btn-secondary" onclick="pauseBackgroundMusic()">⏸ Pause</button>
-          <button class="btn btn-secondary" onclick="stopBackgroundMusic()">⏹ Stop</button>
-          <button class="btn btn-secondary" onclick="resetMusicSettings()">Reset Music</button>
-        </div>
-        <div id="musicStatusInfo" style="font-size:0.85rem; color:var(--primary); font-weight:600;">Status: Idle</div>
-        <div class="youtube-embed-container" id="youtubeEmbedContainer"></div>
-      </div>
-
-      <!-- TAB: OWNER RESPONSE MANAGEMENT -->
-      <div id="tabResponses" class="tab-content">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-          <h3 style="font-size:1.1rem;">Recipient Interaction History</h3>
-          <button class="btn btn-secondary" style="padding:0.3rem 0.8rem; font-size:0.8rem;" onclick="markAllResponsesAsRead()">Mark All as Read</button>
-        </div> 
-        <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Chronological log of wishes, RSVPs, secrets unlocked, and proposal answers submitted by the recipient.</p>
-        <div id="ownerResponsesList" style="max-height: 320px; overflow-y:auto;"></div>
-      </div>
-
-      <!-- TAB 7: Security -->
-      <div id="tabSecurity" class="tab-content">
-        <div class="form-group"><label>Owner Security Passcode (Restricts settings access to Owner only)</label><input type="text" id="edtOwnerPasscode" class="form-control" placeholder="1234" /></div>
-      </div>
-
-      <div style="display: flex; gap: 1rem; margin-top:1.5rem;">
-        <button class="btn" onclick="saveCreatorConfig()">Save Configuration</button>
-        <button class="btn btn-secondary" onclick="resetCreatorConfig()">Reset Defaults</button>
-      </div>
-    </div>
-  </div> 
-
-  <!-- Toast Notification -->
-  <div id="toast">Notification</div>
-
-  <!-- JAVASCRIPT APPLICATION CORE -->
-  <script>
-    /* ======================================================================
-    1. EDITABLE CONFIGURATION OBJECT
-    ====================================================================== */
-    window.CELEBRATION_CONFIG = {
-      ownerPasscode: "1234",
-      recipientName: "Sophia",
-      senderName: "Julian",
-      occasion: "OUR SPECIAL DAY",
-      introHeading: "Happy Celebration, Sophia!",
-      mainMessage: "A dreamy personalized gift crafted with love, memory fragments, and joyful secrets just for you.",
-      giftTitle: "You Unlocked The Surprise Gift!",
-      giftText: "May your day be filled with warm laughter, sweet moments, and endless magic.",
-      proposalQuestion: "Will you go out with me?",
-      vaultPin: "2024",
-      vaultSecretMsg: "You are my favorite thought every single day. I love you!",
-      eventTitle: "Special Anniversary Dinner",
-      eventDesc: "An intimate evening of delicious food, candles, and creating unforgettable memories.",
-      eventDate: "October 14, 2026", 
-      eventTime: "7:00 PM EST",
-      venue: "The Starlight Rooftop Garden",
-      countdownTarget: "2026-10-14T19:00:00",
-      theme: "dreamy-pink",
-      selectedFinale: "confetti",
-      quizQuestion: "What is our favorite shared activity?",
-      quizCorrect: "Stargazing & long chats",
-      quizWrong: "Sitting in traffic",
-      letterPages: [
-        "My Dearest Sophia, \n\nFrom the moment you entered my life, every ordinary day has felt like a scene from a magical movie. Your laughter brightens even the cloudiest afternoons.",
-        "Thank you for every shared smile, late-night conversation, and quiet moment of understanding. Building memories with you is my absolute favorite pastime.", 
-        "As we celebrate this special occasion, I want you to remember how deeply loved and appreciated you are. Here is to all our adventures yet to come!"
-      ],
-      flowers: [
-        { type: "rose", name: "Red Rose", msg: "You bring passion & endless joy to my life" },
-        { type: "tulip", name: "Pink Tulip", msg: "A sweet reminder of how caring & gentle you are" },
-        { type: "lily", name: "White Lily", msg: "Pure happiness whenever you are near" },
-        { type: "orchid", name: "Royal Orchid", msg: "Unique, elegant, and beautiful inside out" },
-        { type: "daisy", name: "Sunny Daisy", msg: "You bring bright warmth to my everyday world" },
-        { type: "cherry", name: "Cherry Blossom", msg: "Every moment with you blooms sweetly" },
-        { type: "sunflower", name: "Golden Sunflower", msg: "You light up any room with your radiant smile" },
-        { type: "lotus", name: "Mystic Lotus", msg: "Peaceful, graceful, and deeply cherished" } 
-      ],
-      memories: [
-        { img: "https://picsum.photos/id/1018/600/400", caption: "Our serene walk by the mountain lake" },
-        { img: "https://picsum.photos/id/1025/600/400", caption: "Cozy coffee mornings together" },
-        { img: "https://picsum.photos/id/1062/600/400", caption: "Stargazing on warm summer nights" }
-      ],
-      pinterestPhotos: [
-        { img: "https://picsum.photos/id/1015/600/800", caption: "Aesthetic sunset vibes" },
-        { img: "https://picsum.photos/id/1025/600/600", caption: "Cozy moments" },
-        { img: "https://picsum.photos/id/1039/600/900", caption: "Unforgettable trip" },
-        { img: "https://picsum.photos/id/1043/600/700", caption: "Dreamy polaroids" },
-        { img: "https://picsum.photos/id/1069/600/800", caption: "Golden hour glow" } 
-      ],
-      retroTvMedia: [
-        { type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Channel 01 - Cozy Video Reel" },
-        { type: "image", src: "https://picsum.photos/id/1018/800/450", title: "Channel 02 - Mountain Lake View" },
-        { type: "image", src: "https://picsum.photos/id/1062/800/450", title: "Channel 03 - Night Sky Stargazing" }
-      ],
-      timeline: [
-        { date: "June 12, 2023", title: "First Met", desc: "A chance meeting that changed everything." },
-        { date: "October 14, 2023", title: "First Official Date", desc: "Coffee turned into a 4-hour walk." },
-        { date: "August 10, 2024", title: "Roadtrip Adventure", desc: "Exploring coastlines and playing endless playlists." }
-      ],
-      responses: []
-    };
-
-    /* ======================================================================
-    2. STATE & WEB AUDIO SYNTHESIZER
-    ====================================================================== */
-    let currentLetterPage = 0;
-    let currentMemoryIdx = 0;
-    let currentTvIdx = 0;
-    let audioCtx = null;
-    let audioPresetIdx = 0;
-    let accMode = false; 
-    let synthInterval = null;
-    let isOwnerAuthenticated = false;
-
-    const localCfg = localStorage.getItem('celebration_cfg');
-    if (localCfg) {
-      try { Object.assign(window.CELEBRATION_CONFIG, JSON.parse(localCfg)); } catch (e) {}
-    }
-
-    function initAudio() {
-      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); 
-    }
-
-    function playSoftTone(freq = 440, duration = 0.4, type = 'sine') {
-      if (audioPresetIdx === 0 || !audioCtx) return;
-      try {
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-        osc.type = type;
-        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-        gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-        osc.start();
-        osc.stop(audioCtx.currentTime + duration);
-      } catch (e) {}
-    }
-
-    function showToast(msg) {
-      const toast = document.getElementById('toast');
-      toast.innerText = msg; 
-      toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 2500);
-    }
-
-    function cycleAudioPreset() { 
-      initAudio();
-      audioPresetIdx = (audioPresetIdx + 1) % 4;
-      const presets = ["Muted", "Ambient Synth", "Romantic Chimes", "Lofi Waves"];
-      showToast(`Audio Preset: ${presets[audioPresetIdx]}`);
-      const btn = document.getElementById('btnAudioToggle');
-      if (audioPresetIdx > 0) {
-        if (audioCtx.state === 'suspended') audioCtx.resume();
-        btn.style.background = 'var(--primary)';
-        btn.style.color = '#fff';
-        startBackgroundMusicSynth();
-      } else {
-        btn.style.background = '';
-        btn.style.color = '';
-        if (synthInterval) clearInterval(synthInterval);
-      }
-    }
-
-    function startBackgroundMusicSynth() {
-      if (synthInterval) clearInterval(synthInterval);
-      let step = 0;
-      const synthChords = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23];
-      const chimeNotes = [523.25, 659.25, 783.99, 1046.50, 880.00];
-      synthInterval = setInterval(() => {
-        if (audioPresetIdx === 1) { 
-          playSoftTone(synthChords[step % synthChords.length], 1.2, 'sine');
-        } else if (audioPresetIdx === 2) { 
-          playSoftTone(chimeNotes[step % chimeNotes.length], 0.8, 'triangle');
-        } else if (audioPresetIdx === 3) {
-          playSoftTone(synthChords[step % synthChords.length] / 2, 0.6, 'sine');
-        }
-        step++;
-      }, 1200);
-    }
-
-    /* ======================================================================
-    3. 21 CSS THEMES MANAGER
-    ====================================================================== */
-    const themesList = [
-      'dreamy-pink', 'lavender-moon', 'cloudy-blue', 'peach-sunset', 'sakura-dream', 'soft-garden',
-      'cream-champagne', 'midnight-romance', 'cozy-coffee', 'fairy-garden', 'vintage-love-letter',
-      'celestial-dream', 'soft-wedding', 'dreamy-birthday', 'luxury-gold', 'galaxy', 'aurora', 'ocean', 
-      'forest', 'scrapbook', 'polaroid'
-    ];
-    let themeIdx = 0;
-    function cycleTheme() {
-      themeIdx = (themeIdx + 1) % themesList.length;
-      const t = themesList[themeIdx];
-      document.documentElement.setAttribute('data-theme', t);
-      showToast(`Theme (${themeIdx + 1}/21): ${t.replace(/-/g,' ').toUpperCase()}`); 
-      playSoftTone(523.25, 0.2);
-    } 
-
-    /* ======================================================================
-    4. UI NAVIGATION & STORY SCROLLING
-    ====================================================================== */
-    function scrollToSection(id) {
-      const el = document.getElementById(id);
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth' });
-        playSoftTone(440, 0.2);
-      }
-    }
-
-    function startStoryExperience() {
-      if (audioPresetIdx === 0) cycleAudioPreset();
-      scrollToSection('gift');
-    }
-
-    const sections = document.querySelectorAll('.chapter-section');
-    const navLinks = document.querySelectorAll('.nav-link');
-    window.addEventListener('scroll', () => {
-      let current = '';
-      sections.forEach(section => {
-        const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
-        if (window.pageYOffset >= (sectionTop - sectionHeight / 3)) { 
-          section.classList.add('visible');
-          current = section.getAttribute('id'); 
-        }
-      });
-      navLinks.forEach(link => {
-        link.classList.remove('active');
-        if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(current)) {
-          link.classList.add('active');
-        }
-      });
-    });
-
-    /* ======================================================================
-    5. INTERACTIVE GIFT BOX LOGIC
-    ====================================================================== */
-    function openGiftBox() {
-      const box = document.getElementById('giftBox');
-      const reveal = document.getElementById('giftRevealCard');
-      if (!box.classList.contains('opened')) {
-        box.classList.add('opened');
-        playSoftTone(587.33, 0.6, 'triangle');
-        triggerConfettiBurst(80);
-        setTimeout(() => {
-          reveal.style.display = 'block';
-          reveal.scrollIntoView({ behavior: 'smooth', block: 'center' }); 
-        }, 700);
-      }
-    }
-
-    /* ======================================================================
-    6. REALISTIC SVG FLOWERS GENERATOR
-    ====================================================================== */
-    function getFlowerSVG(type) {
-      switch (type) {
-        case 'rose':
-          return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M50 20 C30 20 20 40 35 60 C50 80 80 50 65 30 Z" fill="#e63946"/><path d="M50 25 C40 25 35 45 45 55 C55 65 70 45 60 30 Z" fill="#ff4d6d"/><path d="M50 30 C45 35 45 45 50 50 C55 45 55 35 50 30 Z" fill="#ff758f"/></svg>`;
-        case 'tulip':
-          return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M30 70 C20 40 30 20 50 30 C70 20 80 40 70 70 Z" fill="#ff4d6d"/><path d="M40 70 C35 50 45 30 50 35 C55 30 65 50 60 70 Z" fill="#ff758f"/></svg>`;
-        case 'lily':
-          return `<svg viewBox="0 0 100 100" width="100%" height="100%"><circle cx="50" cy="50" r="12" fill="#ffd166"/><path d="M50 15 C40 35 40 45 50 50 C60 45 60 35 50 15 Z" fill="#fffdfa"/><path d="M50 85 C40 65 40 55 50 50 C60 55 60 65 50 85 Z" fill="#fffdfa"/><path d="M15 50 C35 40 45 40 50 50 C45 60 35 60 15 50 Z" fill="#fffdfa"/><path d="M85 50 C65 40 55 40 50 50 C55 60 65 60 85 50 Z" fill="#fffdfa"/></svg>`;
-        default:
-          return `<svg viewBox="0 0 100 100" width="100%" height="100%"><circle cx="50" cy="50" r="18" fill="#facc15"/><circle cx="50" cy="22" r="14" fill="#f472b6"/><circle cx="50" cy="78" r="14" fill="#f472b6"/><circle cx="22" cy="50" r="14" fill="#f472b6"/><circle cx="78" cy="50" r="14" fill="#f472b6"/></svg>`;
-      }
-    }
-
-    function renderBouquet() {
-      const container = document.getElementById('flowerContainer');
-      if (!container) return;
-      container.innerHTML = '';
-      window.CELEBRATION_CONFIG.flowers.forEach((fl) => {
-        const item = document.createElement('div');
-        item.className = 'flower-item';
-        item.innerHTML = `
-          <div class="flower-head">${getFlowerSVG(fl.type)}</div>
-          <div class="flower-stem">
-            <div class="flower-leaf left"></div>
-            <div class="flower-leaf right"></div>
-          </div>
-          <div class="flower-note-pop">${fl.msg}</div>
-        `;
-        item.onclick = () => {
-          item.classList.toggle('bloomed');
-          playSoftTone(659.25, 0.3, 'sine');
-        };
-        container.appendChild(item);
-      });
-    }
-
-    /* ======================================================================
-    7. ENVELOPE & LETTER SYSTEM
-    ====================================================================== */
-    function openLetter() {
-      document.getElementById('envelope').style.display = 'none';
-      document.getElementById('letterPaper').style.display = 'block';
-      updateLetterDisplay();
-      playSoftTone(523.25, 0.5);
-    }
-
-    function updateLetterDisplay() {
-      const pages = window.CELEBRATION_CONFIG.letterPages;
-      document.getElementById('letterContent').innerText = pages[currentLetterPage] || '';
-      document.getElementById('pageIndicator').innerText = `Page ${currentLetterPage + 1}/${pages.length}`;
-      document.getElementById('btnPrevPage').style.visibility = currentLetterPage === 0 ? 'hidden' : 'visible';
-      document.getElementById('btnNextPage').style.visibility = currentLetterPage === pages.length - 1 ? 'hidden' : 'visible';
-    }
-
-    function prevLetterPage() {
-      if (currentLetterPage > 0) { currentLetterPage--; updateLetterDisplay(); }
-    }
-
-    function nextLetterPage() {
-      if (currentLetterPage < window.CELEBRATION_CONFIG.letterPages.length - 1) { currentLetterPage++; updateLetterDisplay(); }
-    }
-
-    function speakLetterPage() {
-      if ('speechSynthesis' in window) {
-        const text = window.CELEBRATION_CONFIG.letterPages[currentLetterPage];
-        const utterance = new SpeechSynthesisUtterance(text);
-        window.speechSynthesis.speak(utterance);
-      } else {
-        showToast("Text-to-speech not supported in this browser.");
-      }
-    }
-
-    /* ======================================================================
-    8. MEMORIES, PHOTO WALL, PINTEREST & RETRO TV
-    ====================================================================== */
-    function updateMemoryCarousel() {
-      const mems = window.CELEBRATION_CONFIG.memories;
-      if (!mems.length) return;
-      const mem = mems[currentMemoryIdx % mems.length];
-      document.getElementById('memoryImg').src = mem.img;
-      document.getElementById('memoryCaption').innerText = mem.caption;
-    }
-
-    function changeMemory(dir) {
-      const mems = window.CELEBRATION_CONFIG.memories;
-      currentMemoryIdx = (currentMemoryIdx + dir + mems.length) % mems.length;
-      updateMemoryCarousel();
-      playSoftTone(440, 0.15);
-    }
-
-    function initPhotoWall() {
-      const wall = document.getElementById('photoWall');
-      if (!wall) return;
-      wall.innerHTML = '';
-      window.CELEBRATION_CONFIG.memories.forEach((mem, idx) => {
-        const el = document.createElement('div');
-        el.className = 'floating-photo';
-        el.style.left = `${(idx * 120 + 20) % 600}px`;
-        el.style.top = `${(idx * 40 + 20) % 200}px`;
-        el.innerHTML = `<img src="${mem.img}" alt="photo" draggable="false"><div style="font-size:0.7rem; text-align:center; margin-top:4px; font-family:var(--font-handwriting);">${mem.caption}</div>`;
-        
-        let isDragging = false, startX, startY, initialLeft, initialTop;
-        el.onmousedown = (e) => {
-          isDragging = true;
-          startX = e.clientX; startY = e.clientY;
-          initialLeft = el.offsetLeft; initialTop = el.offsetTop;
-          el.style.zIndex = 100;
-        };
-        document.onmousemove = (e) => {
-          if (!isDragging) return;
-          el.style.left = `${initialLeft + e.clientX - startX}px`;
-          el.style.top = `${initialTop + e.clientY - startY}px`;
-        };
-        document.onmouseup = () => { isDragging = false; };
-        wall.appendChild(el);
-      });
-    }
-
-    function renderPinterest() {
-      const grid = document.getElementById('pinterestGrid');
-      if (!grid) return;
-      grid.innerHTML = '';
-      window.CELEBRATION_CONFIG.pinterestPhotos.forEach((item) => {
-        const card = document.createElement('div');
-        card.className = 'pin-card';
-        card.innerHTML = `<img src="${item.img}" alt="pin" /><div class="pin-caption">${item.caption}</div>`;
-        grid.appendChild(card);
-      });
-    }
-
-    function renderRetroTv() {
-      const frame = document.getElementById('tvScreenFrame');
-      const label = document.getElementById('tvChannelLabel');
-      const mediaList = window.CELEBRATION_CONFIG.retroTvMedia;
-      if (!frame || !mediaList.length) return;
-      
-      const item = mediaList[currentTvIdx % mediaList.length];
-      label.innerText = `CH ${(currentTvIdx + 1).toString().padStart(2, '0')}`;
-      frame.innerHTML = '<div class="tv-scanlines"></div>';
-      if (item.type === 'video') {
-        frame.innerHTML += `<video src="${item.src}" autoplay loop muted playsinline></video>`;
-      } else {
-        frame.innerHTML += `<img src="${item.src}" alt="${item.title}" />`;
-      }
-    }
-
-    function cycleTvChannel() {
-      currentTvIdx = (currentTvIdx + 1) % window.CELEBRATION_CONFIG.retroTvMedia.length;
-      renderRetroTv();
-      playSoftTone(300, 0.1);
-    }
-    function prevTvMedia() { currentTvIdx--; renderRetroTv(); }
-    function nextTvMedia() { currentTvIdx++; renderRetroTv(); }
-
-    /* ======================================================================
-    9. TIMELINE & COUNTDOWN
-    ====================================================================== */
-    function updateCountdown() {
-      const target = new Date(window.CELEBRATION_CONFIG.countdownTarget).getTime();
-      const now = new Date().getTime();
-      const diff = Math.max(0, target - now);
-
-      document.getElementById('cdDays').innerText = Math.floor(diff / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
-      document.getElementById('cdHours').innerText = Math.floor((diff / (1000 * 60 * 60)) % 24).toString().padStart(2, '0');
-      document.getElementById('cdMins').innerText = Math.floor((diff / 1000 / 60) % 60).toString().padStart(2, '0');
-      document.getElementById('cdSecs').innerText = Math.floor((diff / 1000) % 60).toString().padStart(2, '0');
-    }
-
-    function renderTimeline() {
-      const list = document.getElementById('timelineList');
-      if (!list) return;
-      list.innerHTML = '';
-      window.CELEBRATION_CONFIG.timeline.forEach((item) => {
-        const div = document.createElement('div');
-        div.className = 'timeline-item';
-        div.innerHTML = `<div class="timeline-dot"></div><h4>${item.title}</h4><small style="color:var(--primary); font-weight:600;">${item.date}</small><p style="margin-top:0.4rem; font-size:0.9rem;">${item.desc}</p>`;
-        list.appendChild(div);
-      });
-    }
-
-    /* ======================================================================
-    10. ARCADE GAMES MODAL ENGINE
-    ====================================================================== */
-    function openGame(gameType) {
-      const modal = document.getElementById('gameModal');
-      const container = document.getElementById('gameContainer');
-      modal.style.display = 'flex';
-      container.innerHTML = '';
-
-      if (gameType === 'scratch') {
-        container.innerHTML = `<h3>Scratch Card</h3><p style="margin:1rem 0;">Scratch to reveal your secret reward!</p><div style="background:#ffe0e9; padding:2rem; border-radius:12px; font-weight:bold; color:var(--primary);">✨ You are entitled to 1000 hugs and endless smiles! ✨</div>`;
-      } else if (gameType === 'quiz') {
-        const cfg = window.CELEBRATION_CONFIG;
-        container.innerHTML = `
-          <h3>Love Quiz</h3>
-          <p style="margin:1rem 0;">${cfg.quizQuestion}</p>
-          <button class="btn" onclick="showToast('Correct! 🎉'); closeGameModal();" style="display:block; width:100%; margin-bottom:0.5rem;">${cfg.quizCorrect}</button>
-          <button class="btn btn-secondary" onclick="showToast('Oops! Try again 😊')" style="display:block; width:100%;">${cfg.quizWrong}</button>
-        `;
-      } else {
-        container.innerHTML = `<h3>Celebration Mini-Game</h3><p style="margin:1rem 0;">Playing ${gameType} engine...</p><button class="btn" onclick="closeGameModal()">Claim Reward</button>`;
-      }
-    }
-
-    function closeGameModal() {
-      document.getElementById('gameModal').style.display = 'none';
-    }
-
-    /* ======================================================================
-    11. WISH TREE, SECRETS & RSVP
-    ====================================================================== */
-    function addGuestbookEntry() {
-      const name = document.getElementById('gbName').value.trim();
-      const msg = document.getElementById('gbMsg').value.trim();
-      if (!name || !msg) return showToast("Please enter your name and wish.");
-      
-      const list = document.getElementById('guestbookList');
-      const item = document.createElement('div');
-      item.className = 'guestbook-item';
-      item.innerHTML = `<strong>${name}:</strong> ${msg}`;
-      list.prepend(item);
-
-      window.CELEBRATION_CONFIG.responses.push({ type: 'Wish', name, msg, date: new Date().toLocaleString() });
-      saveResponses();
-      
-      document.getElementById('gbName').value = '';
-      document.getElementById('gbMsg').value = '';
-      showToast("Wish posted successfully!");
-    }
-
-    function saveTimeCapsule() {
-      const date = document.getElementById('tcDate').value;
-      const msg = document.getElementById('tcMsg').value;
-      if (!date || !msg) return showToast("Select a future date & message.");
-      document.getElementById('tcStatus').innerText = `🔒 Capsule sealed until ${date}!`;
-      showToast("Time Capsule Sealed!");
-    }
-
-    function unlockVault() {
-      const pin = document.getElementById('vaultPin').value;
-      if (pin === window.CELEBRATION_CONFIG.vaultPin) {
-        showToast("Vault Unlocked!");
-        alert(window.CELEBRATION_CONFIG.vaultSecretMsg);
-      } else {
-        showToast("Incorrect PIN. Try again!");
-      }
-    }
-
-    function submitRSVP(response) {
-      document.getElementById('rsvpStatus').innerText = `RSVP Status: ${response}`;
-      window.CELEBRATION_CONFIG.responses.push({ type: 'RSVP', response, date: new Date().toLocaleString() });
-      saveResponses();
-      showToast(`RSVP Recorded: ${response}`);
-    }
-
-    function downloadICS() {
-      const cfg = window.CELEBRATION_CONFIG;
-      const icsData = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${cfg.eventTitle}\nDESCRIPTION:${cfg.eventDesc}\nLOCATION:${cfg.venue}\nEND:VEVENT\nEND:VCALENDAR`;
-      const blob = new Blob([icsData], { type: 'text/calendar' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'event.ics';
-      link.click();
-    }
-
-    /* ======================================================================
-    12. PROPOSAL & FINALE EFFECTS
-    ====================================================================== */
-    function escapeNoButton() {
-      if (accMode) return;
-      const btn = document.getElementById('btnNo');
-      const x = Math.random() * (window.innerWidth - 120) - window.innerWidth / 2;
-      const y = Math.random() * 200 - 100;
-      btn.style.transform = `translate(${x}px, ${y}px)`;
-    }
-
-    function toggleAccessibilityMode(checked) {
-      accMode = checked;
-      document.getElementById('btnNo').style.transform = 'none';
-    }
-
-    function triggerYesCelebration() {
-      document.getElementById('proposalResultCard').style.display = 'block';
-      triggerConfettiBurst(150);
-      window.CELEBRATION_CONFIG.responses.push({ type: 'Proposal', response: 'YES!', date: new Date().toLocaleString() });
-      saveResponses();
-      showToast("SHE SAID YES! 🎉❤️");
-    }
-
-    function triggerConfettiBurst(count) {
-      const canvas = document.getElementById('fxCanvas');
-      const ctx = canvas.getContext('2d');
-      canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-      const particles = Array.from({ length: count }, () => ({
-        x: canvas.width / 2, y: canvas.height / 2,
-        vx: (Math.random() - 0.5) * 12, vy: (Math.random() - 0.8) * 12,
-        color: `hsl(${Math.random() * 360}, 100%, 50%)`, size: Math.random() * 8 + 4
-      }));
-
-      function animate() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        particles.forEach((p) => {
-          p.x += p.vx; p.y += p.vy; p.vy += 0.2;
-          ctx.fillStyle = p.color;
-          ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
-        });
-        if (particles.some(p => p.y < canvas.height)) requestAnimationFrame(animate);
-      }
-      animate();
-    }
-
-    /* ======================================================================
-    13. OWNER MODAL & CONTROL CENTER
-    ====================================================================== */
-    function openCreatorModal() {
-      if (!isOwnerAuthenticated) {
-        document.getElementById('ownerAuthModal').style.display = 'flex';
-      } else {
-        document.getElementById('creatorModal').style.display = 'flex';
-        populateCreatorFields();
-      }
-    }
-
-    function closeOwnerAuthModal() { document.getElementById('ownerAuthModal').style.display = 'none'; }
-    function closeCreatorModal() { document.getElementById('creatorModal').style.display = 'none'; }
-
-    function verifyOwnerAccess() {
-      const pass = document.getElementById('ownerPasscodePrompt').value;
-      if (pass === window.CELEBRATION_CONFIG.ownerPasscode) {
-        isOwnerAuthenticated = true;
-        closeOwnerAuthModal();
-        openCreatorModal();
-        showToast("Authenticated as Owner");
-      } else {
-        showToast("Incorrect Security Passcode");
-      }
-    }
-
-    function switchCreatorTab(tabId) {
-      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-      event.target.classList.add('active');
-      document.getElementById(tabId).classList.add('active');
-    }
-
-    function populateCreatorFields() {
-      const cfg = window.CELEBRATION_CONFIG;
-      document.getElementById('edtRecipient').value = cfg.recipientName;
-      document.getElementById('edtSender').value = cfg.senderName;
-      document.getElementById('edtOccasion').value = cfg.occasion;
-      document.getElementById('edtIntroHeading').value = cfg.introHeading;
-      document.getElementById('edtMainMessage').value = cfg.mainMessage;
-      document.getElementById('edtGiftTitle').value = cfg.giftTitle;
-      document.getElementById('edtGiftText').value = cfg.giftText;
-      document.getElementById('edtLetterPages').value = JSON.stringify(cfg.letterPages, null, 2);
-      document.getElementById('edtFlowers').value = JSON.stringify(cfg.flowers, null, 2);
-      document.getElementById('edtMemories').value = JSON.stringify(cfg.memories, null, 2);
-      document.getElementById('edtCountdown').value = cfg.countdownTarget;
-      document.getElementById('edtTimeline').value = JSON.stringify(cfg.timeline, null, 2);
-      document.getElementById('edtEventTitle').value = cfg.eventTitle;
-      document.getElementById('edtEventDate').value = cfg.eventDate;
-      document.getElementById('edtEventTime').value = cfg.eventTime;
-      document.getElementById('edtVenue').value = cfg.venue;
-      document.getElementById('edtPin').value = cfg.vaultPin;
-      document.getElementById('edtSecretMsg').value = cfg.vaultSecretMsg;
-      document.getElementById('edtQuizQuestion').value = cfg.quizQuestion;
-      document.getElementById('edtQuizCorrect').value = cfg.quizCorrect;
-      document.getElementById('edtQuizWrong').value = cfg.quizWrong;
-      document.getElementById('edtOwnerPasscode').value = cfg.ownerPasscode;
-
-      renderResponsesList();
-    }
-
-    function saveCreatorConfig() {
-      const cfg = window.CELEBRATION_CONFIG;
-      cfg.recipientName = document.getElementById('edtRecipient').value;
-      cfg.senderName = document.getElementById('edtSender').value;
-      cfg.occasion = document.getElementById('edtOccasion').value;
-      cfg.introHeading = document.getElementById('edtIntroHeading').value;
-      cfg.mainMessage = document.getElementById('edtMainMessage').value;
-      cfg.giftTitle = document.getElementById('edtGiftTitle').value;
-      cfg.giftText = document.getElementById('edtGiftText').value;
-      cfg.countdownTarget = document.getElementById('edtCountdown').value;
-      cfg.eventTitle = document.getElementById('edtEventTitle').value;
-      cfg.eventDate = document.getElementById('edtEventDate').value;
-      cfg.eventTime = document.getElementById('edtEventTime').value;
-      cfg.venue = document.getElementById('edtVenue').value;
-      cfg.vaultPin = document.getElementById('edtPin').value;
-      cfg.vaultSecretMsg = document.getElementById('edtSecretMsg').value;
-      cfg.quizQuestion = document.getElementById('edtQuizQuestion').value;
-      cfg.quizCorrect = document.getElementById('edtQuizCorrect').value;
-      cfg.quizWrong = document.getElementById('edtQuizWrong').value;
-      cfg.ownerPasscode = document.getElementById('edtOwnerPasscode').value;
-
-      try {
-        cfg.letterPages = JSON.parse(document.getElementById('edtLetterPages').value);
-        cfg.flowers = JSON.parse(document.getElementById('edtFlowers').value);
-        cfg.memories = JSON.parse(document.getElementById('edtMemories').value);
-        cfg.timeline = JSON.parse(document.getElementById('edtTimeline').value);
-      } catch (e) {
-        showToast("JSON formatting error in letter/flowers/memories");
-      }
-
-      localStorage.setItem('celebration_cfg', JSON.stringify(cfg));
-      updateDOMFromConfig();
-      closeCreatorModal();
-      showToast("Settings Saved!");
-    }
-
-    function resetCreatorConfig() {
-      localStorage.removeItem('celebration_cfg');
-      location.reload();
-    }
-
-    function saveResponses() {
-      localStorage.setItem('celebration_cfg', JSON.stringify(window.CELEBRATION_CONFIG));
-    }
-
-    function renderResponsesList() {
-      const container = document.getElementById('ownerResponsesList');
-      container.innerHTML = '';
-      window.CELEBRATION_CONFIG.responses.forEach(r => {
-        const item = document.createElement('div');
-        item.className = 'response-item';
-        item.innerHTML = `<div class="response-header"><span class="response-type">${r.type}</span><span>${r.date}</span></div><div>${JSON.stringify(r)}</div>`;
-        container.appendChild(item);
-      });
-    }
-
-    function updateDOMFromConfig() {
-      const cfg = window.CELEBRATION_CONFIG;
-      document.getElementById('cfgOccasion').innerText = cfg.occasion;
-      document.getElementById('cfgRecipientName').innerText = cfg.recipientName;
-      document.getElementById('cfgIntroHeading').childNodes[0].nodeValue = cfg.introHeading.replace(cfg.recipientName, '') + " ";
-      document.getElementById('cfgMainMessage').innerText = cfg.mainMessage;
-      document.getElementById('cfgGiftTitle').innerText = cfg.giftTitle;
-      document.getElementById('cfgGiftText').innerText = cfg.giftText;
-      document.getElementById('cfgSenderSign').innerText = `With all my love, ${cfg.senderName}`;
-      document.getElementById('cfgEventTitle').innerText = cfg.eventTitle;
-      document.getElementById('cfgEventDesc').innerText = cfg.eventDesc;
-      document.getElementById('cfgEventDate').innerText = cfg.eventDate;
-      document.getElementById('cfgEventTime').innerText = cfg.eventTime;
-      document.getElementById('cfgVenue').innerText = cfg.venue;
-
-      renderBouquet();
-      updateMemoryCarousel();
-      initPhotoWall();
-      renderPinterest();
-      renderRetroTv();
-      renderTimeline();
-    }
-
-    /* ======================================================================
-    14. INITIALIZATION
-    ====================================================================== */
-    window.addEventListener('DOMContentLoaded', () => {
-      updateDOMFromConfig();
-      setInterval(updateCountdown, 1000);
-    });
-  </script>
+<!-- Background Canvas Overlays -->
+<canvas id="bgCanvas"></canvas> <canvas id="fxCanvas"></canvas>
+<!-- Navigation Bar -->
+<nav id="mainNav" aria-label="Main Navigation">
+<a class="nav-link active" onclick="scrollToSection('intro')">Intro</a>
+<a class="nav-link" onclick="scrollToSection('gift')">Gift</a>
+<a class="nav-link" onclick="scrollToSection('bouquet')">Bouquet</a>
+<a class="nav-link" onclick="scrollToSection('letter')">Letter</a>
+<a class="nav-link" onclick="scrollToSection('memories')">Memories</a>
+<a class="nav-link" onclick="scrollToSection('pinterest')">Pinterest</a>
+<a class="nav-link" onclick="scrollToSection('retrotv')">Retro TV</a>
+<a class="nav-link" onclick="scrollToSection('timeline')">Timeline</a>
+<a class="nav-link" onclick="scrollToSection('games')">Arcade</a>
+<a class="nav-link" onclick="scrollToSection('tree')">Wishes</a>
+<a class="nav-link" onclick="scrollToSection('secrets')">Vault</a>
+<a class="nav-link" onclick="scrollToSection('invitation')">Invite</a>
+<a class="nav-link" onclick="scrollToSection('proposal')">Proposal</a>
+</nav>
+<!-- Quick Floating Control Buttons -->
+<div id="quickControls">
+<button class="btn btn-secondary btn-icon" id="btnAudioToggle" title="Audio Options & Synth" onclick="cycleAudioPreset()"></button>
+<button class="btn btn-secondary btn-icon" title="Cycle Themes (21 Available)" onclick="cycleTheme()"></button>
+<button class="btn btn-secondary btn-icon" title="Customize Experience (Owner Only)" onclick="openCreatorModal()"><span id="ownerControlBadge"></span>⚙️</button> </div>
+<main>
+<!-- CHAPTER 1: CINEMATIC INTRO -->
+<section id="intro" class="chapter-section visible">
+<span class="intro-badge" id="cfgOccasion">SPECIAL CELEBRATION</span>
+<h1 class="intro-title" id="cfgIntroHeading">Happy Celebration, <br><span class="handwriting" style="color:var(--primary)" id="cfgRecipientName">Sophia</span>!</h1>
+<p class="intro-msg" id="cfgMainMessage">A dreamy personalized gift crafted with love, memory fragments, and joyful secrets just for you.</p>
+<button class="btn" onclick="startStoryExperience()">
+Begin The Journey
+<svg width="18" height="18" fill="currentColor" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+</button>
+</section>
+<!-- CHAPTER 2: INTERACTIVE GIFT BOX -->
+<section id="gift" class="chapter-section">
+<h2 class="section-title">A Special Surprise</h2>
+<p class="section-subtitle">Tap the golden ribbon to untie the present</p>
+<div class="gift-container" onclick="openGiftBox()">
+<div class="gift-box" id="giftBox">
+ <div class="gift-face"></div>
+ <div class="gift-ribbon-v"></div>
+ <div class="gift-ribbon-h"></div>  <div class="gift-bow"></div>
+</div>
+</div>
+<div class="glass-card gift-reveal-card" id="giftRevealCard">
+<h3 class="handwriting" style="font-size:2.2rem; color:var(--primary);" id="cfgGiftTitle">You Unlocked The Surprise Gift!</h3>
+<p style="margin:1rem 0;" id="cfgGiftText">May your day be filled with warm smiles, sweet moments, and unlimited happiness.</p>
+<button class="btn" onclick="scrollToSection('bouquet')">Explore Next Surprise</button>
+</div>
+</section>
+<!-- CHAPTER 3: INTERACTIVE REALISTIC BOUQUET -->
+<section id="bouquet" class="chapter-section">
+<h2 class="section-title">Interactive Floral Bouquet</h2>
+<p class="section-subtitle">Click on each distinctive blossom to reveal sweet hidden messages</p>
+<div class="bouquet-wrapper" id="flowerContainer">
+<!-- SVG flowers dynamically injected here -->
+</div>
+</section>
+<!-- CHAPTER 4: ENVELOPE & LOVE LETTER -->
+<section id="letter" class="chapter-section">
+<h2 class="section-title">A Heartfelt Note</h2>
+<p class="section-subtitle">Break the wax seal to read the letter</p>
+<div class="letter-stage"> <div class="envelope" id="envelope" onclick="openLetter()">
+ <div class="wax-seal" id="waxSeal"> </div>
+</div>
+<div class="letter-paper" id="letterPaper">
+ <div id="letterContent"></div>
+ <div class="letter-controls">
+ <button class="btn btn-secondary" onclick="prevLetterPage()" id="btnPrevPage">Previous</button>
+ <button class="btn btn-secondary" onclick="speakLetterPage()">Read Aloud</button>
+ <span id="pageIndicator">Page 1/1</span>
+ <button class="btn btn-secondary" onclick="nextLetterPage()" id="btnNextPage">Next</button>
+ </div>
+ <p style="text-align:right; margin-top:1.5rem;" class="handwriting" id="cfgSenderSign">With all my love, Julian</p>
+</div>
+</div>
+</section>
+<!-- CHAPTER 5: MEMORIES & FLOATING PHOTO WALL -->
+<section id="memories" class="chapter-section">
+<h2 class="section-title">Treasured Memories</h2>
+<p class="section-subtitle">Snapshots of our favorite chapters</p>
+<div class="memory-carousel">
+<div class="polaroid-card">
+ <img src="" id="memoryImg" class="polaroid-img" alt="Memory photo" />
+ <p class="polaroid-caption" id="memoryCaption">Our first spontaneous trip</p> </div>
+<div style="display: flex; justify-content:center; gap: 1rem; margin-top:1rem;">
+ <button class="btn btn-secondary btn-icon" onclick="changeMemory(-1)">&lt;</button>
+ <button class="btn btn-secondary btn-icon" onclick="changeMemory(1)">&gt;</button>
+</div>
+</div>
+<h3 style="margin-top:3rem; font-size: 1.4rem;">Interactive Photo Wall</h3>
+<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1rem;">Drag Polaroid photos anywhere on the wall!</p>
+<div class="photo-wall" id="photoWall">
+<!-- Floating draggable photos injected via JS -->
+</div>
+</section>
+<!-- CHAPTER: PINTEREST AESTHETIC COLLAGE -->
+<section id="pinterest" class="chapter-section">
+<h2 class="section-title">Pinterest Gallery</h2>
+<p class="section-subtitle">Aesthetic memory collage board</p>
+<div class="pinterest-grid" id="pinterestGrid">
+<!-- Injected via JS -->
+</div>
+</section>
+<!-- RETRO TV BIG SCREEN (v2.0.1) -->
+<section id="retrotv" class="chapter-section">
+<h2 class="section-title">Retro TV Experience</h2> <p class="section-subtitle">Watch warm video memories & big screen photos</p>
+<div class="retro-tv-wrapper">
+<div class="tv-screen-frame" id="tvScreenFrame">
+ <div class="tv-scanlines"></div>
+</div>
+<div class="tv-controls">
+ <button class="btn btn-secondary" onclick="prevTvMedia()">Prev Channel</button>
+ <div style="display: flex; gap: 12px; align-items:center;">
+ <div class="tv-knob" onclick="cycleTvChannel()" title="Switch Channel"></div>
+ <span id="tvChannelLabel" style="color:#d4af37; font-weight:bold; font-family:monospace;">CH 01</span>
+ </div>
+ <button class="btn btn-secondary" onclick="nextTvMedia()">Next Channel</button>
+</div>
+</div>
+</section>
+<!-- CHAPTER 6: TIMELINE & COUNTDOWN -->
+<section id="timeline" class="chapter-section">
+<h2 class="section-title">Milestones & Countdown</h2>
+<p class="section-subtitle">Counting down to our next big celebration</p>
+<div class="countdown-grid">
+<div class="count-box"><div class="count-num" id="cdDays">00</div><div class="count-label">Days</div></div>
+<div class="count-box"><div class="count-num" id="cdHours">00</div><div class="count-label">Hours</div></div> <div class="count-box"><div class="count-num" id="cdMins">00</div><div class="count-label">Mins</div></div>
+<div class="count-box"><div class="count-num" id="cdSecs">00</div><div class="count-label">Secs</div></div>
+</div>
+<div class="timeline-container" id="timelineList" style="margin-top:3rem;">
+<!-- Timeline items injected via JS -->
+</div>
+</section>
+<!-- CHAPTER 7: ARCADE GAMES HUB (10 GAMES) -->
+<section id="games" class="chapter-section">
+<h2 class="section-title">Celebration Arcade</h2>
+<p class="section-subtitle">Play interactive mini-games to unlock secret rewards</p>
+<div class="games-grid">
+<div class="game-card" onclick="openGame('scratch')">
+ <div class="game-icon"> </div>
+ <h3>Scratch Card</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted);">Scratch overlay to reveal secret note</p>
+</div>
+<div class="game-card" onclick="openGame('match')">
+ <div class="game-icon"> </div>
+ <h3>Memory Match</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted);">Match pairs of celebratory icons</p>
+</div>
+<div class="game-card" onclick="openGame('wheel')">  <div class="game-icon"> </div>
+ <h3>Lucky Wheel</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted);">Spin for sweet compliments</p>
+</div>
+<div class="game-card" onclick="openGame('quiz')">
+ <div class="game-icon"> </div>
+ <h3>Love Quiz</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted);">Test how well you know our story</p>
+</div>
+<div class="game-card" onclick="openGame('balloon')">
+ <div class="game-icon"> </div>
+ <h3>Balloon Pop</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted);">Pop floating balloons for points</p>
+</div>
+<div class="game-card" onclick="openGame('hearts')">
+ <div class="game-icon"> </div>
+ <h3>Catch My Heart</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted);">Catch falling hearts in time</p>
+</div>
+<div class="game-card" onclick="openGame('puzzle')">
+ <div class="game-icon"> </div>
+ <h3>Photo Puzzle</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted);">Arrange sliding puzzle tiles</p>
+</div>
+<div class="game-card" onclick="openGame('magic')">  <div class="game-icon"> </div>
+ <h3>Magic Reveal</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted);">Wave cursor to reveal magical surface</p>
+</div>
+<div class="game-card" onclick="openGame('target')">
+ <div class="game-icon"> </div>
+ <h3>Target Game</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted);">Tap moving targets to score</p>
+</div>
+<div class="game-card" onclick="openGame('hunt')">
+ <div class="game-icon"> </div>
+ <h3>Treasure Hunt</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted);">Solve clues to find the treasure</p>
+</div>
+</div>
+</section>
+<!-- CHAPTER 8: WISH TREE, GUESTBOOK & TIME CAPSULE -->
+<section id="tree" class="chapter-section">
+<h2 class="section-title">Wishes & Time Capsule</h2>
+<p class="section-subtitle">Leave a wish or seal a message for the future</p>
+<div class="tree-canvas-wrap" id="treeCanvasWrap">
+<canvas id="treeCanvas"></canvas>
+<!-- FEATURE 1: PREMIUM ANIMATED SAKURA WISH TREE LAYER -->
+<canvas id="sakuraCanvas"></canvas>
+<div id="sakuraHangingWishes"></div>
+</div>
+<div style="display: flex; gap: 1.5rem; flex-wrap:wrap; justify-content:center; width:100%; max-width: 900px; margin-top:2rem;">
+<div class="glass-card" style="flex: 1; min-width:300px;">
+ <h3>Digital Guestbook</h3>
+ <div style="display: flex; flex-direction:column; gap:0.5rem; margin-top:0.8rem;">
+ <input type="text" id="gbName" placeholder="Your Name" class="form-control" />
+ <input type="text" id="gbMsg" placeholder="Leave a sweet wish..." class="form-control" />
+ <button class="btn" onclick="addGuestbookEntry()">Post Wish</button>
+ </div>
+ <div class="guestbook-list" id="guestbookList"></div>
+</div>
+<div class="glass-card" style="flex: 1; min-width:300px;">
+ <h3>Future Time Capsule</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;">Seal a message to unlock on a future date.</p>
+ <div style="display: flex; flex-direction:column; gap:0.5rem;">
+ <input type="date" id="tcDate" class="form-control" />
+ <textarea id="tcMsg" placeholder="Your future message..." class="form-control" rows="3"></textarea>
+ <button class="btn btn-secondary" onclick="saveTimeCapsule()">Seal Time Capsule</button>
+ </div>
+ <div id="tcLiveCountdown" class="tc-live-countdown"></div>
+ <div id="tcStatus" style="font-size:0.85rem; margin-top:0.8rem; color:var(--primary); font-weight:600;"></div>
+</div>
+</div> </section>
+<!-- CHAPTER 9: SECRETS & TREASURE HUNT -->
+<section id="secrets" class="chapter-section">
+<h2 class="section-title">Secret Vault</h2>
+<p class="section-subtitle">Enter the secret 4-digit PIN code to unlock hidden content</p>
+<div class="glass-card vault-box">
+<div style="font-size:3rem; margin-bottom:0.5rem;"> </div>
+<input type="password" maxlength="4" class="pin-input" id="vaultPin" placeholder="...." />
+<br>
+<button class="btn" onclick="unlockVault()">Unlock Vault</button>
+<p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem;" id="vaultHint">Hint: The year we first met or anniversary year (e.g. 2024)</p>
+</div>
+</section>
+<!-- CHAPTER 10: INVITATION & RSVP -->
+<section id="invitation" class="chapter-section">
+<h2 class="section-title">Save The Date</h2>
+<p class="section-subtitle">You are cordially invited to celebrate together</p>
+<div class="invite-card">
+<span style="letter-spacing:2px; font-size:0.8rem; color:var(--primary); font-weight:700;">OFFICIAL INVITATION</span>
+<h3 style="font-size:2.2rem; margin:0.5rem 0;" id="cfgEventTitle">Special Celebration Dinner</h3> <p style="color:var(--text-muted); margin-bottom: 1.5rem;" id="cfgEventDesc">Join us for an intimate evening of food, laughter, and memories.</p>
+<div style="text-align:left; max-width:300px; margin:0 auto 1.5rem auto; font-size:0.95rem; line-height: 1.8;">
+ <div><strong>Date:</strong> <span id="cfgEventDate">October 14, 2026</span></div>
+ <div><strong>Time:</strong> <span id="cfgEventTime">7:00 PM EST</span></div>
+ <div><strong>Venue:</strong> <span id="cfgVenue">The Starlight Rooftop Garden</span></div>
+</div>
+<div style="display: flex; justify-content:center; gap:0.5rem; flex-wrap:wrap;">
+ <button class="btn" onclick="submitRSVP('Yes')">RSVP: Attending</button>
+ <button class="btn btn-secondary" onclick="submitRSVP('Maybe')">Maybe</button>
+ <button class="btn btn-secondary" onclick="downloadICS()">Add To Calendar</button>
+</div>
+<p id="rsvpStatus" style="font-size:0.85rem; margin-top: 1rem; color:var(--primary); font-weight:600;"></p>
+</div>
+</section>
+<!-- CHAPTER 11: PLAYFUL PROPOSAL QUESTION & FINALE -->
+<section id="proposal" class="chapter-section">
+<div class="proposal-wrap">
+<span style="font-size:3rem; margin-bottom: 1rem;"> </span>
+<h2 class="proposal-title" id="cfgProposalQuestion">Will you go out with me?</h2>
+<div style="margin-bottom:1rem; font-size:0.85rem; color:var(--text-muted);">
+ <label><input type="checkbox" id="chkAccMode" onchange="toggleAccessibilityMode(this.checked)" /> Accessibility Mode (Disable escaping NO button)</label> </div>
+<div class="proposal-btn-group">
+ <button class="btn" id="btnYes" style="padding: 1rem 2.5rem; font-size:1.2rem;" onclick="triggerYesCelebration()">YES! Forever</button>
+ <button class="btn btn-secondary" id="btnNo" onmouseenter="escapeNoButton()" onclick="escapeNoButton()">No</button>
+</div>
+<div id="proposalResultCard" style="display:none; margin-top:1.5rem; padding:1.5rem 2rem; background:var(--card-bg); border-radius:var(--radius-lg); border:2px solid var(--primary); box-shadow:var(--glass-shadow); animation:popin 0.5s ease;">
+ <h3 style="font-size:2.2rem; color:var(--primary);">SHE SAID YES!</h3>
+ <p style="margin-top:0.5rem; font-weight:600;">The absolute best decision ever made!</p>
+</div>
+</div>
+</section>
+</main>
+<!-- Game Modal Wrapper -->
+<div class="game-modal" id="gameModal">
+<div class="game-modal-content">
+<button class="close-modal" onclick="closeGameModal()">×</button>
+<div id="gameContainer"></div>
+</div>
+</div>
+<!-- OWNER SECURITY AUTH MODAL --> <div id="ownerAuthModal">
+<div class="creator-panel" style="max-width:400px; text-align:center;">
+<button class="owner-close-btn" onclick="closeOwnerAuthModal()">✕</button>
+<h3> Owner Authentication</h3>
+<p style="font-size:0.85rem; color:var(--text-muted); margin: 0.8rem 0;">Enter Owner Security Passcode to edit site content. Recipients cannot edit site settings.</p>
+<input type="password" id="ownerPasscodePrompt" class="form-control" placeholder="Enter Owner Passcode" style="text-align:center; font-size:1.2rem; margin-bottom:1rem;" />
+<div style="display: flex; gap:0.5rem; justify-content:center;">
+ <button class="btn" onclick="verifyOwnerAccess()">Unlock Settings</button>
+ <button class="btn btn-secondary" onclick="closeOwnerAuthModal()">Cancel</button>
+</div>
+</div>
+</div>
+<!-- FULL CREATOR/CONFIG MODAL EDITOR (OWNER ONLY) -->
+<div id="creatorModal">
+<div class="creator-panel">
+<!-- VISIBLE ALWAYS-FUNCTIONAL CLOSE (✕) BUTTON -->
+<button class="owner-close-btn" onclick="closeCreatorModal()" title="Close Owner Settings">✕</button>
+<div style="display: flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+ <h2> Owner Control Center</h2>
+</div>
+<p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Edit texts, media, responses, and settings below. Changes take effect instantly.</p>
+<div class="tab-btn-group">
+ <button class="tab-btn active" onclick="switchCreatorTab('tabGeneral')">General</button>
+ <button class="tab-btn" onclick="switchCreatorTab('tabSurprises')">Letter & Gift</button>
+ <button class="tab-btn" onclick="switchCreatorTab('tabBouquet')">Bouquet & Photos</button>
+ <button class="tab-btn" onclick="switchCreatorTab('tabMedia')">Media (Pinterest & TV)</button>
+ <button class="tab-btn" onclick="switchCreatorTab('tabTimeline')">Timeline & RSVP</button>
+ <button class="tab-btn" onclick="switchCreatorTab('tabSecrets')">Vault & Quiz</button>
+ <button class="tab-btn" onclick="switchCreatorTab('tabMusic')">Background Music</button>
+ <button class="tab-btn" onclick="switchCreatorTab('tabResponses')">Responses <span id="tabResponseBadge" class="response-badge" style="display:none;">0</span></button>
+ <button class="tab-btn" onclick="switchCreatorTab('tabSecurity')">Owner Passcode</button>
+</div>
+<!-- TAB 1: General & Intro -->
+<div id="tabGeneral" class="tab-content active">
+ <div class="form-group"><label>Recipient Name</label><input type="text" id="edtRecipient" class="form-control" /></div>
+ <div class="form-group"><label>Sender Name</label><input type="text" id="edtSender" class="form-control" /></div>
+ <div class="form-group"><label>Occasion Tag</label><input type="text" id="edtOccasion" class="form-control" /></div>
+ <div class="form-group"><label>Intro Heading Text</label><input type="text" id="edtIntroHeading" class="form-control" /></div>
+ <div class="form-group"><label>Main Intro Message</label><textarea id="edtMainMessage" class="form-control" rows="2"></textarea></div>
+</div> <!-- TAB 2: Surprises & Letter -->
+<div id="tabSurprises" class="tab-content">
+ <div class="form-group"><label>Gift Box Title</label><input type="text" id="edtGiftTitle" class="form-control" /></div>
+ <div class="form-group"><label>Gift Box Text</label><textarea id="edtGiftText" class="form-control" rows="2"></textarea></div>
+ <div class="form-group"><label>Love Letter Pages (JSON Array)</label><textarea id="edtLetterPages" class="form-control" rows="4"></textarea></div>
+</div>
+<!-- TAB 3: Bouquet & Memories Wall -->
+<div id="tabBouquet" class="tab-content">
+ <div class="form-group"><label>Flower Pop-up Messages (JSON Array: [{type, name, msg}])</label><textarea id="edtFlowers" class="form-control" rows="4"></textarea></div>
+ <div class="form-group"><label>Memories Carousel (JSON Array: [{img, caption}])</label><textarea id="edtMemories" class="form-control" rows="4"></textarea></div>
+</div>
+<!-- TAB 4: Pinterest & Retro TV Media Manager -->
+<div id="tabMedia" class="tab-content">
+ <h3 style="margin-bottom:0.5rem; font-size:1.1rem;">Pinterest Collage Photos</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;">Add photos via URL Link or upload directly from your Device.</p>
+ <div style="display: flex; gap:0.5rem; margin-bottom:0.5rem;">
+ <input type="text" id="pinPhotoUrl" placeholder="Image URL (e.g. https://...)" class="form-control" />
+ <input type="text" id="pinPhotoCaption" placeholder="Caption" class="form-control" />  <button class="btn" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="addPinterestPhotoFromLink()">Add Link</button>
+ </div>
+ <div style="margin-bottom:1rem;">
+ <label style="font-size:0.8em; font-weight:600; display:block; margin-bottom:0.3rem;">Or Upload Photo from Device:</label>
+ <input type="file" id="filePinterestPhoto" accept="image/*" class="form-control" onchange="uploadPinterestPhoto(event)" />
+ </div>
+ <div id="pinterestManagerList" style="max-height: 140px; overflow-y:auto; border:1px solid #ddd; padding:0.5rem; border-radius:8px; margin-bottom:1.5rem; background:#fafafa;"></div>
+ 
+ <h3 style="margin-bottom:0.5rem; font-size:1.1rem;">Retro TV Media</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;">Add media items (videos/images) via URL Link.</p>
+ <div style="display: flex; gap:0.5rem; margin-bottom:0.5rem;">
+ <input type="text" id="retroVideoUrl" placeholder="Media URL (e.g. https://...)" class="form-control" />
+ <input type="text" id="retroVideoTitleInput" placeholder="Media Title" class="form-control" />
+ <button class="btn" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="addRetroVideoFromLink()">Add Link</button>
+ </div>
+</div>
+<!-- TAB 5: Timeline & RSVP -->
+<div id="tabTimeline" class="tab-content">  <div class="form-group"><label>Target Countdown ISO Date (e.g. 2026-10-14T19:00:00)</label><input type="text" id="edtCountdown" class="form-control" /></div>
+ <div class="form-group"><label>Timeline Items (JSON Array: [{date, title, desc}])</label><textarea id="edtTimeline" class="form-control" rows="4"></textarea></div>
+ <div class="form-group"><label>RSVP Event Title</label><input type="text" id="edtEventTitle" class="form-control" /></div>
+ <div class="form-group"><label>RSVP Event Date</label><input type="text" id="edtEventDate" class="form-control" /></div>
+ <div class="form-group"><label>RSVP Event Time</label><input type="text" id="edtEventTime" class="form-control" /></div>
+ <div class="form-group"><label>RSVP Venue</label><input type="text" id="edtVenue" class="form-control" /></div>
+</div>
+<!-- TAB 6: Vault & Quiz -->
+<div id="tabSecrets" class="tab-content">
+ <div class="form-group"><label>Secret Vault 4-Digit PIN</label><input type="text" id="edtPin" maxlength="4" class="form-control" /></div>
+ <div class="form-group"><label>Secret Vault Unlocked Message</label><input type="text" id="edtSecretMsg" class="form-control" /></div>
+ <div class="form-group"><label>Love Quiz Question</label><input type="text" id="edtQuizQuestion" class="form-control" /></div>
+ <div class="form-group"><label>Quiz Correct Option Text</label><input type="text" id="edtQuizCorrect" class="form-control" /></div>
+ <div class="form-group"><label>Quiz Wrong Option Text</label><input type="text" id="edtQuizWrong" class="form-control" /></div>
+ <div class="form-group">
+ <label>Proposal Question (Locked)</label>  <input type="text" value="Will you go out with me?" disabled class="form-control" style="background:#eee; cursor:not-allowed;" />
+ </div>
+ <div class="form-group">
+ <label>Celebration Finale Effect</label>
+ <select id="edtFinale" class="form-control">
+ <option value="confetti">Confetti Explosion</option>
+ <option value="fireworks">Fireworks Display</option>
+ <option value="flowerStorm">Flower Petal Storm</option>
+ <option value="starfield">Starfield Burst</option>
+ </select>
+ </div>
+</div>
+<!-- NEW TAB: BACKGROUND MUSIC (FEATURE 2) -->
+<div id="tabMusic" class="tab-content">
+ <h3 style="margin-bottom:0.5rem; font-size:1.1rem;">Background Music Settings</h3>
+ <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.8rem;">Configure audio playback sources, volume, and looping preferences.</p>
+ <div class="form-group">
+ <label>Music Source Type</label>
+ <select id="edtMusicSourceType" class="form-control" onchange="toggleMusicSourceInputs(this.value)">
+ <option value="none">None (Disabled)</option>
+ <option value="uploadAudio">Upload Audio File (MP3, WAV, OGG, AAC, M4A, FLAC)</option>
+ <option value="uploadVideo">Upload Video File (MP4, MOV, MKV, AVI, WebM - audio track only)</option>
+ <option value="audioUrl">Direct Audio URL</option>
+ <option value="videoUrl">Direct Video URL</option>
+ <option value="youtubeUrl">YouTube URL / Embed</option>
+ </select>
+ </div>
+ <div class="form-group" id="groupMusicUpload" style="display:none;">
+ <label id="lblMusicUpload">Upload Media File</label>
+ <input type="file" id="fileMusicUpload" class="form-control" accept="audio/*,video/*" onchange="handleMusicFileUpload(event)" />
+ </div>
+ <div class="form-group" id="groupMusicUrl" style="display:none;">
+ <label id="lblMusicUrl">Media / YouTube URL</label>
+ <input type="text" id="edtMusicUrlInput" class="form-control" placeholder="https://..." />
+ </div>
+ <div class="form-group">
+ <label>Volume (<span id="volValDisplay">80</span>%)</label>
+ <input type="range" id="edtMusicVol" min="0" max="100" value="80" class="form-control" oninput="document.getElementById('volValDisplay').innerText=this.value" />
+ </div>
+ <div style="display:flex; gap:1.5rem; margin-bottom:1rem;">
+ <label><input type="checkbox" id="edtMusicLoop" checked /> Loop Track</label>
+ <label><input type="checkbox" id="edtMusicAutoplay" checked /> Autoplay (where permitted)</label>
+ <label><input type="checkbox" id="edtMusicEnabled" checked /> Enable Music</label>
+ </div>
+ <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1rem;">
+ <button class="btn" onclick="previewBackgroundMusic()">▶ Preview / Play</button>
+ <button class="btn btn-secondary" onclick="pauseBackgroundMusic()">⏸ Pause</button>
+ <button class="btn btn-secondary" onclick="stopBackgroundMusic()">⏹ Stop</button>
+ <button class="btn btn-secondary" onclick="resetMusicSettings()">Reset Music</button>
+ </div>
+ <div id="musicStatusInfo" style="font-size:0.85rem; color:var(--primary); font-weight:600;">Status: Idle</div>
+ <div class="youtube-embed-container" id="youtubeEmbedContainer"></div>
+</div>
+<!-- NEW TAB: OWNER RESPONSE MANAGEMENT -->
+<div id="tabResponses" class="tab-content">
+ <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+  <h3 style="font-size:1.1rem;">Recipient Interaction History</h3>
+  <button class="btn btn-secondary" style="padding:0.3rem 0.8rem; font-size:0.8rem;" onclick="markAllResponsesAsRead()">Mark All as Read</button>
+ </div>
+ <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Chronological log of wishes, RSVPs, secrets unlocked, and proposal answers submitted by the recipient.</p>
+ <div id="ownerResponsesList" style="max-height: 320px; overflow-y:auto;"></div>
+</div>
+<!-- TAB 7: Security -->
+<div id="tabSecurity" class="tab-content">
+ <div class="form-group"><label>Owner Security Passcode (Restricts settings access to Owner only)</label><input type="text" id="edtOwnerPasscode" class="form-control" placeholder="1234" /></div>
+</div>
+<div style="display: flex; gap: 1rem; margin-top:1.5rem;">
+ <button class="btn" onclick="saveCreatorConfig()">Save Configuration</button>
+ <button class="btn btn-secondary" onclick="resetCreatorConfig()">Reset Defaults</button>
+</div>
+</div>
+</div> <!-- Toast Notification -->
+<div id="toast">Notification</div>
+<!-- JAVASCRIPT APPLICATION CORE -->
+<script>
+/* ======================================================================
+ 1. EDITABLE CONFIGURATION OBJECT
+ ====================================================================== 
+*/
+window.CELEBRATION_CONFIG = {
+ownerPasscode: "1234",
+recipientName: "Sophia",
+senderName: "Julian",
+occasion: "OUR SPECIAL DAY",
+introHeading: "Happy Celebration, Sophia!",
+mainMessage: "A dreamy personalized gift crafted with love, memory fragments, and joyful secrets just for you.",
+giftTitle: "You Unlocked The Surprise Gift!",
+giftText: "May your day be filled with warm laughter, sweet moments, and endless magic.",
+proposalQuestion: "Will you go out with me?",
+vaultPin: "2024",
+vaultSecretMsg: "You are my favorite thought every single day. I love you!",
+eventTitle: "Special Anniversary Dinner",
+eventDesc: "An intimate evening of delicious food, candles, and creating unforgettable memories.",
+eventDate: "October 14, 2026", eventTime: "7:00 PM EST",
+venue: "The Starlight Rooftop Garden",
+countdownTarget: "2026-10-14T19:00:00",
+theme: "dreamy-pink",
+selectedFinale: "confetti",
+quizQuestion: "What is our favorite shared activity?",
+quizCorrect: "Stargazing & long chats",
+quizWrong: "Sitting in traffic",
+letterPages: [
+ "My Dearest Sophia, \n\nFrom the moment you entered my life, every ordinary day has felt like a scene from a magical movie. Your laughter brightens even the cloudiest afternoons.",
+ "Thank you for every shared smile, late-night conversation, and quiet moment of understanding. Building memories with you is my absolute favorite pastime.",
+ "As we celebrate this special occasion, I want you to remember how deeply loved and appreciated you are. Here is to all our adventures yet to come!"
+],
+flowers: [
+ { type: "rose", name: "Red Rose", msg: "You bring passion & endless joy to my life" },
+ { type: "tulip", name: "Pink Tulip", msg: "A sweet reminder of how caring & gentle you are" },
+ { type: "lily", name: "White Lily", msg: "Pure happiness whenever you are near" },
+ { type: "orchid", name: "Royal Orchid", msg: "Unique, elegant, and beautiful inside out" },
+ { type: "daisy", name: "Sunny Daisy", msg: "You bring bright warmth to my everyday world" },
+ { type: "cherry", name: "Cherry Blossom", msg: "Every moment with you blooms sweetly" },
+ { type: "sunflower", name: "Golden Sunflower", msg: "You light up any room with your radiant smile" },
+ { type: "lotus", name: "Mystic Lotus", msg: "Peaceful, graceful, and deeply cherished" } ],
+memories: [
+ { img: "https://picsum.photos/id/1018/600/400", caption: "Our serene walk by the mountain lake" },
+ { img: "https://picsum.photos/id/1025/600/400", caption: "Cozy coffee mornings together" },
+ { img: "https://picsum.photos/id/1062/600/400", caption: "Stargazing on warm summer nights" }
+],
+pinterestPhotos: [
+ { img: "https://picsum.photos/id/1015/600/800", caption: "Aesthetic sunset vibes" },
+ { img: "https://picsum.photos/id/1025/600/600", caption: "Cozy moments" },
+ { img: "https://picsum.photos/id/1039/600/900", caption: "Unforgettable trip" },
+ { img: "https://picsum.photos/id/1043/600/700", caption: "Dreamy polaroids" },
+ { img: "https://picsum.photos/id/1069/600/800", caption: "Golden hour glow" }
+],
+retroTvMedia: [
+ { type: "video", src: "https://www.w3schools.com/html/mov_bbb.mp4", title: "Channel 01 - Cozy Video Reel" },
+ { type: "image", src: "https://picsum.photos/id/1018/800/450", title: "Channel 02 - Mountain Lake View" },
+ { type: "image", src: "https://picsum.photos/id/1062/800/450", title: "Channel 03 - Night Sky Stargazing" }
+],
+timeline: [
+ { date: "June 12, 2023", title: "First Met", desc: "A chance meeting that changed everything." },
+ { date: "October 14, 2023", title: "First Official Date", desc: "Coffee turned into a 4-hour walk." },
+ { date: "August 10, 2024", title: "Roadtrip Adventure", desc: "Exploring coastlines and playing endless playlists." }
+]
+};
+/* ======================================================================
+ 2. STATE & WEB AUDIO SYNTHESIZER
+ ====================================================================== 
+*/
+let currentLetterPage = 0;
+let currentMemoryIdx = 0;
+let currentTvIdx = 0;
+let audioCtx = null;
+let audioPresetIdx = 0;
+let accMode = false;
+let synthInterval = null;
+let isOwnerAuthenticated = false;
+const localCfg = localStorage.getItem('celebration_cfg');
+if (localCfg) {
+try { Object.assign(window.CELEBRATION_CONFIG, JSON.parse(localCfg)); } catch (e) {}
+}
+function initAudio() {
+if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+function playSoftTone(freq = 440, duration = 0.4, type = 'sine') {
+if (audioPresetIdx === 0 || !audioCtx) return;
+try {
+ const osc = audioCtx.createOscillator();
+ const gain = audioCtx.createGain();
+ osc.type = type;
+ osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+ gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+ gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
+ osc.connect(gain);
+ gain.connect(audioCtx.destination);
+ osc.start();
+ osc.stop(audioCtx.currentTime + duration);
+} catch (e) {}
+}
+function showToast(msg) {
+const toast = document.getElementById('toast');
+toast.innerText = msg;
+toast.classList.add('show');
+setTimeout(() => toast.classList.remove('show'), 2500);
+}
+function cycleAudioPreset() { initAudio();
+audioPresetIdx = (audioPresetIdx + 1) % 4;
+const presets = ["Muted", "Ambient Synth", "Romantic Chimes", "Lofi Waves"];
+showToast(`Audio Preset: ${presets[audioPresetIdx]}`);
+const btn = document.getElementById('btnAudioToggle');
+if (audioPresetIdx > 0) {
+ if (audioCtx.state === 'suspended') audioCtx.resume();
+ btn.style.background = 'var(--primary)';
+ btn.style.color = '#fff';
+ startBackgroundMusicSynth();
+} else {
+ btn.style.background = '';
+ btn.style.color = '';
+ if (synthInterval) clearInterval(synthInterval);
+}
+}
+function startBackgroundMusicSynth() {
+if (synthInterval) clearInterval(synthInterval);
+let step = 0;
+const synthChords = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23];
+const chimeNotes = [523.25, 659.25, 783.99, 1046.50, 880.00];
+synthInterval = setInterval(() => {
+ if (audioPresetIdx === 1) {
+ playSoftTone(synthChords[step % synthChords.length], 1.2, 'sine');
+ } else if (audioPresetIdx === 2) {  playSoftTone(chimeNotes[step % chimeNotes.length], 0.8, 'triangle');
+ } else if (audioPresetIdx === 3) {
+ playSoftTone(synthChords[step % synthChords.length] / 2, 0.6, 'sine');
+ }
+ step++;
+}, 1200);
+}
+/* ======================================================================
+ 3. 21 CSS THEMES MANAGER
+ ====================================================================== 
+*/
+const themesList = [
+'dreamy-pink', 'lavender-moon', 'cloudy-blue', 'peach-sunset', 'sakura-dream', 'soft-garden',
+'cream-champagne', 'midnight-romance', 'cozy-coffee', 'fairy-garden', 'vintage-love-letter',
+'celestial-dream', 'soft-wedding', 'dreamy-birthday', 'luxury-gold', 'galaxy', 'aurora', 'ocean', 
+'forest',
+'scrapbook', 'polaroid'
+];
+let themeIdx = 0;
+function cycleTheme() {
+themeIdx = (themeIdx + 1) % themesList.length;
+const t = themesList[themeIdx];
+document.documentElement.setAttribute('data-theme', t);
+showToast(`Theme (${themeIdx + 1}/21): ${t.replace(/-/g,' ').toUpperCase()}`);
+playSoftTone(523.25, 0.2);
+} /* ======================================================================
+ 4. UI NAVIGATION & STORY SCROLLING
+ ====================================================================== 
+*/
+function scrollToSection(id) {
+const el = document.getElementById(id);
+if (el) {
+ el.scrollIntoView({ behavior: 'smooth' });
+ playSoftTone(440, 0.2);
+}
+}
+function startStoryExperience() {
+if (audioPresetIdx === 0) cycleAudioPreset();
+scrollToSection('gift');
+}
+const sections = document.querySelectorAll('.chapter-section');
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+let current = '';
+sections.forEach(section => {
+ const sectionTop = section.offsetTop;
+ const sectionHeight = section.clientHeight;
+ if (window.pageYOffset >= (sectionTop - sectionHeight / 3)) {  section.classList.add('visible');
+ current = section.getAttribute('id');
+ }
+});
+navLinks.forEach(link => {
+ link.classList.remove('active');
+ if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(current)) {
+ link.classList.add('active');
+ }
+});
+});
+/* ======================================================================
+ 5. INTERACTIVE GIFT BOX LOGIC
+ ====================================================================== 
+*/
+function openGiftBox() {
+const box = document.getElementById('giftBox');
+const reveal = document.getElementById('giftRevealCard');
+if (!box.classList.contains('opened')) {
+ box.classList.add('opened');
+ playSoftTone(587.33, 0.6, 'triangle');
+ triggerConfettiBurst(80);
+ setTimeout(() => {
+ reveal.style.display = 'block';
+ reveal.scrollIntoView({ behavior: 'smooth', block: 'center' });  }, 700);
+}
+}
+/* ======================================================================
+ 6. REALISTIC SVG FLOWERS GENERATOR
+ ====================================================================== 
+*/
+function getFlowerSVG(type) {
+switch (type) {
+ case 'rose':
+ return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M50 20 C30 20 20 40 35 60 C50 80 80 50 65 30 Z" fill="#e63946"/><path d="M50 25 C40 25 35 45 45 55 C55 65 70 45 60 30 Z" fill="#ff4d6d"/><path d="M50 30 C45 35 45 45 50 50 C55 45 55 35 50 30 Z" fill="#ff758f"/></svg>`;
+ case 'tulip':
+ return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M30 70 C20 40 30 20 50 30 C70 20 80 40 70 70 Z" fill="#ff4d6d"/><path d="M40 70 C35 50 45 30 50 35 C55 30 65 50 60 70 Z" fill="#ff758f"/></svg>`;
+ case 'lily':
+ return `<svg viewBox="0 0 100 100" width="100%" height="100%"><circle cx="50" cy="50" r="12" fill="#ffd166"/><path d="M50 15 C40 35 40 45 50 50 C60 45 60 35 50 15 Z" fill="#fffdfa"/><path d="M50 85 C40 65 40 55 50 50 C60 55 60 65 50 85 Z" fill="#fffdfa"/><path d="M15 50 C35 40 45 40 50 50 C45 60 35 60 15 50 Z" fill="#fffdfa"/><path d="M85 50 C65 40 55 40 50 50 C55 60 65 60 85 50 Z" fill="#fffdfa"/></svg>`;
+ default:
+ return `<svg viewBox="0 0 100 100" width="100%" height="100%"><circle cx="50" cy="50" r="18" fill="#facc15"/><circle cx="50" cy="22" r="14" fill="#f472b6"/><circle cx="50" cy="78" r="14" fill="#f472b6"/><circle cx="22" cy="50" r="14" fill="#f472b6"/><circle cx="78" cy="50" r="14" fill="#f472b6"/></svg>`;
+}
+}
+function renderBouquet() {
+const container = document.getElementById('flowerContainer');
+if (!container) return;
+container.innerHTML = '';
+window.CELEBRATION_CONFIG.flowers.forEach((f, idx) => {
+ const item = document.createElement('div');
+ item.className = 'flower-item';
+ item.onclick = () => {
+   item.classList.toggle('bloomed');
+   playSoftTone(400 + idx * 40, 0.3, 'triangle');
+ };
+ item.innerHTML = `
+   <div class="flower-head">${getFlowerSVG(f.type)}</div>
+   <div class="flower-stem">
+     <div class="flower-leaf left"></div>
+     <div class="flower-leaf right"></div>
+   </div>
+   <div class="flower-note-pop">${f.msg}</div>
+ `;
+ container.appendChild(item);
+});
+}
+
+/* ======================================================================
+ 7. LETTER, MEMORIES, TV, GAMES & VAULT Core Handlers
+ ====================================================================== 
+*/
+function openLetter() {
+document.getElementById('envelope').classList.add('opened');
+document.getElementById('letterPaper').style.display = 'block';
+renderLetterPage();
+}
+function renderLetterPage() {
+const pages = window.CELEBRATION_CONFIG.letterPages;
+document.getElementById('letterContent').innerText = pages[currentLetterPage] || '';
+document.getElementById('pageIndicator').innerText = `Page ${currentLetterPage + 1}/${pages.length}`;
+}
+function prevLetterPage() {
+if (currentLetterPage > 0) { currentLetterPage--; renderLetterPage(); }
+}
+function nextLetterPage() {
+if (currentLetterPage < window.CELEBRATION_CONFIG.letterPages.length - 1) { currentLetterPage++; renderLetterPage(); }
+}
+function speakLetterPage() {
+if ('speechSynthesis' in window) {
+ const utterance = new SpeechSynthesisUtterance(window.CELEBRATION_CONFIG.letterPages[currentLetterPage]);
+ window.speechSynthesis.speak(utterance);
+} else {
+ showToast("Text-to-speech not supported in this browser.");
+}
+}
+function changeMemory(dir) {
+const mems = window.CELEBRATION_CONFIG.memories;
+currentMemoryIdx = (currentMemoryIdx + dir + mems.length) % mems.length;
+document.getElementById('memoryImg').src = mems[currentMemoryIdx].img;
+document.getElementById('memoryCaption').innerText = mems[currentMemoryIdx].caption;
+}
+function renderPinterestGrid() {
+const grid = document.getElementById('pinterestGrid');
+if (!grid) return;
+grid.innerHTML = '';
+window.CELEBRATION_CONFIG.pinterestPhotos.forEach(p => {
+ const card = document.createElement('div');
+ card.className = 'pin-card';
+ card.innerHTML = `<img src="${p.img}" alt="Pinterest memory"/><div class="pin-caption">${p.caption}</div>`;
+ grid.appendChild(card);
+});
+}
+function cycleTvChannel() {
+const media = window.CELEBRATION_CONFIG.retroTvMedia;
+currentTvIdx = (currentTvIdx + 1) % media.length;
+renderTvScreen();
+}
+function prevTvMedia() {
+const media = window.CELEBRATION_CONFIG.retroTvMedia;
+currentTvIdx = (currentTvIdx - 1 + media.length) % media.length;
+renderTvScreen();
+}
+function nextTvMedia() {
+cycleTvChannel();
+}
+function renderTvScreen() {
+const frame = document.getElementById('tvScreenFrame');
+const label = document.getElementById('tvChannelLabel');
+if (!frame) return;
+const item = window.CELEBRATION_CONFIG.retroTvMedia[currentTvIdx];
+if (!item) return;
+label.innerText = `CH 0${currentTvIdx + 1}`;
+frame.innerHTML = '<div class="tv-scanlines"></div>';
+if (item.type === 'video') {
+ const vid = document.createElement('video');
+ vid.src = item.src; vid.autoplay = true; vid.loop = true; vid.muted = true;
+ frame.appendChild(vid);
+} else {
+ const img = document.createElement('img');
+ img.src = item.src;
+ frame.appendChild(img);
+}
+}
+function openGame(gameType) {
+const modal = document.getElementById('gameModal');
+const container = document.getElementById('gameContainer');
+modal.style.display = 'flex';
+container.innerHTML = `<h3>Celebration Arcade: ${gameType.toUpperCase()}</h3><p style="margin-top:1rem;">Interactive mini-game unlocked! Enjoy the special celebratory challenge.</p><br><button class="btn" onclick="closeGameModal()">Claim Reward</button>`;
+}
+function closeGameModal() {
+document.getElementById('gameModal').style.display = 'none';
+}
+function unlockVault() {
+const pin = document.getElementById('vaultPin').value;
+if (pin === window.CELEBRATION_CONFIG.vaultPin) {
+ showToast("Vault Unlocked!");
+ alert(`SECRET MESSAGE UNLOCKED:\n\n${window.CELEBRATION_CONFIG.vaultSecretMsg}`);
+ recordOwnerResponse('Secret Vault', `Vault unlocked using PIN: ${pin}`);
+} else {
+ showToast("Incorrect PIN. Please try again.");
+}
+}
+function submitRSVP(status) {
+document.getElementById('rsvpStatus').innerText = `RSVP Recorded: ${status}! Thank you.`;
+showToast(`RSVP status updated to ${status}`);
+recordOwnerResponse('RSVP Submission', `RSVP Status: ${status}`);
+}
+function downloadICS() {
+const icsData = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${window.CELEBRATION_CONFIG.eventTitle}\nDESCRIPTION:${window.CELEBRATION_CONFIG.eventDesc}\nLOCATION:${window.CELEBRATION_CONFIG.venue}\nEND:VEVENT\nEND:VCALENDAR`;
+const blob = new Blob([icsData], { type: 'text/calendar' });
+const link = document.createElement('a');
+link.href = URL.createObjectURL(blob);
+link.download = 'event.ics';
+link.click();
+}
+function escapeNoButton() {
+if (accMode) return;
+const btnNo = document.getElementById('btnNo');
+const rx = (Math.random() - 0.5) * 200;
+const ry = (Math.random() - 0.5) * 120;
+btnNo.style.transform = `translate(${rx}px, ${ry}px)`;
+}
+function toggleAccessibilityMode(val) {
+accMode = val;
+if (accMode) {
+ const btnNo = document.getElementById('btnNo');
+ btnNo.style.transform = 'none';
+}
+}
+function triggerYesCelebration() {
+document.getElementById('proposalResultCard').style.display = 'block';
+triggerConfettiBurst(150);
+recordOwnerResponse('Proposal Response', 'SHE SAID YES!');
+}
+function triggerConfettiBurst(count = 100) {
+const fx = document.getElementById('fxCanvas');
+if (!fx) return;
+const ctx = fx.getContext('2d');
+fx.width = window.innerWidth;
+fx.height = window.innerHeight;
+const particles = [];
+for (let i = 0; i < count; i++) {
+ particles.push({
+   x: fx.width / 2, y: fx.height / 2,
+   vx: (Math.random() - 0.5) * 12, vy: (Math.random() - 0.5) * 12 - 4,
+   size: Math.random() * 8 + 4,
+   color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+   life: 100
+ });
+}
+function anim() {
+ ctx.clearRect(0, 0, fx.width, fx.height);
+ particles.forEach((p, idx) => {
+   p.x += p.vx; p.y += p.vy; p.vy += 0.15; p.life--;
+   ctx.fillStyle = p.color;
+   ctx.fillRect(p.x, p.y, p.size, p.size);
+   if (p.life <= 0) particles.splice(idx, 1);
+ });
+ if (particles.length > 0) requestAnimationFrame(anim);
+}
+anim();
+}
+
+/* ======================================================================
+ 8. CREATOR & OWNER MODAL CONTROLS
+ ====================================================================== 
+*/
+function openCreatorModal() {
+if (!isOwnerAuthenticated) {
+ document.getElementById('ownerAuthModal').style.display = 'flex';
+} else {
+ document.getElementById('creatorModal').style.display = 'flex';
+ populateCreatorForm();
+}
+}
+function closeCreatorModal() {
+document.getElementById('creatorModal').style.display = 'none';
+}
+function closeOwnerAuthModal() {
+document.getElementById('ownerAuthModal').style.display = 'none';
+}
+function verifyOwnerAccess() {
+const pass = document.getElementById('ownerPasscodePrompt').value;
+if (pass === window.CELEBRATION_CONFIG.ownerPasscode) {
+ isOwnerAuthenticated = true;
+ closeOwnerAuthModal();
+ openCreatorModal();
+ showToast("Owner Authentication Successful!");
+} else {
+ showToast("Invalid Passcode!");
+}
+}
+function switchCreatorTab(tabId) {
+document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+event.currentTarget.classList.add('active');
+document.getElementById(tabId).classList.add('active');
+}
+function populateCreatorForm() {
+const cfg = window.CELEBRATION_CONFIG;
+document.getElementById('edtRecipient').value = cfg.recipientName || '';
+document.getElementById('edtSender').value = cfg.senderName || '';
+document.getElementById('edtOccasion').value = cfg.occasion || '';
+document.getElementById('edtIntroHeading').value = cfg.introHeading || '';
+document.getElementById('edtMainMessage').value = cfg.mainMessage || '';
+document.getElementById('edtGiftTitle').value = cfg.giftTitle || '';
+document.getElementById('edtGiftText').value = cfg.giftText || '';
+document.getElementById('edtLetterPages').value = JSON.stringify(cfg.letterPages, null, 2);
+document.getElementById('edtFlowers').value = JSON.stringify(cfg.flowers, null, 2);
+document.getElementById('edtMemories').value = JSON.stringify(cfg.memories, null, 2);
+document.getElementById('edtCountdown').value = cfg.countdownTarget || '';
+document.getElementById('edtTimeline').value = JSON.stringify(cfg.timeline, null, 2);
+document.getElementById('edtEventTitle').value = cfg.eventTitle || '';
+document.getElementById('edtEventDate').value = cfg.eventDate || '';
+document.getElementById('edtEventTime').value = cfg.eventTime || '';
+document.getElementById('edtVenue').value = cfg.venue || '';
+document.getElementById('edtPin').value = cfg.vaultPin || '';
+document.getElementById('edtSecretMsg').value = cfg.vaultSecretMsg || '';
+document.getElementById('edtOwnerPasscode').value = cfg.ownerPasscode || '';
+renderOwnerResponsesTab();
+}
+function saveCreatorConfig() {
+const cfg = window.CELEBRATION_CONFIG;
+cfg.recipientName = document.getElementById('edtRecipient').value;
+cfg.senderName = document.getElementById('edtSender').value;
+cfg.occasion = document.getElementById('edtOccasion').value;
+cfg.introHeading = document.getElementById('edtIntroHeading').value;
+cfg.mainMessage = document.getElementById('edtMainMessage').value;
+cfg.giftTitle = document.getElementById('edtGiftTitle').value;
+cfg.giftText = document.getElementById('edtGiftText').value;
+cfg.eventTitle = document.getElementById('edtEventTitle').value;
+cfg.eventDate = document.getElementById('edtEventDate').value;
+cfg.eventTime = document.getElementById('edtEventTime').value;
+cfg.venue = document.getElementById('edtVenue').value;
+cfg.vaultPin = document.getElementById('edtPin').value;
+cfg.vaultSecretMsg = document.getElementById('edtSecretMsg').value;
+cfg.ownerPasscode = document.getElementById('edtOwnerPasscode').value;
+try { cfg.letterPages = JSON.parse(document.getElementById('edtLetterPages').value); } catch(e) {}
+try { cfg.flowers = JSON.parse(document.getElementById('edtFlowers').value); } catch(e) {}
+try { cfg.memories = JSON.parse(document.getElementById('edtMemories').value); } catch(e) {}
+try { cfg.timeline = JSON.parse(document.getElementById('edtTimeline').value); } catch(e) {}
+localStorage.setItem('celebration_cfg', JSON.stringify(cfg));
+saveBackgroundMusicConfig();
+showToast("Settings Saved Permanently!");
+closeCreatorModal();
+location.reload();
+}
+function resetCreatorConfig() {
+if (confirm("Reset configuration to default settings?")) {
+ localStorage.removeItem('celebration_cfg');
+ location.reload();
+}
+}
+
+/* ======================================================================
+ FEATURE 1 — PREMIUM ANIMATED SAKURA WISH TREE & HANGING WISHES
+ ====================================================================== 
+*/
+const SakuraWishTree = (function() {
+ let canvas, ctx;
+ let petals = [];
+ const wishAnchors = [
+   { x: 0.32, y: 0.38 }, { x: 0.42, y: 0.30 }, { x: 0.52, y: 0.28 },
+   { x: 0.62, y: 0.32 }, { x: 0.70, y: 0.42 }, { x: 0.38, y: 0.48 },
+   { x: 0.58, y: 0.46 }, { x: 0.48, y: 0.52 }, { x: 0.28, y: 0.50 }
+ ];
+
+ function init() {
+   canvas = document.getElementById('sakuraCanvas');
+   if (!canvas) return;
+   ctx = canvas.getContext('2d');
+   resize();
+   window.addEventListener('resize', resize);
+   createPetals(60);
+   requestAnimationFrame(renderLoop);
+   renderHangingWishes();
+ }
+
+ function resize() {
+   const wrap = document.getElementById('treeCanvasWrap');
+   if (!wrap || !canvas) return;
+   canvas.width = wrap.clientWidth;
+   canvas.height = wrap.clientHeight;
+   renderTreeStatic();
+ }
+
+ function createPetals(count) {
+   petals = [];
+   for (let i = 0; i < count; i++) {
+     petals.push({
+       x: Math.random() * canvas.width,
+       y: Math.random() * canvas.height,
+       size: Math.random() * 5 + 4,
+       speedY: Math.random() * 1.2 + 0.6,
+       speedX: Math.random() * 0.8 - 0.4,
+       rotation: Math.random() * 360,
+       rotSpeed: (Math.random() - 0.5) * 2,
+       opacity: Math.random() * 0.5 + 0.5
+     });
+   }
+ }
+
+ function renderTreeStatic() {
+   const baseCanvas = document.getElementById('treeCanvas');
+   if (!baseCanvas) return;
+   const bCtx = baseCanvas.getContext('2d');
+   baseCanvas.width = canvas.width;
+   baseCanvas.height = canvas.height;
+   const w = baseCanvas.width;
+   const h = baseCanvas.height;
+
+   bCtx.clearRect(0, 0, w, h);
+   // Organic Realistic Trunk
+   const trunkGrad = bCtx.createLinearGradient(w * 0.45, h, w * 0.55, h * 0.4);
+   trunkGrad.addColorStop(0, '#2d1810');
+   trunkGrad.addColorStop(0.5, '#4a2810');
+   trunkGrad.addColorStop(1, '#683b1a');
+
+   bCtx.beginPath();
+   bCtx.moveTo(w * 0.44, h);
+   bCtx.quadraticCurveTo(w * 0.48, h * 0.7, w * 0.47, h * 0.55);
+   bCtx.quadraticCurveTo(w * 0.40, h * 0.40, w * 0.30, h * 0.32);
+   bCtx.lineTo(w * 0.33, h * 0.30);
+   bCtx.quadraticCurveTo(w * 0.43, h * 0.38, w * 0.49, h * 0.50);
+   bCtx.quadraticCurveTo(w * 0.53, h * 0.38, w * 0.68, h * 0.28);
+   bCtx.lineTo(w * 0.71, h * 0.30);
+   bCtx.quadraticCurveTo(w * 0.57, h * 0.42, w * 0.53, h * 0.58);
+   bCtx.quadraticCurveTo(w * 0.54, h * 0.75, w * 0.58, h);
+   bCtx.fillStyle = trunkGrad;
+   bCtx.fill();
+
+   // Sakura Blossom Canopy Clusters
+   const clusters = [
+     { x: w * 0.30, y: h * 0.28, r: 65 },
+     { x: w * 0.45, y: h * 0.22, r: 80 },
+     { x: w * 0.62, y: h * 0.25, r: 75 },
+     { x: w * 0.72, y: h * 0.35, r: 55 },
+     { x: w * 0.38, y: h * 0.38, r: 60 },
+     { x: w * 0.54, y: h * 0.36, r: 70 }
+   ];
+
+   clusters.forEach(c => {
+     const cGrad = bCtx.createRadialGradient(c.x, c.y, c.r * 0.1, c.x, c.y, c.r);
+     cGrad.addColorStop(0, 'rgba(255, 183, 197, 0.95)');
+     cGrad.addColorStop(0.6, 'rgba(255, 105, 180, 0.75)');
+     cGrad.addColorStop(1, 'rgba(219, 39, 119, 0)');
+     bCtx.beginPath();
+     bCtx.arc(c.x, c.y, c.r, 0, Math.PI * 2);
+     bCtx.fillStyle = cGrad;
+     bCtx.fill();
+   });
+ }
+
+ function renderLoop() {
+   ctx.clearRect(0, 0, canvas.width, canvas.height);
+   petals.forEach(p => {
+     p.y += p.speedY;
+     p.x += p.speedX + Math.sin(p.y * 0.02) * 0.5;
+     p.rotation += p.rotSpeed;
+
+     if (p.y > canvas.height) {
+       p.y = -10;
+       p.x = Math.random() * canvas.width;
+     }
+
+     ctx.save();
+     ctx.translate(p.x, p.y);
+     ctx.rotate((p.rotation * Math.PI) / 180);
+     ctx.fillStyle = `rgba(255, 182, 193, ${p.opacity})`;
+     ctx.beginPath();
+     ctx.ellipse(0, 0, p.size, p.size * 0.5, 0, 0, Math.PI * 2);
+     ctx.fill();
+     ctx.restore();
+   });
+   requestAnimationFrame(renderLoop);
+ }
+
+ function renderHangingWishes() {
+   const container = document.getElementById('sakuraHangingWishes');
+   if (!container) return;
+   container.innerHTML = '';
+   const storedWishes = JSON.parse(localStorage.getItem('sakura_wishes') || '[]');
+   const wrap = document.getElementById('treeCanvasWrap');
+   if (!wrap) return;
+
+   storedWishes.forEach((w, idx) => {
+     const anchor = wishAnchors[idx % wishAnchors.length];
+     const paper = document.createElement('div');
+     paper.className = 'sakura-wish-paper';
+     paper.style.left = `${anchor.x * 100}%`;
+     paper.style.top = `${anchor.y * 100}%`;
+     paper.innerText = `${w.name}: ${w.msg}`;
+     paper.onclick = () => alert(`Wish by ${w.name}:\n\n"${w.msg}"`);
+     container.appendChild(paper);
+   });
+ }
+
+ function addWish(name, msg) {
+   const storedWishes = JSON.parse(localStorage.getItem('sakura_wishes') || '[]');
+   storedWishes.push({ name, msg, timestamp: new Date().toLocaleString() });
+   localStorage.setItem('sakura_wishes', JSON.stringify(storedWishes));
+   renderHangingWishes();
+ }
+
+ return { init, addWish, renderHangingWishes };
+})();
+
+/* ======================================================================
+ FEATURE 2 — OWNER BACKGROUND MUSIC MANAGER
+ ====================================================================== 
+*/
+const BackgroundMusicManager = (function() {
+ let audioEl, videoEl;
+ let config = {
+   sourceType: 'none',
+   url: '',
+   volume: 80,
+   loop: true,
+   autoplay: true,
+   enabled: true
+ };
+
+ function init() {
+   audioEl = document.getElementById('mainBgMusic');
+   if (!audioEl) {
+     audioEl = document.createElement('audio');
+     audioEl.id = 'mainBgMusic';
+     document.body.appendChild(audioEl);
+   }
+   loadSavedConfig();
+   applyConfig();
+   setupAutoplayFallback();
+ }
+
+ function loadSavedConfig() {
+   const saved = localStorage.getItem('bg_music_config');
+   if (saved) {
+     try { Object.assign(config, JSON.parse(saved)); } catch (e) {}
+   }
+ }
+
+ function saveConfig() {
+   localStorage.setItem('bg_music_config', JSON.stringify(config));
+ }
+
+ function applyConfig() {
+   const statusLbl = document.getElementById('musicStatusInfo');
+   if (!config.enabled || config.sourceType === 'none') {
+     if (audioEl) audioEl.pause();
+     if (statusLbl) statusLbl.innerText = 'Status: Disabled';
+     return;
+   }
+
+   audioEl.volume = config.volume / 100;
+   audioEl.loop = config.loop;
+
+   if (config.sourceType === 'youtubeUrl') {
+     renderYouTubeEmbed(config.url);
+     if (statusLbl) statusLbl.innerText = 'Status: YouTube Embedded Track Playing';
+     return;
+   } else {
+     document.getElementById('youtubeEmbedContainer').style.display = 'none';
+   }
+
+   if (config.url) {
+     audioEl.src = config.url;
+     if (config.autoplay) {
+       audioEl.play().then(() => {
+         if (statusLbl) statusLbl.innerText = 'Status: Playing Default Background Music';
+       }).catch(() => {
+         if (statusLbl) statusLbl.innerText = 'Status: Autoplay blocked. Click anywhere to start music.';
+       });
+     }
+   }
+ }
+
+ function renderYouTubeEmbed(url) {
+   const container = document.getElementById('youtubeEmbedContainer');
+   if (!container) return;
+   let videoId = '';
+   if (url.includes('v=')) videoId = url.split('v=')[1].split('&')[0];
+   else if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1];
+
+   if (videoId) {
+     container.style.display = 'block';
+     container.innerHTML = `<iframe src="https://www.youtube.com/embed/${videoId}?autoplay=1&loop=${config.loop ? 1 : 0}&playlist=${videoId}" allow="autoplay"></iframe>`;
+   }
+ }
+
+ function setupAutoplayFallback() {
+   const startAudio = () => {
+     if (config.enabled && audioEl && audioEl.paused && config.sourceType !== 'none') {
+       audioEl.play().catch(() => {});
+     }
+     window.removeEventListener('click', startAudio);
+     window.removeEventListener('touchstart', startAudio);
+   };
+   window.addEventListener('click', startAudio);
+   window.addEventListener('touchstart', startAudio);
+ }
+
+ return {
+   init,
+   setConfig: (newCfg) => { Object.assign(config, newCfg); saveConfig(); applyConfig(); },
+   getConfig: () => config,
+   play: () => audioEl && audioEl.play(),
+   pause: () => audioEl && audioEl.pause(),
+   stop: () => { if (audioEl) { audioEl.pause(); audioEl.currentTime = 0; } }
+ };
+})();
+
+function toggleMusicSourceInputs(val) {
+ document.getElementById('groupMusicUpload').style.display = (val === 'uploadAudio' || val === 'uploadVideo') ? 'block' : 'none';
+ document.getElementById('groupMusicUrl').style.display = (val === 'audioUrl' || val === 'videoUrl' || val === 'youtubeUrl') ? 'block' : 'none';
+}
+
+function handleMusicFileUpload(e) {
+ const file = e.target.files[0];
+ if (file) {
+   const url = URL.createObjectURL(file);
+   document.getElementById('edtMusicUrlInput').value = url;
+   showToast(`File loaded: ${file.name}`);
+ }
+}
+
+function previewBackgroundMusic() {
+ saveBackgroundMusicConfig();
+ BackgroundMusicManager.play();
+}
+
+function pauseBackgroundMusic() {
+ BackgroundMusicManager.pause();
+}
+
+function stopBackgroundMusic() {
+ BackgroundMusicManager.stop();
+}
+
+function resetMusicSettings() {
+ localStorage.removeItem('bg_music_config');
+ showToast('Background Music Reset to Default');
+ location.reload();
+}
+
+function saveBackgroundMusicConfig() {
+ const sourceType = document.getElementById('edtMusicSourceType').value;
+ const url = document.getElementById('edtMusicUrlInput').value;
+ const volume = document.getElementById('edtMusicVol').value;
+ const loop = document.getElementById('edtMusicLoop').checked;
+ const autoplay = document.getElementById('edtMusicAutoplay').checked;
+ const enabled = document.getElementById('edtMusicEnabled').checked;
+
+ BackgroundMusicManager.setConfig({ sourceType, url, volume, loop, autoplay, enabled });
+}
+
+/* ======================================================================
+ FEATURE 3 — OWNER RESPONSE MANAGEMENT TRACKER
+ ====================================================================== 
+*/
+function recordOwnerResponse(type, content) {
+ const responses = JSON.parse(localStorage.getItem('owner_responses') || '[]');
+ responses.unshift({
+   id: Date.now(),
+   type,
+   content,
+   timestamp: new Date().toLocaleString(),
+   read: false
+ });
+ localStorage.setItem('owner_responses', JSON.stringify(responses));
+ updateUnreadResponseBadge();
+}
+
+function updateUnreadResponseBadge() {
+ const responses = JSON.parse(localStorage.getItem('owner_responses') || '[]');
+ const unreadCount = responses.filter(r => !r.read).length;
+ const badge = document.getElementById('ownerControlBadge');
+ const tabBadge = document.getElementById('tabResponseBadge');
+
+ if (unreadCount > 0) {
+   if (badge) badge.innerText = `(${unreadCount}) `;
+   if (tabBadge) { tabBadge.innerText = unreadCount; tabBadge.style.display = 'inline-block'; }
+ } else {
+   if (badge) badge.innerText = '';
+   if (tabBadge) tabBadge.style.display = 'none';
+ }
+}
+
+function renderOwnerResponsesTab() {
+ const list = document.getElementById('ownerResponsesList');
+ if (!list) return;
+ const responses = JSON.parse(localStorage.getItem('owner_responses') || '[]');
+ list.innerHTML = '';
+
+ if (responses.length === 0) {
+   list.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted); text-align:center;">No responses recorded yet.</p>';
+   return;
+ }
+
+ responses.forEach(r => {
+   const item = document.createElement('div');
+   item.className = `response-item ${r.read ? '' : 'unread'}`;
+   item.innerHTML = `
+     <div class="response-header">
+       <span class="response-type">${r.type}</span>
+       <span>${r.timestamp}</span>
+     </div>
+     <div style="font-size:0.9rem;">${r.content}</div>
+   `;
+   list.appendChild(item);
+ });
+}
+
+function markAllResponsesAsRead() {
+ const responses = JSON.parse(localStorage.getItem('owner_responses') || '[]');
+ responses.forEach(r => r.read = true);
+ localStorage.setItem('owner_responses', JSON.stringify(responses));
+ renderOwnerResponsesTab();
+ updateUnreadResponseBadge();
+ showToast("All responses marked as read.");
+}
+
+/* ======================================================================
+ FEATURE 4 — TIME CAPSULE LIVE COUNTDOWN ENHANCEMENT
+ ====================================================================== 
+*/
+const TimeCapsuleEnhancer = (function() {
+ let interval = null;
+
+ function init() {
+   setupNextBirthdayDefault();
+   startLiveTicker();
+ }
+
+ function setupNextBirthdayDefault() {
+   const dateInput = document.getElementById('tcDate');
+   if (!dateInput) return;
+   const today = new Date();
+   const nextBday = new Date(today.getFullYear() + 1, today.getMonth(), today.getDate());
+   dateInput.value = nextBday.toISOString().split('T')[0];
+ }
+
+ function startLiveTicker() {
+   if (interval) clearInterval(interval);
+   interval = setInterval(updateTicker, 1000);
+   updateTicker();
+ }
+
+ function updateTicker() {
+   const storedCapsule = JSON.parse(localStorage.getItem('time_capsule_data') || 'null');
+   const container = document.getElementById('tcLiveCountdown');
+   const status = document.getElementById('tcStatus');
+   if (!container || !storedCapsule) return;
+
+   const now = new Date().getTime();
+   const target = new Date(storedCapsule.date).getTime();
+   const diff = target - now;
+
+   if (diff <= 0) {
+     container.innerHTML = '';
+     status.innerText = `🔓 TIME CAPSULE UNLOCKED!\nMessage: "${storedCapsule.msg}"`;
+     return;
+   }
+
+   const years = Math.floor(diff / (1000 * 60 * 60 * 24 * 365));
+   const months = Math.floor((diff % (1000 * 60 * 60 * 24 * 365)) / (1000 * 60 * 60 * 24 * 30));
+   const days = Math.floor((diff % (1000 * 60 * 60 * 24 * 30)) / (1000 * 60 * 60 * 24));
+   const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+   const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+   const secs = Math.floor((diff % (1000 * 60)) / 1000);
+
+   container.innerHTML = `
+     <div class="tc-time-unit"><div class="tc-time-val">${years}</div><div class="tc-time-lbl">Yrs</div></div>
+     <div class="tc-time-unit"><div class="tc-time-val">${months}</div><div class="tc-time-lbl">Mths</div></div>
+     <div class="tc-time-unit"><div class="tc-time-val">${days}</div><div class="tc-time-lbl">Days</div></div>
+     <div class="tc-time-unit"><div class="tc-time-val">${hours}</div><div class="tc-time-lbl">Hrs</div></div>
+     <div class="tc-time-unit"><div class="tc-time-val">${mins}</div><div class="tc-time-lbl">Min</div></div>
+     <div class="tc-time-unit"><div class="tc-time-val">${secs}</div><div class="tc-time-lbl">Sec</div></div>
+   `;
+   status.innerText = "🔒 Time Capsule Sealed & Ticking...";
+ }
+
+ return { init, startLiveTicker };
+})();
+
+function saveTimeCapsule() {
+ const date = document.getElementById('tcDate').value;
+ const msg = document.getElementById('tcMsg').value;
+ if (!date || !msg) { showToast("Please select unlock date and enter message!"); return; }
+
+ localStorage.setItem('time_capsule_data', JSON.stringify({ date, msg, sealedAt: new Date().toLocaleString() }));
+ showToast("Time Capsule Sealed Successfully!");
+ recordOwnerResponse('Time Capsule Sealed', `Sealed until ${date}`);
+ TimeCapsuleEnhancer.startLiveTicker();
+}
+
+function addGuestbookEntry() {
+ const name = document.getElementById('gbName').value || 'Anonymous';
+ const msg = document.getElementById('gbMsg').value;
+ if (!msg) { showToast("Please write a wish!"); return; }
+
+ SakuraWishTree.addWish(name, msg);
+ recordOwnerResponse('Wish Note Posted', `${name}: "${msg}"`);
+ showToast("Wish posted to the Sakura Tree!");
+ document.getElementById('gbMsg').value = '';
+}
+
+/* ======================================================================
+ INITIALIZATION HOOKS
+ ====================================================================== 
+*/
+window.addEventListener('DOMContentLoaded', () => {
+ renderBouquet();
+ renderPinterestGrid();
+ renderTvScreen();
+ SakuraWishTree.init();
+ BackgroundMusicManager.init();
+ updateUnreadResponseBadge();
+ TimeCapsuleEnhancer.init();
+});
+</script>
+<!-- Append after all your existing JS scripts -->
+<script src="premium-features/dynamic-background.js"></script>
+<script src="premium-features/sound-engine.js"></script>
+<script src="premium-features/guide-character.js"></script>
+<script src="premium-features/bg-music-library.js"></script>
+<script src="premium-features/cinematic-chapters.js"></script>
+<script src="premium-features/gift-box-enhancer.js"></script>
+<script src="premium-features/mini-game-enhancer.js"></script>
+<script src="premium-features/email-notifications.js"></script>
+<script src="premium-features/owner-settings-panel.js"></script>
+
+<script>
+  // Initialize all features once DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    window.PremiumSuite.init();
+  });
+</script>
 </body>
 </html>

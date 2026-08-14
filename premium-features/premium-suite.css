@@ -1,8 +1,7 @@
 /* ==========================================================================
-   PREMIUM SUITE MASTER STYLESHEET
+   HIGH-TECH GLASSMORPHISM & 3D SUITE STYLES
    ========================================================================== */
 
-/* --- Feature 1: Dynamic Background Overlays --- */
 #premiumBgCanvas {
   position: fixed;
   top: 0;
@@ -13,31 +12,23 @@
   z-index: 0;
 }
 
-.premium-bg-video {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  object-fit: cover;
-  z-index: -1;
-  opacity: 0.85;
-  transition: opacity 1s ease;
-}
-
-/* --- Feature 3: Interactive Guide Character --- */
+/* --- Interactive Mascot Guide (High-Tech Floating HUD) --- */
 #premiumGuideContainer {
   position: fixed;
-  bottom: 25px;
-  left: 25px;
+  bottom: 30px;
+  left: 30px;
   z-index: 9000;
   display: flex;
   flex-direction: column;
   align-items: center;
-  pointer-events: auto;
   user-select: none;
-  transition: transform 0.15s ease-out, filter 0.3s ease;
   cursor: grab;
+  filter: drop-shadow(0 12px 24px rgba(0, 0, 0, 0.25));
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#premiumGuideContainer:hover {
+  transform: translateY(-5px) scale(1.03);
 }
 
 #premiumGuideContainer:active {
@@ -46,24 +37,23 @@
 
 .premium-guide-speech {
   position: absolute;
-  bottom: 110%;
+  bottom: 115%;
   left: 50%;
   transform: translateX(-50%) translateY(10px);
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(12px);
-  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.8));
-  color: var(--text-main, #333);
-  padding: 0.75rem 1.1rem;
-  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(16px) saturate(180%);
+  -webkit-backdrop-filter: blur(16px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: #f8fafc;
+  padding: 0.85rem 1.25rem;
+  border-radius: 20px;
   font-size: 0.88rem;
   font-weight: 600;
   white-space: nowrap;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease, transform 0.3s ease;
-  max-width: 260px;
-  text-align: center;
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .premium-guide-speech.visible {
@@ -79,26 +69,20 @@
   transform: translateX(-50%);
   border-width: 8px;
   border-style: solid;
-  border-color: rgba(255, 255, 255, 0.95) transparent transparent transparent;
+  border-color: rgba(15, 23, 42, 0.75) transparent transparent transparent;
 }
 
 .premium-guide-avatar {
-  width: 90px;
-  height: 90px;
-  filter: drop-shadow(0 8px 16px rgba(0,0,0,0.2));
-  transition: transform 0.3s ease;
-}
-
-.premium-guide-avatar:hover {
-  transform: scale(1.08);
+  width: 95px;
+  height: 95px;
+  animation: floatHUD 4s ease-in-out infinite alternate;
 }
 
 .premium-guide-controls {
   position: absolute;
-  top: -12px;
-  right: -12px;
+  top: -8px;
+  right: -8px;
   display: none;
-  gap: 4px;
 }
 
 #premiumGuideContainer:hover .premium-guide-controls {
@@ -106,156 +90,45 @@
 }
 
 .premium-guide-btn {
-  width: 22px;
-  height: 22px;
+  width: 24px;
+  height: 24px;
   border-radius: 50%;
-  background: rgba(0,0,0,0.65);
+  background: rgba(239, 68, 68, 0.85);
   color: #fff;
   border: none;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.4);
 }
 
-/* --- Feature 5: Cinematic Chapter Overlay --- */
-#premiumCinematicOverlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: radial-gradient(circle at center, rgba(15,23,42,0.92) 0%, rgba(0,0,0,0.98) 100%);
-  z-index: 99999;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.6s ease;
-  color: #fff;
-  text-align: center;
-  padding: 2rem;
+/* --- High-Tech Animations --- */
+@keyframes floatHUD {
+  0% { transform: translateY(0px) rotate(0deg); }
+  100% { transform: translateY(-8px) rotate(2deg); }
 }
 
-#premiumCinematicOverlay.active {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.cinematic-badge {
-  font-size: 0.85rem;
-  letter-spacing: 4px;
-  text-transform: uppercase;
-  color: var(--accent, #ffd166);
-  margin-bottom: 1rem;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: cinematicFadeUp 0.8s 0.2s forwards;
-}
-
-.cinematic-title {
-  font-family: var(--font-heading, serif);
-  font-size: clamp(2.2rem, 6vw, 4rem);
-  font-weight: 700;
-  margin-bottom: 0.8rem;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: cinematicFadeUp 0.8s 0.4s forwards;
-  background: linear-gradient(135deg, #ffffff, #f0c27b);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
-
-.cinematic-subtitle {
-  font-family: var(--font-handwriting, cursive);
-  font-size: clamp(1.4rem, 4vw, 2.2rem);
-  color: var(--primary-light, #ff758f);
-  margin-bottom: 2rem;
-  opacity: 0;
-  transform: translateY(20px);
-  animation: cinematicFadeUp 0.8s 0.6s forwards;
-}
-
-.cinematic-skip-btn {
-  position: absolute;
-  bottom: 40px;
-  padding: 0.6rem 1.4rem;
-  border-radius: 30px;
-  background: rgba(255,255,255,0.15);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: #fff;
-  font-size: 0.85rem;
-  cursor: pointer;
-  backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
-}
-
-.cinematic-skip-btn:hover {
-  background: rgba(255,255,255,0.3);
-  transform: scale(1.05);
-}
-
-@keyframes cinematicFadeUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* --- Feature 6: Enhanced Gift Box Animations --- */
-.gift-box.premium-glowing {
-  animation: giftPulseGlow 2s infinite alternate, giftFloat 3s ease-in-out infinite alternate !important;
-}
-
-.gift-box.premium-shaking {
-  animation: giftShake 0.5s ease-in-out infinite !important;
-}
-
-@keyframes giftPulseGlow {
-  0% { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.4)); }
-  100% { filter: drop-shadow(0 0 30px rgba(255, 215, 0, 0.9)); }
-}
-
-@keyframes giftShake {
-  0%, 100% { transform: rotate(0deg) scale(1.05); }
-  20% { transform: rotate(-6deg) scale(1.07); }
-  40% { transform: rotate(6deg) scale(1.07); }
-  60% { transform: rotate(-4deg) scale(1.06); }
-  80% { transform: rotate(4deg) scale(1.06); }
-}
-
-/* --- Feature 7: Mini-Game HUD Overlay --- */
+/* --- Mini-Game High-Tech HUD --- */
 .premium-game-hud {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgba(0, 0, 0, 0.05);
-  border-radius: 12px;
-  padding: 0.6rem 1rem;
-  margin-bottom: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 0.75rem 1.25rem;
+  margin-bottom: 1.25rem;
   font-weight: 600;
-  font-size: 0.9rem;
+  color: #ffffff;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
 }
 
 .premium-game-score {
-  color: var(--primary, #e63946);
-  font-size: 1.1rem;
-}
-
-/* --- Feature 10: Owner Settings Injection --- */
-.premium-settings-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1rem;
-  margin-top: 1rem;
-}
-
-.premium-settings-card {
-  background: rgba(0,0,0,0.02);
-  border: 1px solid rgba(0,0,0,0.08);
-  border-radius: 12px;
-  padding: 1rem;
+  color: #ff4d6d;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-shadow: 0 0 10px rgba(255, 77, 109, 0.5);
 }

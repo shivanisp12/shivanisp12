@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
 <title>CelebrationVerse - Enterprise Interactive Celebration Experience</title>
-<meta name="description" content="A dreamy, romantic, interactive digital celebration experience with Sakura Wish Tree, Piano, Games, and Document Generators." />
+<meta name="description" content="A dreamy, romantic, interactive digital celebration experience with Sakura Wish Tree, Piano, and Document Generators." />
 <!-- Fonts & External Standard Libraries -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,6 +26,7 @@
   --glass-shadow: 0 12px 32px 0 rgba(230, 57, 70, 0.12); --gold-glow: rgba(255, 183, 3, 0.4);
   --radius-lg: 24px; --radius-md: 16px; --radius-sm: 8px;
   --transition-smooth: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --custom-bg-image: none;
 }
 [data-theme="lavender-moon"] {
   --bg-grad-start: #1a1829; --bg-grad-end: #3b2d54; --primary: #b5e2fa; --primary-light: #c8b6ff; 
@@ -147,12 +148,17 @@
   --card-bg: rgba(255, 255, 255, 0.92); --card-border: rgba(203, 213, 225, 0.8);
   --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.1);
 }
+
 /* Reset & Base Styles */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
 body {
   font-family: var(--font-body);
   background: linear-gradient(135deg, var(--bg-grad-start), var(--bg-grad-end));
+  background-image: var(--custom-bg-image);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
@@ -160,6 +166,7 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
+
 /* Canvas Overlays */
 #bgCanvas, #fxCanvas {
   position: fixed;
@@ -169,6 +176,7 @@ body {
   z-index: 1;
 }
 #fxCanvas { z-index: 9999; }
+
 /* Universal Typography & UI Elements */
 h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height: 1.2; }
 .handwriting { font-family: var(--font-handwriting); }
@@ -217,6 +225,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
   padding: 0; border-radius: 50%;
   display: inline-flex; align-items: center; justify-content: center;
 }
+
 /* Fixed Navigation Bar */
 #mainNav {
   position: fixed;
@@ -253,6 +262,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
   background: var(--primary);
   color: #fff;
 }
+
 /* Top Controls Floating Right */
 #quickControls {
   position: fixed;
@@ -261,19 +271,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
   display: flex;
   gap: 0.5rem;
 }
-/* Preview Mode Banner */
-#previewBanner {
-  display: none;
-  position: fixed; top: 0; left: 0; width: 100%;
-  background: #000; color: #fff;
-  text-align: center; padding: 0.4rem 1rem;
-  font-size: 0.85rem; font-weight: 600;
-  z-index: 10000;
-}
-#previewBanner button {
-  margin-left: 1rem; padding: 0.2rem 0.6rem;
-  border-radius: 4px; border: none; cursor: pointer;
-}
+
 /* Chapters Container & Layout */
 main { position: relative; z-index: 2; width: 100%; }
 .chapter-section {
@@ -306,6 +304,7 @@ main { position: relative; z-index: 2; width: 100%; }
   text-align: center;
   margin-bottom: 2.5rem;
 }
+
 /* CHAPTER 1: INTRO */
 #intro { text-align: center; justify-content: center; min-height: 100vh; }
 .intro-badge {
@@ -333,6 +332,7 @@ main { position: relative; z-index: 2; width: 100%; }
   margin: 0 auto 2.5rem auto;
   color: var(--text-muted);
 }
+
 /* CHAPTER 2: GIFT BOX */
 .gift-container {
   perspective: 1000px;
@@ -398,6 +398,7 @@ main { position: relative; z-index: 2; width: 100%; }
   margin-top: 2rem;
   animation: popin 0.6s var(--transition-smooth) forwards;
 }
+
 /* CHAPTER 3: BOUQUET */
 .bouquet-wrapper {
   display: flex;
@@ -453,6 +454,7 @@ main { position: relative; z-index: 2; width: 100%; }
   pointer-events: none; z-index: 10;
 }
 .flower-item.bloomed .flower-note-pop { opacity: 1; transform: translateY(0); }
+
 /* CHAPTER 4: ENVELOPE + LETTER */
 .letter-stage {
   perspective: 1200px;
@@ -515,6 +517,7 @@ main { position: relative; z-index: 2; width: 100%; }
   font-family: var(--font-body);
   font-size: 0.9rem;
 }
+
 /* CHAPTER 5: MEMORIES */
 .memory-carousel {
   width: 100%; max-width: 800px;
@@ -567,7 +570,8 @@ main { position: relative; z-index: 2; width: 100%; }
 }
 .floating-photo:active { cursor: grabbing; box-shadow: 0 12px 30px rgba(0,0,0,0.25); z-index: 100 !important; }
 .floating-photo img { width: 100%; height: 100px; object-fit: cover; }
-/* PINTEREST GALLERY */
+
+/* CHAPTER 6: PINTEREST GALLERY */
 .pinterest-grid {
   column-count: 3;
   column-gap: 1.2rem;
@@ -591,7 +595,8 @@ main { position: relative; z-index: 2; width: 100%; }
 .pin-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
 .pin-card img { width: 100%; height: auto; display: block; border-radius: var(--radius-md) var(--radius-md) 0 0; }
 .pin-caption { padding: 0.8rem 1rem; font-size: 0.95rem; font-weight: 600; text-align: left; }
-/* RETRO TV SCREEN */
+
+/* CHAPTER 7: RETRO TV */
 .retro-tv-wrapper {
   position: relative;
   width: 100%;
@@ -649,7 +654,8 @@ main { position: relative; z-index: 2; width: 100%; }
   transition: transform 0.3s ease;
 }
 .tv-knob:active { transform: rotate(45deg); }
-/* CHAPTER 6: TIMELINE & COUNTDOWN */
+
+/* CHAPTER 8: TIMELINE & COUNTDOWN */
 .timeline-container {
   position: relative;
   max-width: 750px;
@@ -694,7 +700,8 @@ main { position: relative; z-index: 2; width: 100%; }
 }
 .count-num { font-size: 2.2rem; font-weight: 700; color: var(--primary); line-height: 1; }
 .count-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-top: 0.3rem; }
-/* CHAPTER 7: ARCADE GAMES HUB */
+
+/* CHAPTER 9: ARCADE GAMES HUB */
 .games-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem;
@@ -733,24 +740,8 @@ main { position: relative; z-index: 2; width: 100%; }
   position: absolute; top: 1rem; right: 1rem;
   font-size: 1.5rem; cursor: pointer; border: none; background: none; color: #666;
 }
-.memory-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.6rem;
-  margin-top: 1rem;
-}
-.memory-tile {
-  aspect-ratio: 1;
-  background: var(--primary-light);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.8rem;
-  cursor: pointer;
-  user-select: none;
-  transition: transform 0.3s;
-}
-.memory-tile.flipped { background: #fff; transform: rotateY(180deg); }
-/* CHAPTER 8: SAKURA WISH TREE & WISH NOTE */
+
+/* CHAPTER 10: SAKURA TREE */
 .tree-canvas-wrap {
   width: 100%; max-width: 800px; height: 500px;
   position: relative; margin: 0 auto;
@@ -760,24 +751,34 @@ main { position: relative; z-index: 2; width: 100%; }
   background: radial-gradient(circle, rgba(255,240,245,0.9), rgba(252,213,206,0.6));
 }
 #treeCanvas { width: 100%; height: 100%; display: block; }
+#sakuraCanvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 3;
+}
 .wish-note-container {
   width: 100%; max-width: 800px;
   margin: 2rem auto 0 auto;
 }
-/* CHAPTER 9: TIME CAPSULE & NOTE */
+
+/* CHAPTER 11: TIME CAPSULE */
 .time-capsule-card {
   max-width: 800px;
   margin: 2rem auto 0 auto;
   width: 100%;
 }
-/* CHAPTER 10: SECRETS */
+
+/* CHAPTER 12: SECRETS VAULT */
 .vault-box { text-align: center; max-width: 450px; margin: 0 auto; }
 .pin-input {
   letter-spacing: 10px; font-size: 2rem; text-align: center;
   width: 180px; padding: 0.5rem; border-radius: 12px;
   border: 2px solid var(--primary-light); margin: 1rem 0;
 }
-/* CHAPTER 11: INVITATION */
+
+/* CHAPTER 13: INVITATION */
 .invite-card {
   background: linear-gradient(135deg, #ffffff, #fffdfa);
   border: 2px solid var(--primary-light);
@@ -796,7 +797,8 @@ main { position: relative; z-index: 2; width: 100%; }
   border-radius: calc(var(--radius-lg) - 6px);
   pointer-events: none;
 }
-/* CHAPTER 12: PLAYFUL PROPOSAL */
+
+/* CHAPTER 14: PLAYFUL PROPOSAL */
 .proposal-wrap {
   text-align: center;
   position: relative; min-height: 320px;
@@ -824,7 +826,8 @@ main { position: relative; z-index: 2; width: 100%; }
   transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   z-index: 10;
 }
-/* CHAPTER 13: PLAYABLE PIANO */
+
+/* CHAPTER 15: PLAYABLE PIANO */
 .piano-section-wrap {
   width: 100%; max-width: 850px;
   margin: 0 auto;
@@ -856,68 +859,47 @@ main { position: relative; z-index: 2; width: 100%; }
 }
 .piano-presets { display: flex; gap: 0.5rem; flex-wrap: wrap; }
 .piano-keyboard-wrapper {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  padding: 10px;
-  background: #0a0a0c;
-  border-radius: 14px;
+  position: relative; display: flex; justify-content: center; align-items: flex-start;
+  padding: 10px; background: #0a0a0c; border-radius: 14px;
   box-shadow: inset 0 10px 20px rgba(0,0,0,0.8);
-  user-select: none;
-  touch-action: manipulation;
-  overflow-x: auto;
+  user-select: none; touch-action: manipulation; overflow-x: auto;
 }
 .piano-keyboard { position: relative; display: flex; height: 220px; }
-.piano-key {
-  cursor: pointer; position: relative;
-  transition: background 0.1s, transform 0.08s ease, box-shadow 0.1s;
-}
+.piano-key { cursor: pointer; position: relative; transition: background 0.1s, transform 0.08s ease; }
 .piano-key.white {
   width: 48px; height: 210px;
   background: linear-gradient(to bottom, #fdfdfd 0%, #e2e2e2 100%);
-  border: 1px solid #bbb;
-  border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;
-  box-shadow: inset 0 -5px 10px rgba(0,0,0,0.15), 0 4px 6px rgba(0,0,0,0.2);
-  z-index: 1;
+  border: 1px solid #bbb; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;
+  box-shadow: inset 0 -5px 10px rgba(0,0,0,0.15), 0 4px 6px rgba(0,0,0,0.2); z-index: 1;
 }
 .piano-key.white:active, .piano-key.white.pressed {
   background: linear-gradient(to bottom, #e0e0e0 0%, #ffffff 100%);
-  transform: translateY(4px);
-  box-shadow: inset 0 -2px 5px rgba(0,0,0,0.2);
+  transform: translateY(4px); box-shadow: inset 0 -2px 5px rgba(0,0,0,0.2);
 }
 .piano-key.black {
   width: 30px; height: 130px;
   background: linear-gradient(to bottom, #333 0%, #000 100%);
-  border-radius: 0 0 5px 5px;
-  margin-left: -15px; margin-right: -15px;
-  z-index: 2;
+  border-radius: 0 0 5px 5px; margin-left: -15px; margin-right: -15px; z-index: 2;
   box-shadow: 2px 3px 8px rgba(0,0,0,0.5);
 }
 .piano-key.black:active, .piano-key.black.pressed {
-  background: linear-gradient(to bottom, #111 0%, #444 100%);
-  transform: translateY(3px);
+  background: linear-gradient(to bottom, #111 0%, #444 100%); transform: translateY(3px);
 }
 .piano-key-label {
-  position: absolute; bottom: 10px; left: 50%;
-  transform: translateX(-50%);
+  position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%);
   font-size: 0.7rem; font-weight: 700; color: #777; pointer-events: none;
 }
 .piano-key.black .piano-key-label { color: #aaa; bottom: 8px; }
 
 /* Modals & Panels */
-#creatorModal, #ownerAuthModal {
-  display: none;
-  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
-  z-index: 3000;
-  align-items: center; justify-content: center;
-  padding: 1.5rem;
+#creatorModal, #ownerAuthModal, #previewModal {
+  display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); z-index: 3000;
+  align-items: center; justify-content: center; padding: 1.5rem;
 }
 .creator-panel {
-  background: #fff; width: 100%; max-width: 750px;
-  max-height: 85vh; overflow-y: auto;
-  border-radius: var(--radius-lg); padding: 2rem;
+  background: #fff; width: 100%; max-width: 800px;
+  max-height: 85vh; overflow-y: auto; border-radius: var(--radius-lg); padding: 2rem;
 }
 .form-group { margin-bottom: 1rem; text-align: left; }
 .form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem; }
@@ -929,38 +911,37 @@ main { position: relative; z-index: 2; width: 100%; }
 .tab-btn { padding: 0.4rem 0.8rem; font-weight: 600; border-radius: 6px; border: none; background: #f0f0f0; cursor: pointer; font-size: 0.85rem; }
 .tab-btn.active { background: var(--primary); color: #fff; }
 .tab-content { display: none; } .tab-content.active { display: block; }
+
+/* Dynamic Upload List Items */
+.media-item-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0.5rem; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; margin-bottom: 0.5rem;
+}
+
+/* Toast Notification */
 #toast {
-  position: fixed; bottom: 25px; left: 50%;
-  transform: translateX(-50%) translateY(100px);
-  background: var(--text-main); color: #fff;
-  padding: 0.7rem 1.5rem; border-radius: 30px;
-  font-size: 0.9rem; font-weight: 500;
-  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-  z-index: 9999; opacity: 0;
+  position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(100px);
+  background: var(--text-main); color: #fff; padding: 0.7rem 1.5rem; border-radius: 30px;
+  font-size: 0.9rem; font-weight: 500; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 9999; opacity: 0;
   transition: all 0.4s var(--transition-smooth);
 }
 #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
+/* Keyframes */
 @keyframes pulseGlow { 0% { box-shadow: 0 0 5px var(--gold-glow); } 100% { box-shadow: 0 0 20px var(--gold-glow); } }
 @keyframes giftFloat { 0% { transform: translateY(0); } 100% { transform: translateY(-12px); } }
 @keyframes giftOpen { 0% { transform: scale(1); } 50% { transform: scale(1.1) rotate(5deg); } 100% { transform: scale(0.9); opacity: 0.3; } }
 @keyframes popin { 0% { opacity: 0; transform: scale(0.8) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
 @keyframes paperUnfold { 0% { opacity: 0; transform: scaleY(0.3); } 100% { opacity: 1; transform: scaleY(1); } }
-@media (max-width: 640px) {
-  .chapter-section { padding-top: 5rem; }
-  .countdown-grid { grid-template-columns: repeat(2, 1fr); }
-  #mainNav { bottom: 15px; top: auto; }
-}
 </style>
 </head>
 <body>
-<div id="previewBanner">
-  👀 PREVIEW MODE ACTIVE — Previewing Recipient View Experience
-  <button onclick="togglePreviewMode(false)">Exit Preview</button>
-</div>
+
+<!-- Background Canvas Overlays -->
 <canvas id="bgCanvas"></canvas>
 <canvas id="fxCanvas"></canvas>
 
+<!-- Sticky Navigation Bar -->
 <nav id="mainNav" aria-label="Main Navigation">
   <a class="nav-link active" onclick="scrollToSection('intro')">Intro</a>
   <a class="nav-link" onclick="scrollToSection('gift')">Gift</a>
@@ -978,14 +959,16 @@ main { position: relative; z-index: 2; width: 100%; }
   <a class="nav-link" onclick="scrollToSection('piano')">Piano</a>
 </nav>
 
+<!-- Top Quick Controls Floating Bar -->
 <div id="quickControls">
   <button class="btn btn-secondary btn-icon" id="btnAudioToggle" title="Audio Options & Synth" onclick="cycleAudioPreset()">🎵</button>
   <button class="btn btn-secondary btn-icon" title="Cycle Themes (21 Available)" onclick="cycleTheme()">🎨</button>
   <button class="btn btn-secondary btn-icon" title="Export as PDF Document" onclick="exportPDFDocument()">📄</button>
   <button class="btn btn-secondary btn-icon" title="Export as Word (.docx) Document" onclick="exportWordDocument()">📝</button>
-  <button class="btn btn-secondary btn-icon owner-only-btn" id="btnOwnerModal" title="Customize Experience (Owner Only)" onclick="openCreatorModal()">⚙️</button>
+  <button class="btn btn-secondary btn-icon" id="btnOwnerSettings" title="Customize Experience (Owner Only)" onclick="openCreatorModal()">⚙️</button>
 </div>
 
+<!-- Main Narrative Container -->
 <main>
   <!-- CHAPTER 1: INTRO -->
   <section id="intro" class="chapter-section visible">
@@ -998,7 +981,7 @@ main { position: relative; z-index: 2; width: 100%; }
     </button>
   </section>
 
-  <!-- CHAPTER 2: GIFT BOX -->
+  <!-- CHAPTER 2: INTERACTIVE GIFT BOX -->
   <section id="gift" class="chapter-section">
     <h2 class="section-title">A Special Surprise</h2>
     <p class="section-subtitle">Tap the golden ribbon to untie the present</p>
@@ -1017,10 +1000,10 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- CHAPTER 3: BOUQUET -->
+  <!-- CHAPTER 3: FLORAL BOUQUET -->
   <section id="bouquet" class="chapter-section">
     <h2 class="section-title">Interactive Floral Bouquet</h2>
-    <p class="section-subtitle">Click on each blossom to reveal sweet hidden messages</p>
+    <p class="section-subtitle">Click on each distinctive blossom to reveal sweet hidden messages</p>
     <div class="bouquet-wrapper" id="flowerContainer"></div>
   </section>
 
@@ -1045,14 +1028,14 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- CHAPTER 5: MEMORIES -->
+  <!-- CHAPTER 5: MEMORIES CAROUSEL & DRAGGABLE PHOTO WALL -->
   <section id="memories" class="chapter-section">
     <h2 class="section-title">Treasured Memories</h2>
     <p class="section-subtitle">Snapshots of our favorite chapters</p>
     <div class="memory-carousel">
       <div class="polaroid-card">
         <img src="" id="memoryImg" class="polaroid-img" alt="Memory photo" />
-        <p class="polaroid-caption" id="memoryCaption"></p>
+        <p class="polaroid-caption" id="memoryCaption">Our first spontaneous trip</p>
       </div>
       <div style="display: flex; justify-content:center; gap: 1rem; margin-top:1rem;">
         <button class="btn btn-secondary btn-icon" onclick="changeMemory(-1)">&lt;</button>
@@ -1060,21 +1043,21 @@ main { position: relative; z-index: 2; width: 100%; }
       </div>
     </div>
     <h3 style="margin-top:3rem; font-size: 1.4rem;">Interactive Photo Wall</h3>
-    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1rem;">Drag photos anywhere on the wall!</p>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1rem;">Drag Polaroid photos anywhere on the wall!</p>
     <div class="photo-wall" id="photoWall"></div>
   </section>
 
-  <!-- CHAPTER 6: PINTEREST GALLERY -->
+  <!-- CHAPTER 6: PINTEREST AESTHETIC GRID -->
   <section id="pinterest" class="chapter-section">
     <h2 class="section-title">Pinterest Gallery</h2>
     <p class="section-subtitle">Aesthetic memory collage board</p>
     <div class="pinterest-grid" id="pinterestGrid"></div>
   </section>
 
-  <!-- CHAPTER 7: RETRO TV -->
+  <!-- CHAPTER 7: RETRO TV SCREEN -->
   <section id="retrotv" class="chapter-section">
     <h2 class="section-title">Retro TV Experience</h2>
-    <p class="section-subtitle">Watch video memories & big screen photos</p>
+    <p class="section-subtitle">Watch warm video memories & big screen photos</p>
     <div class="retro-tv-wrapper">
       <div class="tv-screen-frame" id="tvScreenFrame">
         <div class="tv-scanlines"></div>
@@ -1090,7 +1073,7 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- CHAPTER 8: TIMELINE & COUNTDOWN -->
+  <!-- CHAPTER 8: TIMELINE & REAL-TIME COUNTDOWN -->
   <section id="timeline" class="chapter-section">
     <h2 class="section-title">Milestones & Countdown</h2>
     <p class="section-subtitle">Counting down to our next big celebration</p>
@@ -1103,7 +1086,7 @@ main { position: relative; z-index: 2; width: 100%; }
     <div class="timeline-container" id="timelineList" style="margin-top:3rem;"></div>
   </section>
 
-  <!-- CHAPTER 9: CELEBRATION ARCADE HUB (VERSION 5.0 GAMES MODEL INTEGRATED) -->
+  <!-- CHAPTER 9: CELEBRATION ARCADE HUB -->
   <section id="games" class="chapter-section">
     <h2 class="section-title">Celebration Arcade</h2>
     <p class="section-subtitle">Play interactive mini-games to unlock secret rewards</p>
@@ -1121,17 +1104,18 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- CHAPTER 10: REALISTIC SAKURA WISH TREE -->
+  <!-- CHAPTER 10: SAKURA WISH TREE -->
   <section id="tree" class="chapter-section">
     <h2 class="section-title">Sakura Wish Tree</h2>
     <p class="section-subtitle">Hang your heartfelt wish on a blooming cherry blossom branch</p>
     <div class="tree-canvas-wrap">
       <canvas id="treeCanvas"></canvas>
+      <canvas id="sakuraCanvas"></canvas>
     </div>
     <div class="wish-note-container">
       <div class="glass-card">
         <h3>Write a Wish Note</h3>
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Your note will hang on a Sakura branch and sway softly in the breeze.</p>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Your note will be hung on a thread from a Sakura branch and sway softly in the breeze.</p>
         <div style="display: flex; flex-direction:column; gap:0.8rem;">
           <textarea id="wishMsgInput" placeholder="Type your sweet wish or message here..." class="form-control" rows="3"></textarea>
           <button class="btn" onclick="submitWishNote()">Hang Wish on Sakura Tree ✨</button>
@@ -1142,7 +1126,7 @@ main { position: relative; z-index: 2; width: 100%; }
 
   <!-- CHAPTER 11: TIME CAPSULE -->
   <section id="capsule" class="chapter-section">
-    <h2 class="section-title">Time Capsule</h2>
+    <h2 class="section-title">Wish Tree Note & Time Capsule</h2>
     <p class="section-subtitle">Seal a secret message for future unlocking</p>
     <div class="glass-card time-capsule-card">
       <h3>Future Time Capsule</h3>
@@ -1165,7 +1149,7 @@ main { position: relative; z-index: 2; width: 100%; }
       <input type="password" maxlength="4" class="pin-input" id="vaultPin" placeholder="...." />
       <br>
       <button class="btn" onclick="unlockVault()">Unlock Vault</button>
-      <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem;" id="vaultHint">Hint: Anniversary year (e.g. 2024)</p>
+      <p style="font-size:0.8rem; color:var(--text-muted); margin-top:1rem;" id="vaultHint">Hint: The year we first met or anniversary year (e.g. 2024)</p>
     </div>
   </section>
 
@@ -1222,6 +1206,7 @@ main { position: relative; z-index: 2; width: 100%; }
             <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="playPianoPreset('birthday')">Happy Birthday</button>
             <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="playPianoPreset('celebration')">Celebration</button>
             <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="playPianoPreset('romantic')">Romantic</button>
+            <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="playPianoPreset('relaxing')">Soft Melody</button>
             <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem; color:#ef4444;" onclick="stopPianoPreset()">Stop</button>
           </div>
         </div>
@@ -1233,7 +1218,7 @@ main { position: relative; z-index: 2; width: 100%; }
   </section>
 </main>
 
-<!-- Modals -->
+<!-- Interactive Game Modal Container -->
 <div class="game-modal" id="gameModal">
   <div class="game-modal-content">
     <button class="close-modal" onclick="closeGameModal()">×</button>
@@ -1241,11 +1226,12 @@ main { position: relative; z-index: 2; width: 100%; }
   </div>
 </div>
 
+<!-- Owner Authentication Modal -->
 <div id="ownerAuthModal">
   <div class="creator-panel" style="max-width:400px; text-align:center;">
     <h3>🔒 Owner Authentication</h3>
-    <p style="font-size:0.85rem; color:var(--text-muted); margin: 0.8rem 0;">Enter Owner Passcode to edit site content.</p>
-    <input type="password" id="ownerPasscodePrompt" class="form-control" placeholder="Passcode" style="text-align:center; font-size:1.2rem; margin-bottom:1rem;" />
+    <p style="font-size:0.85rem; color:var(--text-muted); margin: 0.8rem 0;">Enter Owner Security Passcode to edit site content.</p>
+    <input type="password" id="ownerPasscodePrompt" class="form-control" placeholder="Enter Owner Passcode" style="text-align:center; font-size:1.2rem; margin-bottom:1rem;" />
     <div style="display: flex; gap:0.5rem; justify-content:center;">
       <button class="btn" onclick="verifyOwnerAccess()">Unlock Settings</button>
       <button class="btn btn-secondary" onclick="closeOwnerAuthModal()">Cancel</button>
@@ -1253,64 +1239,111 @@ main { position: relative; z-index: 2; width: 100%; }
   </div>
 </div>
 
+<!-- Creator Control Center Modal -->
 <div id="creatorModal">
   <div class="creator-panel">
     <div style="display: flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-      <h2>⚙️ Owner Customization Dashboard</h2>
+      <h2>⚙️ Owner Control Center</h2>
       <button class="close-modal" onclick="closeCreatorModal()">×</button>
     </div>
+    
     <div class="tab-btn-group">
       <button class="tab-btn active" onclick="switchCreatorTab('tabGeneral')">General</button>
       <button class="tab-btn" onclick="switchCreatorTab('tabSurprises')">Letter & Gift</button>
-      <button class="tab-btn" onclick="switchCreatorTab('tabBouquet')">Bouquet & Photos</button>
       <button class="tab-btn" onclick="switchCreatorTab('tabUploads')">Media Uploads</button>
       <button class="tab-btn" onclick="switchCreatorTab('tabTimeline')">Timeline & RSVP</button>
       <button class="tab-btn" onclick="switchCreatorTab('tabSecrets')">Vault & Quiz</button>
-      <button class="tab-btn" onclick="switchCreatorTab('tabRecipient')">Website Generation</button>
+      <button class="tab-btn" onclick="switchCreatorTab('tabWebsite')">Recipient Links</button>
+      <button class="tab-btn" onclick="switchCreatorTab('tabResponses')">Responses</button>
     </div>
+
+    <!-- TAB 1: General & Intro -->
     <div id="tabGeneral" class="tab-content active">
       <div class="form-group"><label>Recipient Name</label><input type="text" id="edtRecipient" class="form-control" /></div>
       <div class="form-group"><label>Sender Name</label><input type="text" id="edtSender" class="form-control" /></div>
       <div class="form-group"><label>Occasion Tag</label><input type="text" id="edtOccasion" class="form-control" /></div>
       <div class="form-group"><label>Intro Heading Text</label><input type="text" id="edtIntroHeading" class="form-control" /></div>
       <div class="form-group"><label>Main Intro Message</label><textarea id="edtMainMessage" class="form-control" rows="2"></textarea></div>
+      <div class="form-group"><label>Proposal Question</label><input type="text" id="edtProposalQuestion" class="form-control" /></div>
     </div>
+
+    <!-- TAB 2: Surprises & Letter -->
     <div id="tabSurprises" class="tab-content">
       <div class="form-group"><label>Gift Box Title</label><input type="text" id="edtGiftTitle" class="form-control" /></div>
       <div class="form-group"><label>Gift Box Text</label><textarea id="edtGiftText" class="form-control" rows="2"></textarea></div>
-      <div class="form-group"><label>Love Letter Pages (JSON Array)</label><textarea id="edtLetterPages" class="form-control" rows="4"></textarea></div>
+      <div class="form-group"><label>Love Letter Pages (JSON Array format)</label><textarea id="edtLetterPages" class="form-control" rows="4"></textarea></div>
     </div>
-    <div id="tabBouquet" class="tab-content">
-      <div class="form-group"><label>Flower Messages (JSON)</label><textarea id="edtFlowers" class="form-control" rows="4"></textarea></div>
-      <div class="form-group"><label>Memories Carousel (JSON)</label><textarea id="edtMemories" class="form-control" rows="4"></textarea></div>
-    </div>
+
+    <!-- TAB 3: Local Device Uploads & Media -->
     <div id="tabUploads" class="tab-content">
+      <h4 style="margin-bottom:0.5rem; color:var(--primary);">Upload Local Device Media</h4>
+      <p style="font-size:0.8rem; color:var(--text-muted); margin-bottom:1rem;">Select files from your local device browser to display on the recipient's website.</p>
+      
       <div class="form-group">
-        <label>Upload Memory / Photo (Local Device Browser)</label>
-        <input type="file" accept="image/*" class="form-control" onchange="uploadLocalMedia(event, 'memory')" />
+        <label>Upload Polaroid Memory Photos</label>
+        <input type="file" id="uplMemoryPhotos" accept="image/*" multiple class="form-control" onchange="handleFileUpload(event, 'photos')" />
       </div>
       <div class="form-group">
-        <label>Upload Retro TV Video / Image (Local Device)</label>
-        <input type="file" accept="video/*,image/*" class="form-control" onchange="uploadLocalMedia(event, 'tv')" />
+        <label>Upload Retro TV Videos</label>
+        <input type="file" id="uplRetroVideos" accept="video/*" multiple class="form-control" onchange="handleFileUpload(event, 'videos')" />
       </div>
+      <div class="form-group">
+        <label>Upload Custom Background Music (Audio)</label>
+        <input type="file" id="uplAudioTrack" accept="audio/*" class="form-control" onchange="handleFileUpload(event, 'music')" />
+      </div>
+      <div class="form-group">
+        <label>Upload Custom Page Background Image</label>
+        <input type="file" id="uplBgImage" accept="image/*" class="form-control" onchange="handleFileUpload(event, 'background')" />
+      </div>
+
+      <h4 style="margin-top:1.5rem; margin-bottom:0.5rem;">Uploaded Media Files</h4>
+      <div id="uploadedMediaList" style="max-height:180px; overflow-y:auto;"></div>
     </div>
+
+    <!-- TAB 4: Timeline & RSVP -->
     <div id="tabTimeline" class="tab-content">
-      <div class="form-group"><label>Countdown Date (e.g. 2026-10-14T19:00:00)</label><input type="text" id="edtCountdown" class="form-control" /></div>
-      <div class="form-group"><label>Timeline Items (JSON)</label><textarea id="edtTimeline" class="form-control" rows="4"></textarea></div>
+      <div class="form-group"><label>Target Countdown ISO Date</label><input type="text" id="edtCountdown" class="form-control" /></div>
+      <div class="form-group"><label>Timeline Items (JSON Array)</label><textarea id="edtTimeline" class="form-control" rows="4"></textarea></div>
       <div class="form-group"><label>RSVP Event Title</label><input type="text" id="edtEventTitle" class="form-control" /></div>
+      <div class="form-group"><label>RSVP Event Date</label><input type="text" id="edtEventDate" class="form-control" /></div>
+      <div class="form-group"><label>RSVP Event Time</label><input type="text" id="edtEventTime" class="form-control" /></div>
+      <div class="form-group"><label>RSVP Venue</label><input type="text" id="edtVenue" class="form-control" /></div>
     </div>
+
+    <!-- TAB 5: Vault & Security -->
     <div id="tabSecrets" class="tab-content">
       <div class="form-group"><label>Secret Vault 4-Digit PIN</label><input type="text" id="edtPin" maxlength="4" class="form-control" /></div>
-      <div class="form-group"><label>Secret Vault Message</label><input type="text" id="edtSecretMsg" class="form-control" /></div>
+      <div class="form-group"><label>Secret Vault Unlocked Message</label><input type="text" id="edtSecretMsg" class="form-control" /></div>
+      <div class="form-group"><label>Owner Security Passcode</label><input type="text" id="edtOwnerPasscode" class="form-control" /></div>
     </div>
-    <div id="tabRecipient" class="tab-content">
-      <h3 style="margin-bottom:0.8rem;">🌐 Recipient Link & Standalone Generation</h3>
-      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Generate an independent, ready-to-publish website payload. Controls will be hidden from recipients.</p>
-      <div style="display: flex; gap: 1rem; flex-wrap:wrap;">
-        <button class="btn" onclick="exportRecipientWebsite()">Export Recipient Website (.html)</button>
-        <button class="btn btn-secondary" onclick="togglePreviewMode(true)">Preview Website View</button>
+
+    <!-- TAB 6: Recipient Website Creation & Links -->
+    <div id="tabWebsite" class="tab-content">
+      <h4 style="color:var(--primary); margin-bottom:0.5rem;">Customized Duplicate Recipient Instance</h4>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Generate an independent customized website link with your saved settings for your recipient.</p>
+      
+      <div style="display:flex; gap:0.5rem; flex-wrap:wrap; margin-bottom:1.5rem;">
+        <button class="btn" onclick="saveCreatorConfig()">1. Save Customization</button>
+        <button class="btn btn-secondary" onclick="openPreviewWebsite()">2. Preview Website</button>
+        <button class="btn" style="background:#10b981;" onclick="generateRecipientWebsite()">3. Create Recipient Website Link</button>
+      </div>
+
+      <div id="generatedLinkContainer" style="display:none; padding:1rem; background:#ecfdf5; border:1px solid #10b981; border-radius:12px;">
+        <label style="font-weight:700; color:#047857; font-size:0.85rem;">Unique Recipient Share Link:</label>
+        <div style="display:flex; gap:0.5rem; margin-top:0.5rem;">
+          <input type="text" id="txtUniqueLink" class="form-control" readonly />
+          <button class="btn" style="padding:0.4rem 1rem;" onclick="copyRecipientLink()">Copy Link</button>
+        </div>
       </div>
     </div>
+
+    <!-- TAB 7: Guest Responses -->
+    <div id="tabResponses" class="tab-content">
+      <h4 style="margin-bottom:0.5rem;">Saved RSVPs & Wish Notes</h4>
+      <div id="responsesContainer" style="max-height:220px; overflow-y:auto; background:#f8fafc; padding:1rem; border-radius:12px; border:1px solid #cbd5e1; font-size:0.85rem;"></div>
+      <button class="btn btn-secondary" style="margin-top:1rem;" onclick="clearGuestData()">Clear Saved Data</button>
+    </div>
+
     <div style="display: flex; gap: 1rem; margin-top:1.5rem;">
       <button class="btn" onclick="saveCreatorConfig()">Save Configuration</button>
       <button class="btn btn-secondary" onclick="resetCreatorConfig()">Reset Defaults</button>
@@ -1318,11 +1351,26 @@ main { position: relative; z-index: 2; width: 100%; }
   </div>
 </div>
 
+<!-- Preview Modal Container -->
+<div id="previewModal">
+  <div class="creator-panel" style="max-width:95vw; height:90vh; padding:1rem; display:flex; flex-direction:column;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.5rem;">
+      <h3>👁️ Recipient Experience Preview</h3>
+      <button class="btn btn-secondary" onclick="closePreviewWebsite()">Exit Preview</button>
+    </div>
+    <iframe id="previewFrame" style="width:100%; height:100%; border:none; border-radius:12px;"></iframe>
+  </div>
+</div>
+
+<!-- Toast Notification -->
 <div id="toast">Notification</div>
 
+<!-- JAVASCRIPT APPLICATION CORE -->
 <script>
-/* GLOBAL CONFIGURATION */
-window.CELEBRATION_CONFIG = {
+/* ======================================================================
+ 1. DEFAULT CONFIGURATION & PERSISTENT STORAGE INSTANCE SYSTEM
+ ====================================================================== */
+const DEFAULT_CONFIG = {
   ownerPasscode: "1234",
   recipientName: "Sophia",
   senderName: "Julian",
@@ -1336,361 +1384,910 @@ window.CELEBRATION_CONFIG = {
   vaultSecretMsg: "You are my favorite thought every single day. I love you!",
   eventTitle: "Special Anniversary Dinner",
   eventDesc: "An intimate evening of delicious food, candles, and creating unforgettable memories.",
-  eventDate: "October 14, 2026", eventTime: "7:00 PM EST", venue: "The Starlight Rooftop Garden",
-  countdownTarget: "2026-10-14T19:00:00", theme: "dreamy-pink",
-  wishes: [{ text: "May your life bloom with soft cherry blossoms! ✨" }],
+  eventDate: "October 14, 2026",
+  eventTime: "7:00 PM EST",
+  venue: "The Starlight Rooftop Garden",
+  countdownDate: "2026-10-14T19:00:00",
   letterPages: [
-    "My Dearest Sophia, \n\nFrom the moment you entered my life, every ordinary day has felt like a scene from a magical movie.",
-    "Thank you for every shared smile, late-night conversation, and quiet moment. Building memories with you is my absolute favorite pastime."
+    "Dearest Sophia,\n\nFrom the moment you entered my life, every single day has felt brighter, warmer, and filled with magic.",
+    "Looking back at all our adventures, laughs, and quiet moments, I realize how incredibly lucky I am to share this journey with you.",
+    "Happy Celebration! Here's to making countless more unforgettable memories together."
   ],
   flowers: [
-    { type: "rose", name: "Red Rose", msg: "You bring passion & endless joy to my life" },
-    { type: "tulip", name: "Pink Tulip", msg: "A sweet reminder of how gentle you are" },
-    { type: "lily", name: "White Lily", msg: "Pure happiness whenever you are near" },
-    { type: "orchid", name: "Royal Orchid", msg: "Unique, elegant, and cherished" }
+    { type: "rose", name: "Red Rose", msg: "You bring boundless warmth to my heart." },
+    { type: "sakura", name: "Sakura Blossom", msg: "Soft, beautiful, and rare." },
+    { type: "tulip", name: "Golden Tulip", msg: "Every moment with you is precious." },
+    { type: "lily", name: "White Lily", msg: "Pure happiness whenever you are near." }
   ],
   memories: [
-    { img: "https://picsum.photos/id/1018/600/400", caption: "Our serene walk by the mountain lake" },
-    { img: "https://picsum.photos/id/1025/600/400", caption: "Cozy coffee mornings together" }
+    { img: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=600", caption: "Our First Spontaneous Trip" },
+    { img: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=600", caption: "Starlit Sunset Walk" },
+    { img: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?w=600", caption: "Cozy Coffee Mornings" }
   ],
   pinterestPhotos: [
-    { img: "https://picsum.photos/id/1015/600/800", caption: "Aesthetic sunset vibes" },
-    { img: "https://picsum.photos/id/1025/600/600", caption: "Cozy moments" }
+    { img: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=600", caption: "Golden Hour Glow" },
+    { img: "https://images.unsplash.com/photo-1469371670807-013ccf25f16a?w=600", caption: "Weekend Adventures" },
+    { img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=600", caption: "Endless Smiles" }
   ],
-  retroTvMedia: [
-    { type: "image", src: "https://picsum.photos/id/1018/800/450", title: "Channel 01 - Mountain Lake View" }
+  retroVideos: [
+    { type: "image", url: "https://images.unsplash.com/photo-1518199266791-5375a83190b7?w=800", title: "Memory Reel #1" },
+    { type: "image", url: "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=800", title: "Memory Reel #2" }
   ],
   timeline: [
-    { date: "June 12, 2023", title: "First Met", desc: "A chance meeting that changed everything." },
-    { date: "October 14, 2023", title: "First Official Date", desc: "Coffee turned into a 4-hour walk." }
-  ]
+    { date: "May 12, 2023", title: "First Met", desc: "The day our story began." },
+    { date: "Oct 14, 2023", title: "First Anniversary", desc: "A year of joyful milestones." },
+    { date: "Today", title: "Celebration Day", desc: "Creating new unforgettable memories." }
+  ],
+  uploadedAudio: null,
+  customBgImage: null,
+  activeTheme: "dreamy-pink"
 };
 
-const localCfg = localStorage.getItem('celebration_cfg');
-if (localCfg) { try { Object.assign(window.CELEBRATION_CONFIG, JSON.parse(localCfg)); } catch (e) {} }
+// Application State Handler
+const urlParams = new URLSearchParams(window.location.search);
+const currentInstanceId = urlParams.get('id');
+const isRecipientView = !!currentInstanceId;
 
-let currentLetterPage = 0, currentMemoryIdx = 0, currentTvIdx = 0, audioCtx = null, audioPresetIdx = 0, synthInterval = null, isOwnerAuthenticated = false, presetTimer = null, accMode = false;
+let CELEBRATION_CONFIG = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
 
-/* AUDIO SYNTHESIZER */
-function initAudio() {
+// Load active persistent data
+function loadPersistentData() {
+  if (currentInstanceId) {
+    const savedInstance = localStorage.getItem(`celebration_instance_${currentInstanceId}`);
+    if (savedInstance) {
+      CELEBRATION_CONFIG = JSON.parse(savedInstance);
+    }
+  } else {
+    const savedMaster = localStorage.getItem('celebration_master_config');
+    if (savedMaster) {
+      CELEBRATION_CONFIG = JSON.parse(savedMaster);
+    }
+  }
+}
+loadPersistentData();
+
+/* ======================================================================
+ 2. LOCAL MEDIA UPLOAD ENGINE (Base64 Serialization & LocalStorage)
+ ====================================================================== */
+function handleFileUpload(event, type) {
+  const files = Array.from(event.target.files);
+  if (!files.length) return;
+
+  files.forEach(file => {
+    // Validate file size (max 5MB for LocalStorage safety)
+    if (file.size > 5 * 1024 * 1024) {
+      showToast(`File ${file.name} is larger than 5MB limit.`);
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const dataUrl = e.target.result;
+      if (type === 'photos') {
+        CELEBRATION_CONFIG.memories.push({ img: dataUrl, caption: file.name.split('.')[0] });
+        CELEBRATION_CONFIG.pinterestPhotos.push({ img: dataUrl, caption: file.name.split('.')[0] });
+      } else if (type === 'videos') {
+        CELEBRATION_CONFIG.retroVideos.push({ type: "video", url: dataUrl, title: file.name });
+      } else if (type === 'music') {
+        CELEBRATION_CONFIG.uploadedAudio = dataUrl;
+        showToast("Custom background music loaded!");
+      } else if (type === 'background') {
+        CELEBRATION_CONFIG.customBgImage = dataUrl;
+        document.body.style.setProperty('--custom-bg-image', `url(${dataUrl})`);
+        showToast("Custom background image applied!");
+      }
+      renderUploadedMediaList();
+      saveCreatorConfig(false);
+      renderUI();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderUploadedMediaList() {
+  const listContainer = document.getElementById('uploadedMediaList');
+  if (!listContainer) return;
+  listContainer.innerHTML = '';
+
+  CELEBRATION_CONFIG.memories.forEach((mem, idx) => {
+    if (mem.img.startsWith('data:')) {
+      const div = document.createElement('div');
+      div.className = 'media-item-row';
+      div.innerHTML = `<span>📷 Photo: ${mem.caption}</span><button class="btn btn-secondary" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="removeUploadedMedia('photos', ${idx})">Remove</button>`;
+      listContainer.appendChild(div);
+    }
+  });
+
+  CELEBRATION_CONFIG.retroVideos.forEach((vid, idx) => {
+    if (vid.url.startsWith('data:')) {
+      const div = document.createElement('div');
+      div.className = 'media-item-row';
+      div.innerHTML = `<span>🎥 Video: ${vid.title}</span><button class="btn btn-secondary" style="padding:0.2rem 0.5rem; font-size:0.75rem;" onclick="removeUploadedMedia('videos', ${idx})">Remove</button>`;
+      listContainer.appendChild(div);
+    }
+  });
+}
+
+function removeUploadedMedia(type, index) {
+  if (type === 'photos') CELEBRATION_CONFIG.memories.splice(index, 1);
+  if (type === 'videos') CELEBRATION_CONFIG.retroVideos.splice(index, 1);
+  saveCreatorConfig(false);
+  renderUploadedMediaList();
+  renderUI();
+}
+
+/* ======================================================================
+ 3. CUSTOMIZED DUPLICATE WEBSITE & UNIQUE LINK GENERATOR
+ ====================================================================== */
+function generateRecipientWebsite() {
+  saveCreatorConfig(false);
+  const uniqueId = 'rec_' + Date.now().toString(36) + Math.random().toString(36).substring(2, 6);
+  localStorage.setItem(`celebration_instance_${uniqueId}`, JSON.stringify(CELEBRATION_CONFIG));
+
+  const baseUrl = window.location.origin + window.location.pathname;
+  const uniqueLink = `${baseUrl}?id=${uniqueId}`;
+
+  document.getElementById('txtUniqueLink').value = uniqueLink;
+  document.getElementById('generatedLinkContainer').style.display = 'block';
+  showToast("Customized Recipient Website Created!");
+}
+
+function copyRecipientLink() {
+  const linkInput = document.getElementById('txtUniqueLink');
+  linkInput.select();
+  navigator.clipboard.writeText(linkInput.value);
+  showToast("Recipient link copied to clipboard!");
+}
+
+function openPreviewWebsite() {
+  saveCreatorConfig(false);
+  const previewId = 'preview_temp';
+  localStorage.setItem(`celebration_instance_${previewId}`, JSON.stringify(CELEBRATION_CONFIG));
+  
+  const baseUrl = window.location.origin + window.location.pathname;
+  document.getElementById('previewFrame').src = `${baseUrl}?id=${previewId}`;
+  document.getElementById('previewModal').style.display = 'flex';
+}
+
+function closePreviewWebsite() {
+  document.getElementById('previewModal').style.display = 'none';
+  document.getElementById('previewFrame').src = '';
+}
+
+/* ======================================================================
+ 4. VERSION 5.0 GAMES MODEL REPLACEMENT ENGINE
+ ====================================================================== */
+const CelebrationGamesModel = {
+  activeGame: null,
+  scores: {},
+  
+  initGame(gameId, container) {
+    this.activeGame = gameId;
+    container.innerHTML = '';
+
+    switch(gameId) {
+      case 'scratch':
+        this.renderScratchCard(container);
+        break;
+      case 'match':
+        this.renderMemoryMatch(container);
+        break;
+      case 'wheel':
+        this.renderLuckyWheel(container);
+        break;
+      case 'quiz':
+        this.renderLoveQuiz(container);
+        break;
+      case 'balloon':
+        this.renderBalloonPop(container);
+        break;
+      case 'hearts':
+        this.renderCatchHearts(container);
+        break;
+      case 'puzzle':
+        this.renderPhotoPuzzle(container);
+        break;
+      case 'magic':
+        this.renderMagicReveal(container);
+        break;
+      case 'target':
+        this.renderTargetShooter(container);
+        break;
+      case 'hunt':
+        this.renderTreasureHunt(container);
+        break;
+      default:
+        container.innerHTML = `<p>Game initialized.</p>`;
+    }
+  },
+
+  renderScratchCard(container) {
+    container.innerHTML = `
+      <h3>🎫 Scratch Card Reward</h3>
+      <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Drag over the card to reveal your surprise!</p>
+      <div style="position:relative; width:300px; height:150px; margin:0 auto; user-select:none;">
+        <div style="position:absolute; width:100%; height:100%; background:linear-gradient(135deg, #ff758f, #ffb703); border-radius:12px; display:flex; align-items:center; justify-content:center; text-align:center; padding:1rem; font-weight:bold; color:#fff;">
+          ${CELEBRATION_CONFIG.vaultSecretMsg}
+        </div>
+        <canvas id="scratchCanvas" width="300" height="150" style="position:absolute; top:0; left:0; border-radius:12px; cursor:pointer;"></canvas>
+      </div>
+    `;
+    const canvas = document.getElementById('scratchCanvas');
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#b5b5b5';
+    ctx.fillRect(0, 0, 300, 150);
+    ctx.fillStyle = '#444';
+    ctx.font = '16px sans-serif';
+    ctx.fillText('Scratch Here!', 100, 80);
+
+    let isScratching = false;
+    const scratch = (e) => {
+      if (!isScratching) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX || e.touches[0].clientX) - rect.left;
+      const y = (e.clientY || e.touches[0].clientY) - rect.top;
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.beginPath();
+      ctx.arc(x, y, 20, 0, Math.PI * 2);
+      ctx.fill();
+    };
+
+    canvas.addEventListener('mousedown', () => isScratching = true);
+    canvas.addEventListener('mouseup', () => isScratching = false);
+    canvas.addEventListener('mousemove', scratch);
+    canvas.addEventListener('touchstart', () => isScratching = true);
+    canvas.addEventListener('touchend', () => isScratching = false);
+    canvas.addEventListener('touchmove', scratch);
+  },
+
+  renderMemoryMatch(container) {
+    const symbols = ['🌸','💖','🎁','👑','🎈','🌸','💖','🎁','👑','🎈'];
+    const shuffled = symbols.sort(() => 0.5 - Math.random());
+    container.innerHTML = `
+      <h3>🧩 Memory Match</h3>
+      <div style="display:grid; grid-template-columns:repeat(5, 1fr); gap:8px; margin-top:1rem;">
+        ${shuffled.map((s, i) => `<div class="memory-tile" data-symbol="${s}" id="tile_${i}" onclick="CelebrationGamesModel.flipTile(${i})" style="height:60px; background:var(--primary-light); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; cursor:pointer;">❓</div>`).join('')}
+      </div>
+    `;
+    this.flipped = [];
+  },
+
+  flipTile(index) {
+    const tile = document.getElementById(`tile_${index}`);
+    if (!tile || this.flipped.length >= 2 || tile.innerHTML !== '❓') return;
+    tile.innerHTML = tile.dataset.symbol;
+    tile.style.background = '#fff';
+    this.flipped.push({ index, symbol: tile.dataset.symbol });
+
+    if (this.flipped.length === 2) {
+      setTimeout(() => {
+        if (this.flipped[0].symbol !== this.flipped[1].symbol) {
+          document.getElementById(`tile_${this.flipped[0].index}`).innerHTML = '❓';
+          document.getElementById(`tile_${this.flipped[0].index}`).style.background = 'var(--primary-light)';
+          document.getElementById(`tile_${this.flipped[1].index}`).innerHTML = '❓';
+          document.getElementById(`tile_${this.flipped[1].index}`).style.background = 'var(--primary-light)';
+        }
+        this.flipped = [];
+      }, 700);
+    }
+  },
+
+  renderLuckyWheel(container) {
+    container.innerHTML = `
+      <h3>🎡 Lucky Wheel</h3>
+      <div style="width:200px; height:200px; border-radius:50%; border:8px solid var(--primary); margin:1.5rem auto; display:flex; align-items:center; justify-content:center; font-size:1.2rem; font-weight:bold; transition:transform 3s cubic-bezier(0.1, 2, 0.2, 1);" id="wheelDisc">
+        💖 WINNER 💖
+      </div>
+      <button class="btn" onclick="CelebrationGamesModel.spinWheel()">Spin Wheel</button>
+    `;
+  },
+
+  spinWheel() {
+    const disc = document.getElementById('wheelDisc');
+    const deg = 1440 + Math.floor(Math.random() * 360);
+    disc.style.transform = `rotate(${deg}deg)`;
+    setTimeout(() => showToast("You won a lifetime of warm hugs!"), 3100);
+  },
+
+  renderLoveQuiz(container) {
+    container.innerHTML = `
+      <h3>❓ Love Quiz</h3>
+      <p style="margin:1rem 0;">What is the most special memory we share?</p>
+      <div style="display:flex; flex-direction:column; gap:0.5rem;">
+        <button class="btn btn-secondary" onclick="showToast('Correct! Every single day! ❤️')">All of our spontaneous adventures!</button>
+        <button class="btn btn-secondary" onclick="showToast('Try again! 😉')">The rainy afternoon coffee</button>
+      </div>
+    `;
+  },
+
+  renderBalloonPop(container) {
+    container.innerHTML = `
+      <h3>🎈 Balloon Pop</h3>
+      <p style="font-size:0.85rem; color:#666;">Pop 5 balloons!</p>
+      <div id="balloonArea" style="height:200px; position:relative; overflow:hidden; border:1px dashed #ccc; margin-top:1rem; border-radius:12px;"></div>
+    `;
+    const area = document.getElementById('balloonArea');
+    for(let i=0; i<5; i++) {
+      const b = document.createElement('div');
+      b.innerHTML = '🎈';
+      b.style.cssText = `position:absolute; font-size:2rem; left:${20 + i*50}px; top:${30 + (i%2)*60}px; cursor:pointer;`;
+      b.onclick = () => { b.style.transform = 'scale(1.5)'; b.style.opacity = '0'; setTimeout(()=>b.remove(), 200); };
+      area.appendChild(b);
+    }
+  },
+
+  renderCatchHearts(container) {
+    container.innerHTML = `
+      <h3>💖 Catch My Heart</h3>
+      <p style="font-size:0.85rem; color:#666;">Tap the falling heart!</p>
+      <div id="heartArea" style="height:200px; position:relative; border:1px dashed #ccc; margin-top:1rem; border-radius:12px; overflow:hidden;">
+        <div id="targetHeart" style="position:absolute; font-size:2.5rem; top:20px; left:40%; cursor:pointer; transition:top 1.5s linear;">💖</div>
+      </div>
+    `;
+    const h = document.getElementById('targetHeart');
+    h.onclick = () => { showToast("Caught my heart! 💖"); h.style.top = '20px'; };
+    setInterval(() => { if (h) h.style.top = h.style.top === '140px' ? '20px' : '140px'; }, 1600);
+  },
+
+  renderPhotoPuzzle(container) {
+    container.innerHTML = `
+      <h3>🖼️ Photo Puzzle</h3>
+      <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Interactive 3x3 Tile Puzzle coming together!</p>
+      <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:4px; width:240px; height:240px; margin:0 auto; background:#eee; padding:4px; border-radius:8px;">
+        ${[1,2,3,4,5,6,7,8,''].map((t, i) => `<div style="background:var(--primary-light); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:bold; border-radius:4px; font-size:1.2rem;">${t}</div>`).join('')}
+      </div>
+    `;
+  },
+
+  renderMagicReveal(container) {
+    container.innerHTML = `<h3>✨ Magic Reveal</h3><p style="margin-top:1rem; color:var(--primary); font-weight:600;">Hover cursor over screen to reveal sparkles!</p>`;
+  },
+  renderTargetShooter(container) {
+    container.innerHTML = `<h3>🎯 Target Game</h3><p style="margin-top:1rem;">Tap moving targets to score!</p>`;
+  },
+  renderTreasureHunt(container) {
+    container.innerHTML = `<h3>🗝️ Treasure Hunt</h3><p style="margin-top:1rem;">Solve clues around the site to find the secret vault code!</p>`;
+  }
+};
+
+function openGame(gameId) {
+  document.getElementById('gameModal').style.display = 'flex';
+  CelebrationGamesModel.initGame(gameId, document.getElementById('gameContainer'));
+}
+function closeGameModal() {
+  document.getElementById('gameModal').style.display = 'none';
+}
+
+/* ======================================================================
+ 5. REALISTIC SAKURA WISH TREE & NATURAL PETAL ANIMATION ENGINE
+ ====================================================================== */
+function initSakuraTree() {
+  const tCanvas = document.getElementById('treeCanvas');
+  const pCanvas = document.getElementById('sakuraCanvas');
+  if (!tCanvas || !pCanvas) return;
+
+  const ctxT = tCanvas.getContext('2d');
+  const ctxP = pCanvas.getContext('2d');
+
+  function resizeCanvases() {
+    tCanvas.width = tCanvas.parentElement.clientWidth;
+    tCanvas.height = tCanvas.parentElement.clientHeight;
+    pCanvas.width = pCanvas.parentElement.clientWidth;
+    pCanvas.height = pCanvas.parentElement.clientHeight;
+    drawTree();
+  }
+  window.addEventListener('resize', resizeCanvases);
+
+  // Draw Realistic Bloomed Tree Architecture
+  function drawTree() {
+    const w = tCanvas.width;
+    const h = tCanvas.height;
+    ctxT.clearRect(0, 0, w, h);
+
+    // Realistic Organic Trunk Path
+    ctxT.beginPath();
+    ctxT.moveTo(w * 0.5 - 25, h);
+    ctxT.bezierCurveTo(w * 0.5 - 20, h * 0.7, w * 0.48 - 15, h * 0.55, w * 0.45, h * 0.45);
+    ctxT.bezierCurveTo(w * 0.52, h * 0.55, w * 0.52 + 15, h * 0.7, w * 0.5 + 25, h);
+    ctxT.closePath();
+    
+    const trunkGrad = ctxT.createLinearGradient(w * 0.4, 0, w * 0.6, 0);
+    trunkGrad.addColorStop(0, '#3e2723');
+    trunkGrad.addColorStop(0.5, '#5d4037');
+    trunkGrad.addColorStop(1, '#2b1b17');
+    ctxT.fillStyle = trunkGrad;
+    ctxT.fill();
+
+    // Natural Structural Branches
+    drawBranch(ctxT, w * 0.47, h * 0.5, -Math.PI * 0.25, 60, 10);
+    drawBranch(ctxT, w * 0.51, h * 0.48, Math.PI * 0.2, 55, 9);
+    drawBranch(ctxT, w * 0.46, h * 0.42, -Math.PI * 0.4, 45, 7);
+
+    // Full Circular Bloomed Canopy Clusters
+    const canopyCenter = { x: w * 0.5, y: h * 0.35 };
+    const clusterRadii = [80, 65, 75, 60, 70, 55, 90];
+    const offsets = [
+      {x: 0, y: -20}, {x: -60, y: -10}, {x: 60, y: -10},
+      {x: -90, y: 30}, {x: 90, y: 30}, {x: -30, y: -50}, {x: 30, y: -50}
+    ];
+
+    offsets.forEach((off, i) => {
+      const cx = canopyCenter.x + off.x;
+      const cy = canopyCenter.y + off.y;
+      const r = clusterRadii[i];
+
+      const bloomGrad = ctxT.createRadialGradient(cx, cy, 5, cx, cy, r);
+      bloomGrad.addColorStop(0, 'rgba(255, 182, 193, 0.95)');
+      bloomGrad.addColorStop(0.6, 'rgba(255, 105, 180, 0.75)');
+      bloomGrad.addColorStop(1, 'rgba(255, 192, 203, 0)');
+
+      ctxT.beginPath();
+      ctxT.arc(cx, cy, r, 0, Math.PI * 2);
+      ctxT.fillStyle = bloomGrad;
+      ctxT.fill();
+    });
+  }
+
+  function drawBranch(ctx, startX, startY, angle, length, width) {
+    ctx.save();
+    ctx.beginPath();
+    ctx.lineWidth = width;
+    ctx.strokeStyle = '#4e342e';
+    ctx.lineCap = 'round';
+    ctx.moveTo(startX, startY);
+    const endX = startX + Math.cos(angle) * length;
+    const endY = startY + Math.sin(angle) * length;
+    ctx.lineTo(endX, endY);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  // Smooth Falling Sakura Petals Physics
+  const petals = [];
+  const petalCount = 45;
+
+  for (let i = 0; i < petalCount; i++) {
+    petals.push({
+      x: Math.random() * pCanvas.width || 400,
+      y: Math.random() * pCanvas.height || 300,
+      size: 5 + Math.random() * 6,
+      speedY: 0.6 + Math.random() * 0.8,
+      speedX: -0.3 + Math.random() * 0.6,
+      oscillation: Math.random() * Math.PI * 2,
+      rotation: Math.random() * Math.PI,
+      opacity: 0.6 + Math.random() * 0.4
+    });
+  }
+
+  function animatePetals() {
+    ctxP.clearRect(0, 0, pCanvas.width, pCanvas.height);
+
+    petals.forEach(p => {
+      p.y += p.speedY;
+      p.oscillation += 0.02;
+      p.x += Math.sin(p.oscillation) * 0.8 + p.speedX;
+      p.rotation += 0.01;
+
+      if (p.y > pCanvas.height) {
+        p.y = -10;
+        p.x = Math.random() * pCanvas.width;
+      }
+
+      ctxP.save();
+      ctxP.translate(p.x, p.y);
+      ctxP.rotate(p.rotation);
+      ctxP.globalAlpha = p.opacity;
+      ctxP.fillStyle = '#ffb6c1';
+      ctxP.beginPath();
+      ctxP.ellipse(0, 0, p.size, p.size * 0.6, 0, 0, Math.PI * 2);
+      ctxP.fill();
+      ctxP.restore();
+    });
+
+    requestAnimationFrame(animatePetals);
+  }
+
+  resizeCanvases();
+  animatePetals();
+}
+
+/* ======================================================================
+ 6. PLAYABLE PIANO ENGINE
+ ====================================================================== */
+let audioCtx = null;
+const notesFreq = {
+  'C4': 261.63, 'C#4': 277.18, 'D4': 293.66, 'D#4': 311.13, 'E4': 329.63,
+  'F4': 349.23, 'F#4': 369.99, 'G4': 392.00, 'G#4': 415.30, 'A4': 440.00,
+  'A#4': 466.16, 'B4': 493.88, 'C5': 523.25
+};
+
+function playNote(freq) {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+  gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+  gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 1.2);
+  osc.connect(gain);
+  gain.connect(audioCtx.destination);
+  osc.start();
+  osc.stop(audioCtx.currentTime + 1.2);
 }
-function playTone(freq = 440, duration = 0.4, type = 'sine', gainVal = 0.1) {
-  initAudio();
-  if (!audioCtx) return;
-  try {
-    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-    osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-    gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
-    gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.start(); osc.stop(audioCtx.currentTime + duration);
-  } catch (e) {}
-}
-function playPianoSound(freq) {
-  initAudio();
-  if (!audioCtx) return;
-  try {
-    const now = audioCtx.currentTime, osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
-    osc.type = 'triangle'; osc.frequency.setValueAtTime(freq, now);
-    gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    osc.start(now); osc.stop(now + 1.2);
-  } catch(e) {}
-}
-function showToast(msg) {
-  const toast = document.getElementById('toast');
-  toast.innerText = msg; toast.classList.add('show');
-  setTimeout(() => toast.classList.remove('show'), 2500);
-}
-function cycleAudioPreset() {
-  initAudio();
-  audioPresetIdx = (audioPresetIdx + 1) % 4;
-  const presets = ["Muted", "Ambient Synth", "Romantic Chimes", "Lofi Waves"];
-  showToast(`Audio: ${presets[audioPresetIdx]}`);
-  if (synthInterval) clearInterval(synthInterval);
-  if (audioPresetIdx > 0) {
-    synthInterval = setInterval(() => playTone(300 + Math.random()*400, 1.0, 'sine', 0.04), 1400);
-  }
-}
-const themesList = ['dreamy-pink', 'lavender-moon', 'cloudy-blue', 'peach-sunset', 'sakura-dream', 'soft-garden', 'cream-champagne', 'midnight-romance', 'cozy-coffee', 'fairy-garden', 'vintage-love-letter', 'celestial-dream', 'soft-wedding', 'dreamy-birthday', 'luxury-gold', 'galaxy', 'aurora', 'ocean', 'forest', 'scrapbook', 'polaroid'];
-let themeIdx = 0;
-function cycleTheme() {
-  themeIdx = (themeIdx + 1) % themesList.length;
-  const t = themesList[themeIdx];
-  document.documentElement.setAttribute('data-theme', t);
-  showToast(`Theme: ${t}`);
-}
-function scrollToSection(id) {
-  const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth' });
-}
-function startStoryExperience() { scrollToSection('gift'); }
 
-/* CHAPTER LOGIC & RENDERERS */
-function openGiftBox() {
-  document.getElementById('giftBox').classList.add('opened');
-  setTimeout(() => { document.getElementById('giftRevealCard').style.display = 'block'; }, 600);
-}
-function getFlowerSVG(type) {
-  return `<svg viewBox="0 0 100 100" width="100%" height="100%"><circle cx="50" cy="50" r="30" fill="${type==='rose'?'#e63946':'#ff758f'}"/></svg>`;
-}
-function initBouquet() {
-  const c = document.getElementById('flowerContainer'); if (!c) return; c.innerHTML = '';
-  window.CELEBRATION_CONFIG.flowers.forEach((flw) => {
-    const item = document.createElement('div'); item.className = 'flower-item';
-    item.onclick = () => item.classList.toggle('bloomed');
-    item.innerHTML = `<div class="flower-head">${getFlowerSVG(flw.type)}</div><div class="flower-stem"></div><div style="font-size:0.85rem; font-weight:600;">${flw.name}</div><div class="flower-note-pop">${flw.msg}</div>`;
-    c.appendChild(item);
+function renderPianoKeyboard() {
+  const keyboard = document.getElementById('pianoKeyboard');
+  if (!keyboard) return;
+  keyboard.innerHTML = '';
+
+  const keys = [
+    { note: 'C4', type: 'white' }, { note: 'C#4', type: 'black' },
+    { note: 'D4', type: 'white' }, { note: 'D#4', type: 'black' },
+    { note: 'E4', type: 'white' }, { note: 'F4', type: 'white' },
+    { note: 'F#4', type: 'black' }, { note: 'G4', type: 'white' },
+    { note: 'G#4', type: 'black' }, { note: 'A4', type: 'white' },
+    { note: 'A#4', type: 'black' }, { note: 'B4', type: 'white' },
+    { note: 'C5', type: 'white' }
+  ];
+
+  keys.forEach(k => {
+    const keyEl = document.createElement('div');
+    keyEl.className = `piano-key ${k.type}`;
+    keyEl.innerHTML = `<span class="piano-key-label">${k.note}</span>`;
+    keyEl.onclick = () => {
+      playNote(notesFreq[k.note]);
+      keyEl.classList.add('pressed');
+      setTimeout(() => keyEl.classList.remove('pressed'), 200);
+    };
+    keyboard.appendChild(keyEl);
   });
 }
-function openLetter() {
-  document.getElementById('envelope').style.display = 'none';
-  document.getElementById('letterPaper').style.display = 'block';
-  renderLetterPage();
+
+function playPianoPreset(preset) {
+  const melodies = {
+    birthday: ['C4','C4','D4','C4','F4','E4'],
+    romantic: ['E4','G4','A4','B4','C5'],
+    celebration: ['G4','C5','G4','C5','E4'],
+    relaxing: ['C4','E4','G4','B4']
+  };
+  const melody = melodies[preset] || melodies.birthday;
+  melody.forEach((note, idx) => {
+    setTimeout(() => playNote(notesFreq[note]), idx * 400);
+  });
 }
-function renderLetterPage() {
-  const pages = window.CELEBRATION_CONFIG.letterPages;
-  document.getElementById('letterContent').innerText = pages[currentLetterPage] || "";
-  document.getElementById('pageIndicator').innerText = `Page ${currentLetterPage + 1}/${pages.length}`;
-}
-function prevLetterPage() { if (currentLetterPage > 0) { currentLetterPage--; renderLetterPage(); } }
-function nextLetterPage() { if (currentLetterPage < window.CELEBRATION_CONFIG.letterPages.length - 1) { currentLetterPage++; renderLetterPage(); } }
-function speakLetterPage() {
-  if ('speechSynthesis' in window) {
-    const utter = new SpeechSynthesisUtterance(window.CELEBRATION_CONFIG.letterPages[currentLetterPage]);
-    window.speechSynthesis.speak(utter);
+function stopPianoPreset() {}
+
+/* ======================================================================
+ 7. USER INTERFACE RENDERING & INTERACTION CONTROLLERS
+ ====================================================================== */
+function renderUI() {
+  document.getElementById('cfgRecipientName').innerText = CELEBRATION_CONFIG.recipientName;
+  document.getElementById('cfgIntroHeading').innerHTML = CELEBRATION_CONFIG.introHeading.replace(CELEBRATION_CONFIG.recipientName, `<span class="handwriting" style="color:var(--primary)">${CELEBRATION_CONFIG.recipientName}</span>`);
+  document.getElementById('cfgOccasion').innerText = CELEBRATION_CONFIG.occasion;
+  document.getElementById('cfgMainMessage').innerText = CELEBRATION_CONFIG.mainMessage;
+  document.getElementById('cfgGiftTitle').innerText = CELEBRATION_CONFIG.giftTitle;
+  document.getElementById('cfgGiftText').innerText = CELEBRATION_CONFIG.giftText;
+  document.getElementById('cfgSenderSign').innerText = `With all my love, ${CELEBRATION_CONFIG.senderName}`;
+  document.getElementById('cfgProposalQuestion').innerText = CELEBRATION_CONFIG.proposalQuestion;
+  document.getElementById('cfgEventTitle').innerText = CELEBRATION_CONFIG.eventTitle;
+  document.getElementById('cfgEventDesc').innerText = CELEBRATION_CONFIG.eventDesc;
+  document.getElementById('cfgEventDate').innerText = CELEBRATION_CONFIG.eventDate;
+  document.getElementById('cfgEventTime').innerText = CELEBRATION_CONFIG.eventTime;
+  document.getElementById('cfgVenue').innerText = CELEBRATION_CONFIG.venue;
+
+  // Apply Custom Theme & Background
+  document.documentElement.setAttribute('data-theme', CELEBRATION_CONFIG.activeTheme || 'dreamy-pink');
+  if (CELEBRATION_CONFIG.customBgImage) {
+    document.body.style.setProperty('--custom-bg-image', `url(${CELEBRATION_CONFIG.customBgImage})`);
+  }
+
+  // Render Memories & Pinterest
+  if (CELEBRATION_CONFIG.memories.length) {
+    document.getElementById('memoryImg').src = CELEBRATION_CONFIG.memories[0].img;
+    document.getElementById('memoryCaption').innerText = CELEBRATION_CONFIG.memories[0].caption;
+  }
+  renderPinterestGrid();
+  renderTimeline();
+  renderFloralBouquet();
+
+  // Hide owner settings button in recipient view
+  if (isRecipientView) {
+    document.getElementById('btnOwnerSettings').style.display = 'none';
   }
 }
-function renderMemory() {
-  const mems = window.CELEBRATION_CONFIG.memories; if (!mems.length) return;
-  document.getElementById('memoryImg').src = mems[currentMemoryIdx].img;
-  document.getElementById('memoryCaption').innerText = mems[currentMemoryIdx].caption;
+
+let currentMemoryIdx = 0;
+function changeMemory(step) {
+  if (!CELEBRATION_CONFIG.memories.length) return;
+  currentMemoryIdx = (currentMemoryIdx + step + CELEBRATION_CONFIG.memories.length) % CELEBRATION_CONFIG.memories.length;
+  document.getElementById('memoryImg').src = CELEBRATION_CONFIG.memories[currentMemoryIdx].img;
+  document.getElementById('memoryCaption').innerText = CELEBRATION_CONFIG.memories[currentMemoryIdx].caption;
 }
-function changeMemory(dir) {
-  currentMemoryIdx = (currentMemoryIdx + dir + window.CELEBRATION_CONFIG.memories.length) % window.CELEBRATION_CONFIG.memories.length;
-  renderMemory();
+
+function renderPinterestGrid() {
+  const grid = document.getElementById('pinterestGrid');
+  if (!grid) return;
+  grid.innerHTML = CELEBRATION_CONFIG.pinterestPhotos.map(p => `
+    <div class="pin-card">
+      <img src="${p.img}" alt="${p.caption}" />
+      <div class="pin-caption">${p.caption}</div>
+    </div>
+  `).join('');
 }
-function initPhotoWall() {
-  const w = document.getElementById('photoWall'); if (!w) return; w.innerHTML = '';
-  window.CELEBRATION_CONFIG.memories.forEach((m, idx) => {
-    const photo = document.createElement('div'); photo.className = 'floating-photo';
-    photo.style.left = `${20 + idx * 30}%`; photo.style.top = `${20}%`;
-    photo.innerHTML = `<img src="${m.img}" /><div style="font-size:0.65rem; text-align:center;">${m.caption}</div>`;
-    w.appendChild(photo);
-  });
-}
-function renderPinterestBoard() {
-  const g = document.getElementById('pinterestGrid'); if (!g) return; g.innerHTML = '';
-  window.CELEBRATION_CONFIG.pinterestPhotos.forEach(p => {
-    const card = document.createElement('div'); card.className = 'pin-card';
-    card.innerHTML = `<img src="${p.img}" /><div class="pin-caption">${p.caption}</div>`;
-    g.appendChild(card);
-  });
-}
-function initRetroTv() {
-  const media = window.CELEBRATION_CONFIG.retroTvMedia; if (!media || !media.length) return;
-  const f = document.getElementById('tvScreenFrame');
-  f.innerHTML = `<div class="tv-scanlines"></div><img src="${media[currentTvIdx].src}" />`;
-  document.getElementById('tvChannelLabel').innerText = `CH 0${currentTvIdx + 1}`;
-}
-function cycleTvChannel() {
-  currentTvIdx = (currentTvIdx + 1) % window.CELEBRATION_CONFIG.retroTvMedia.length;
-  initRetroTv();
-}
-function prevTvMedia() { cycleTvChannel(); }
-function nextTvMedia() { cycleTvChannel(); }
 
 function renderTimeline() {
-  const t = document.getElementById('timelineList'); if (!t) return; t.innerHTML = '';
-  window.CELEBRATION_CONFIG.timeline.forEach(item => {
-    const el = document.createElement('div'); el.className = 'timeline-item';
-    el.innerHTML = `<div class="timeline-dot"></div><h4>${item.title}</h4><small>${item.date}</small><p>${item.desc}</p>`;
-    t.appendChild(el);
-  });
+  const container = document.getElementById('timelineList');
+  if (!container) return;
+  container.innerHTML = CELEBRATION_CONFIG.timeline.map(t => `
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <h4>${t.title} - <span style="font-size:0.85rem; color:var(--primary);">${t.date}</span></h4>
+      <p style="font-size:0.9rem; color:var(--text-muted);">${t.desc}</p>
+    </div>
+  `).join('');
 }
 
-/* ARCADE GAMES HUB (VERSION 5.0 REPLACEMENT) */
-function openGame(gameType) {
-  const modal = document.getElementById('gameModal');
-  const container = document.getElementById('gameContainer');
-  modal.style.display = 'flex';
-  container.innerHTML = '';
+function renderFloralBouquet() {
+  const container = document.getElementById('flowerContainer');
+  if (!container) return;
+  container.innerHTML = CELEBRATION_CONFIG.flowers.map(f => `
+    <div class="flower-item" onclick="this.classList.toggle('bloomed')">
+      <div class="flower-head" style="font-size:3.5rem; text-align:center;">🌸</div>
+      <div class="flower-stem"><div class="flower-leaf left"></div><div class="flower-leaf right"></div></div>
+      <div class="flower-note-pop">${f.msg}</div>
+    </div>
+  `).join('');
+}
 
-  if (gameType === 'scratch') {
-    container.innerHTML = '<h3>🎫 Scratch Card</h3><p>Scratch to reveal reward!</p><canvas id="scratchCanvas" width="300" height="150" style="border-radius:12px; margin-top:10px; cursor:crosshair;"></canvas>';
-    const canvas = document.getElementById('scratchCanvas'), ctx = canvas.getContext('2d');
-    ctx.fillStyle = '#ccc'; ctx.fillRect(0, 0, 300, 150);
-    ctx.fillStyle = '#e63946'; ctx.font = '20px sans-serif'; ctx.fillText("🎉 You Win Eternal Love!", 30, 80);
-    let scratching = false;
-    canvas.onmousedown = () => scratching = true;
-    canvas.onmouseup = () => scratching = false;
-    canvas.onmousemove = (e) => {
-      if (!scratching) return;
-      const rect = canvas.getBoundingClientRect();
-      ctx.clearRect(e.clientX - rect.left - 10, e.clientY - rect.top - 10, 20, 20);
-    };
-  } else if (gameType === 'match') {
-    container.innerHTML = '<h3>🧩 Memory Match</h3><div class="memory-grid" id="memGrid"></div>';
-    const grid = document.getElementById('memGrid');
-    const icons = ['💖','🎁','🌸','🎂','💖','🎁','🌸','🎂'];
-    icons.sort(() => Math.random() - 0.5);
-    icons.forEach(ic => {
-      const tile = document.createElement('div'); tile.className = 'memory-tile';
-      tile.onclick = () => { tile.innerText = ic; tile.classList.add('flipped'); };
-      grid.appendChild(tile);
-    });
-  } else if (gameType === 'wheel') {
-    container.innerHTML = '<h3>🎡 Lucky Wheel</h3><button class="btn" style="margin-top:1rem;" onclick="showToast(\'Spinning... Won: Unlimited Hugs!\')">Spin Wheel</button>';
-  } else if (gameType === 'quiz') {
-    container.innerHTML = `<h3>❓ Love Quiz</h3><p style="margin:1rem 0;">${window.CELEBRATION_CONFIG.quizQuestion || 'What is our favorite memory?'}</p><button class="btn" onclick="showToast('Correct! Perfect match!')">Option A</button>`;
+/* ======================================================================
+ 8. LETTER & EVENT CONTROLLERS
+ ====================================================================== */
+let currentLetterPage = 0;
+function openLetter() {
+  document.getElementById('envelope').classList.add('opened');
+  setTimeout(() => {
+    document.getElementById('letterPaper').style.display = 'block';
+    showLetterPage(0);
+  }, 400);
+}
+
+function showLetterPage(pageIdx) {
+  currentLetterPage = pageIdx;
+  document.getElementById('letterContent').innerText = CELEBRATION_CONFIG.letterPages[pageIdx] || '';
+  document.getElementById('pageIndicator').innerText = `Page ${pageIdx + 1}/${CELEBRATION_CONFIG.letterPages.length}`;
+}
+
+function nextLetterPage() {
+  if (currentLetterPage < CELEBRATION_CONFIG.letterPages.length - 1) showLetterPage(currentLetterPage + 1);
+}
+function prevLetterPage() {
+  if (currentLetterPage > 0) showLetterPage(currentLetterPage - 1);
+}
+function speakLetterPage() {
+  if ('speechSynthesis' in window) {
+    const utterance = new SpeechSynthesisUtterance(CELEBRATION_CONFIG.letterPages[currentLetterPage]);
+    window.speechSynthesis.speak(utterance);
+  }
+}
+
+/* Retro TV Controllers */
+let tvChannelIdx = 0;
+function renderTvChannel() {
+  const frame = document.getElementById('tvScreenFrame');
+  const media = CELEBRATION_CONFIG.retroVideos[tvChannelIdx];
+  document.getElementById('tvChannelLabel').innerText = `CH 0${tvChannelIdx + 1}`;
+  
+  if (!media) return;
+  if (media.type === 'video') {
+    frame.innerHTML = `<video src="${media.url}" autoplay loop muted controls style="width:100%; height:100%; object-fit:cover;"></video><div class="tv-scanlines"></div>`;
   } else {
-    container.innerHTML = `<h3>🎮 ${gameType.toUpperCase()} Game</h3><p style="margin:1rem 0;">Interactive Game Engine Loaded successfully.</p><button class="btn" onclick="closeGameModal()">Claim Reward</button>`;
+    frame.innerHTML = `<img src="${media.url}" alt="${media.title}" style="width:100%; height:100%; object-fit:cover;" /><div class="tv-scanlines"></div>`;
   }
 }
-function closeGameModal() { document.getElementById('gameModal').style.display = 'none'; }
-
-/* SAKURA TREE ANIMATION ENGINE */
-function initSakuraTree() {
-  const canvas = document.getElementById('treeCanvas'); if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight;
-
-  let petals = Array.from({ length: 40 }, () => ({
-    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
-    r: 3 + Math.random() * 4, s: 1 + Math.random() * 1.5
-  }));
-
-  function drawBranch(x, y, len, angle, depth) {
-    if (depth === 0) {
-      ctx.beginPath(); ctx.arc(x, y, 12, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255, 183, 197, 0.7)'; ctx.fill(); return;
-    }
-    const nx = x + Math.cos(angle) * len;
-    const ny = y + Math.sin(angle) * len;
-    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(nx, ny);
-    ctx.lineWidth = depth * 2.5; ctx.strokeStyle = '#5c3d2e'; ctx.stroke();
-    const sway = Math.sin(Date.now() * 0.002 + depth) * 0.05;
-    drawBranch(nx, ny, len * 0.75, angle - 0.4 + sway, depth - 1);
-    drawBranch(nx, ny, len * 0.75, angle + 0.4 + sway, depth - 1);
-  }
-
-  function loop() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    drawBranch(canvas.width / 2, canvas.height, 80, -Math.PI / 2, 6);
-    petals.forEach(p => {
-      p.y += p.s; if (p.y > canvas.height) p.y = 0;
-      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fillStyle = '#ffb7c5'; ctx.fill();
-    });
-    requestAnimationFrame(loop);
-  }
-  loop();
+function nextTvMedia() {
+  tvChannelIdx = (tvChannelIdx + 1) % CELEBRATION_CONFIG.retroVideos.length;
+  renderTvChannel();
 }
-function submitWishNote() {
-  const val = document.getElementById('wishMsgInput').value;
-  if (!val) return;
-  window.CELEBRATION_CONFIG.wishes.push({ text: val });
-  showToast("Wish hung on Sakura Tree!");
-  document.getElementById('wishMsgInput').value = '';
+function prevTvMedia() {
+  tvChannelIdx = (tvChannelIdx - 1 + CELEBRATION_CONFIG.retroVideos.length) % CELEBRATION_CONFIG.retroVideos.length;
+  renderTvChannel();
 }
-function saveTimeCapsule() { showToast("Time capsule sealed for the future!"); }
+function cycleTvChannel() { nextTvMedia(); }
+
+/* Secret Vault */
 function unlockVault() {
-  if (document.getElementById('vaultPin').value === window.CELEBRATION_CONFIG.vaultPin) {
-    showToast(`Unlocked: ${window.CELEBRATION_CONFIG.vaultSecretMsg}`);
-  } else { showToast("Incorrect PIN code!"); }
+  const pin = document.getElementById('vaultPin').value;
+  if (pin === CELEBRATION_CONFIG.vaultPin) {
+    showToast(`Vault Unlocked: ${CELEBRATION_CONFIG.vaultSecretMsg}`);
+  } else {
+    showToast("Incorrect 4-Digit PIN!");
+  }
 }
-function submitRSVP(status) { showToast(`RSVP Registered: ${status}`); }
-function downloadICS() { showToast("Calendar file generated!"); }
-function triggerYesCelebration() { document.getElementById('proposalResultCard').style.display = 'block'; }
+
+/* Save Time Capsule */
+function saveTimeCapsule() {
+  const d = document.getElementById('tcDate').value;
+  const m = document.getElementById('tcMsg').value;
+  if (d && m) {
+    document.getElementById('tcStatus').innerText = `🔒 Capsule Sealed for ${d}!`;
+    showToast("Time capsule saved securely!");
+  }
+}
+
+/* Submit Wish Note */
+function submitWishNote() {
+  const msg = document.getElementById('wishMsgInput').value;
+  if (msg) {
+    showToast("Wish note hung on the Sakura Tree!");
+    document.getElementById('wishMsgInput').value = '';
+  }
+}
+
+/* RSVP Controller */
+function submitRSVP(status) {
+  document.getElementById('rsvpStatus').innerText = `RSVP Recorded: ${status}! ❤️`;
+  showToast("Thank you for your RSVP response!");
+}
+
+/* Proposal Escaping Button */
+let isAccMode = false;
+function toggleAccessibilityMode(checked) { isAccMode = checked; }
 function escapeNoButton() {
-  if (accMode) return;
+  if (isAccMode) return;
   const btn = document.getElementById('btnNo');
-  btn.style.transform = `translate(${(Math.random()-0.5)*150}px, ${(Math.random()-0.5)*100}px)`;
+  const x = (Math.random() - 0.5) * 200;
+  const y = (Math.random() - 0.5) * 100;
+  btn.style.transform = `translate(${x}px, ${y}px)`;
 }
-function toggleAccessibilityMode(val) { accMode = val; }
-
-/* PLAYABLE PIANO */
-function initPiano() {
-  const kb = document.getElementById('pianoKeyboard'); if (!kb) return; kb.innerHTML = '';
-  const notes = [
-    { note: 'C4', freq: 261.63, type: 'white' }, { note: 'C#4', freq: 277.18, type: 'black' },
-    { note: 'D4', freq: 293.66, type: 'white' }, { note: 'D#4', freq: 311.13, type: 'black' },
-    { note: 'E4', freq: 329.63, type: 'white' }, { note: 'F4', freq: 349.23, type: 'white' },
-    { note: 'F#4', freq: 369.99, type: 'black' }, { note: 'G4', freq: 392.00, type: 'white' },
-    { note: 'G#4', freq: 415.30, type: 'black' }, { note: 'A4', freq: 440.00, type: 'white' },
-    { note: 'A#4', freq: 466.16, type: 'black' }, { note: 'B4', freq: 493.88, type: 'white' }
-  ];
-  notes.forEach(n => {
-    const k = document.createElement('div'); k.className = `piano-key ${n.type}`;
-    k.onclick = () => playPianoSound(n.freq);
-    k.innerHTML = `<span class="piano-key-label">${n.note}</span>`;
-    kb.appendChild(k);
-  });
+function triggerYesCelebration() {
+  document.getElementById('proposalResultCard').style.display = 'block';
+  showToast("SHE SAID YES! 🎉❤️");
 }
-function playPianoPreset(type) { showToast(`Playing ${type} melody...`); }
-function stopPianoPreset() { showToast("Stopped melody"); }
 
-/* OWNER DASHBOARD & RECIPIENT WEB GENERATOR */
+/* ======================================================================
+ 9. OWNER CONTROL CENTER MODALS & CONFIGURATION PERSISTENCE
+ ====================================================================== */
 function openCreatorModal() {
-  if (!isOwnerAuthenticated) { document.getElementById('ownerAuthModal').style.display = 'flex'; return; }
-  document.getElementById('creatorModal').style.display = 'flex';
-  document.getElementById('edtRecipient').value = window.CELEBRATION_CONFIG.recipientName;
-  document.getElementById('edtSender').value = window.CELEBRATION_CONFIG.senderName;
-  document.getElementById('edtOccasion').value = window.CELEBRATION_CONFIG.occasion;
-  document.getElementById('edtIntroHeading').value = window.CELEBRATION_CONFIG.introHeading;
-  document.getElementById('edtMainMessage').value = window.CELEBRATION_CONFIG.mainMessage;
+  document.getElementById('ownerAuthModal').style.display = 'flex';
+}
+function closeOwnerAuthModal() {
+  document.getElementById('ownerAuthModal').style.display = 'none';
 }
 function verifyOwnerAccess() {
-  if (document.getElementById('ownerPasscodePrompt').value === window.CELEBRATION_CONFIG.ownerPasscode) {
-    isOwnerAuthenticated = true; closeOwnerAuthModal(); openCreatorModal();
-  } else { showToast("Invalid Passcode!"); }
+  const inputPass = document.getElementById('ownerPasscodePrompt').value;
+  if (inputPass === CELEBRATION_CONFIG.ownerPasscode) {
+    closeOwnerAuthModal();
+    populateCreatorForm();
+    document.getElementById('creatorModal').style.display = 'flex';
+  } else {
+    showToast("Incorrect Owner Passcode!");
+  }
 }
-function closeOwnerAuthModal() { document.getElementById('ownerAuthModal').style.display = 'none'; }
-function closeCreatorModal() { document.getElementById('creatorModal').style.display = 'none'; }
+function closeCreatorModal() {
+  document.getElementById('creatorModal').style.display = 'none';
+}
+
 function switchCreatorTab(tabId) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
   event.target.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
 }
-function uploadLocalMedia(e, target) {
-  const file = e.target.files[0]; if (!file) return;
-  const r = new FileReader();
-  r.onload = (evt) => {
-    if (target === 'memory') window.CELEBRATION_CONFIG.memories.unshift({ img: evt.target.result, caption: "Local Photo" });
-    showToast("Media uploaded & updated!");
-    renderMemory(); initPhotoWall();
-  };
-  r.readAsDataURL(file);
-}
-function saveCreatorConfig() {
-  window.CELEBRATION_CONFIG.recipientName = document.getElementById('edtRecipient').value;
-  localStorage.setItem('celebration_cfg', JSON.stringify(window.CELEBRATION_CONFIG));
-  showToast("Settings saved persistently!"); closeCreatorModal(); location.reload();
-}
-function resetCreatorConfig() { localStorage.removeItem('celebration_cfg'); location.reload(); }
-function exportRecipientWebsite() {
-  const recipientDoc = "<!DOCTYPE html>\n" + document.documentElement.outerHTML.replace('class="owner-only-btn"', 'style="display:none;"');
-  const blob = new Blob([recipientDoc], { type: 'text/html' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
-  a.download = `Celebration_${window.CELEBRATION_CONFIG.recipientName}.html`; a.click();
-  showToast("Standalone Recipient Website exported!");
-}
-function togglePreviewMode(enable) {
-  document.getElementById('previewBanner').style.display = enable ? 'block' : 'none';
-  document.querySelectorAll('.owner-only-btn').forEach(b => b.style.display = enable ? 'none' : 'inline-flex');
-  if (enable) closeCreatorModal();
-}
-function exportPDFDocument() { window.print(); }
-function exportWordDocument() { showToast("Word exporter ready!"); }
 
-/* INITIALIZATION */
+function populateCreatorForm() {
+  document.getElementById('edtRecipient').value = CELEBRATION_CONFIG.recipientName;
+  document.getElementById('edtSender').value = CELEBRATION_CONFIG.senderName;
+  document.getElementById('edtOccasion').value = CELEBRATION_CONFIG.occasion;
+  document.getElementById('edtIntroHeading').value = CELEBRATION_CONFIG.introHeading;
+  document.getElementById('edtMainMessage').value = CELEBRATION_CONFIG.mainMessage;
+  document.getElementById('edtProposalQuestion').value = CELEBRATION_CONFIG.proposalQuestion;
+  document.getElementById('edtGiftTitle').value = CELEBRATION_CONFIG.giftTitle;
+  document.getElementById('edtGiftText').value = CELEBRATION_CONFIG.giftText;
+  document.getElementById('edtLetterPages').value = JSON.stringify(CELEBRATION_CONFIG.letterPages, null, 2);
+  document.getElementById('edtCountdown').value = CELEBRATION_CONFIG.countdownDate;
+  document.getElementById('edtTimeline').value = JSON.stringify(CELEBRATION_CONFIG.timeline, null, 2);
+  document.getElementById('edtEventTitle').value = CELEBRATION_CONFIG.eventTitle;
+  document.getElementById('edtEventDate').value = CELEBRATION_CONFIG.eventDate;
+  document.getElementById('edtEventTime').value = CELEBRATION_CONFIG.eventTime;
+  document.getElementById('edtVenue').value = CELEBRATION_CONFIG.venue;
+  document.getElementById('edtPin').value = CELEBRATION_CONFIG.vaultPin;
+  document.getElementById('edtSecretMsg').value = CELEBRATION_CONFIG.vaultSecretMsg;
+  document.getElementById('edtOwnerPasscode').value = CELEBRATION_CONFIG.ownerPasscode;
+  renderUploadedMediaList();
+}
+
+function saveCreatorConfig(notify = true) {
+  CELEBRATION_CONFIG.recipientName = document.getElementById('edtRecipient').value;
+  CELEBRATION_CONFIG.senderName = document.getElementById('edtSender').value;
+  CELEBRATION_CONFIG.occasion = document.getElementById('edtOccasion').value;
+  CELEBRATION_CONFIG.introHeading = document.getElementById('edtIntroHeading').value;
+  CELEBRATION_CONFIG.mainMessage = document.getElementById('edtMainMessage').value;
+  CELEBRATION_CONFIG.proposalQuestion = document.getElementById('edtProposalQuestion').value;
+  CELEBRATION_CONFIG.giftTitle = document.getElementById('edtGiftTitle').value;
+  CELEBRATION_CONFIG.giftText = document.getElementById('edtGiftText').value;
+  CELEBRATION_CONFIG.eventTitle = document.getElementById('edtEventTitle').value;
+  CELEBRATION_CONFIG.eventDate = document.getElementById('edtEventDate').value;
+  CELEBRATION_CONFIG.eventTime = document.getElementById('edtEventTime').value;
+  CELEBRATION_CONFIG.venue = document.getElementById('edtVenue').value;
+  CELEBRATION_CONFIG.vaultPin = document.getElementById('edtPin').value;
+  CELEBRATION_CONFIG.vaultSecretMsg = document.getElementById('edtSecretMsg').value;
+  CELEBRATION_CONFIG.ownerPasscode = document.getElementById('edtOwnerPasscode').value;
+
+  try {
+    CELEBRATION_CONFIG.letterPages = JSON.parse(document.getElementById('edtLetterPages').value);
+    CELEBRATION_CONFIG.timeline = JSON.parse(document.getElementById('edtTimeline').value);
+  } catch(e) {}
+
+  if (currentInstanceId) {
+    localStorage.setItem(`celebration_instance_${currentInstanceId}`, JSON.stringify(CELEBRATION_CONFIG));
+  } else {
+    localStorage.setItem('celebration_master_config', JSON.stringify(CELEBRATION_CONFIG));
+  }
+
+  renderUI();
+  if (notify) showToast("Owner configuration saved persistently!");
+}
+
+function resetCreatorConfig() {
+  CELEBRATION_CONFIG = JSON.parse(JSON.stringify(DEFAULT_CONFIG));
+  localStorage.removeItem('celebration_master_config');
+  populateCreatorForm();
+  renderUI();
+  showToast("Configuration reset to defaults.");
+}
+
+/* ======================================================================
+ 10. UTILITIES, EXPORTS & INITIALIZATION
+ ====================================================================== */
+function showToast(msg) {
+  const toast = document.getElementById('toast');
+  toast.innerText = msg;
+  toast.classList.add('show');
+  setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+function cycleTheme() {
+  const themes = ['dreamy-pink','lavender-moon','cloudy-blue','peach-sunset','sakura-dream','soft-garden','cream-champagne','midnight-romance','cozy-coffee','fairy-garden','vintage-love-letter','celestial-dream','soft-wedding','dreamy-birthday','luxury-gold','galaxy','aurora','ocean','forest','scrapbook','polaroid'];
+  const nextTheme = themes[(themes.indexOf(CELEBRATION_CONFIG.activeTheme) + 1) % themes.length];
+  CELEBRATION_CONFIG.activeTheme = nextTheme;
+  document.documentElement.setAttribute('data-theme', nextTheme);
+  saveCreatorConfig(false);
+  showToast(`Switched Theme: ${nextTheme}`);
+}
+
+function scrollToSection(id) {
+  document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+}
+
+function exportPDFDocument() {
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.text(`Celebration Verse - ${CELEBRATION_CONFIG.recipientName}`, 10, 10);
+  doc.text(CELEBRATION_CONFIG.mainMessage, 10, 20);
+  doc.save('CelebrationVerse.pdf');
+}
+
+function exportWordDocument() {
+  showToast("Exporting Word Document...");
+}
+
+function openGiftBox() {
+  document.getElementById('giftBox').classList.add('opened');
+  setTimeout(() => {
+    document.getElementById('giftRevealCard').style.display = 'block';
+  }, 600);
+}
+
+function startStoryExperience() {
+  scrollToSection('gift');
+}
+
+/* Application Bootstrapping */
 window.addEventListener('DOMContentLoaded', () => {
-  initBouquet(); renderMemory(); initPhotoWall(); renderPinterestBoard();
-  initRetroTv(); renderTimeline(); initSakuraTree(); initPiano();
-  document.getElementById('cfgRecipientName').innerText = window.CELEBRATION_CONFIG.recipientName;
+  renderUI();
+  initSakuraTree();
+  renderPianoKeyboard();
+  renderTvChannel();
 });
 </script>
 </body>

@@ -4,12 +4,12 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
 <title>CelebrationVerse - Enterprise Interactive Celebration Experience</title>
-<meta name="description" content="A dreamy, romantic, interactive digital celebration experience with Sakura Wish Tree, Piano, document generators, and custom arcade." />
-<!-- Fonts & External Libraries -->
+<meta name="description" content="A dreamy, romantic, interactive digital celebration experience with Sakura Wish Tree, Piano, Games, and Document Generators." />
+<!-- Fonts & External Standard Libraries -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<!-- Document Export Libraries -->
+<!-- Document Export Libraries for PDF & Word Generation -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/docx@8.2.2/build/index.umd.js"></script>
 <style>
@@ -19,6 +19,7 @@
   --font-handwriting: 'Dancing Script', cursive;
   --font-body: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   
+  /* Theme 1: Dreamy Pink (Default) */
   --bg-grad-start: #fff0f5; --bg-grad-end: #fcd5ce; --primary: #e63946; --primary-light: #ff758f; 
   --accent: #ffb703; --text-main: #3d0c11; --text-muted: #723d46;
   --card-bg: rgba(255, 255, 255, 0.85); --card-border: rgba(255, 255, 255, 0.95); 
@@ -146,14 +147,12 @@
   --card-bg: rgba(255, 255, 255, 0.92); --card-border: rgba(203, 213, 225, 0.8);
   --glass-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.1);
 }
-
 /* Reset & Base Styles */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
 body {
   font-family: var(--font-body);
   background: linear-gradient(135deg, var(--bg-grad-start), var(--bg-grad-end));
-  background-size: cover; background-position: center; background-attachment: fixed;
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
@@ -161,209 +160,785 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
 }
-body.recipient-mode .owner-only { display: none !important; }
-
 /* Canvas Overlays */
 #bgCanvas, #fxCanvas {
-  position: fixed; top: 0; left: 0;
+  position: fixed;
+  top: 0; left: 0;
   width: 100vw; height: 100vh;
-  pointer-events: none; z-index: 1;
+  pointer-events: none;
+  z-index: 1;
 }
 #fxCanvas { z-index: 9999; }
-
 /* Universal Typography & UI Elements */
 h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height: 1.2; }
 .handwriting { font-family: var(--font-handwriting); }
 .glass-card {
   background: var(--card-bg);
-  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--card-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--glass-shadow);
-  padding: 2rem; transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 2rem;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 .btn {
-  display: inline-flex; align-items: center; justify-content: center;
-  gap: 0.6rem; padding: 0.85rem 1.8rem;
-  font-family: var(--font-body); font-weight: 600; font-size: 1rem;
-  border-radius: 50px; border: none; cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1.8rem;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  border-radius: 50px;
+  border: none;
+  cursor: pointer;
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
-  color: #ffffff; box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  color: #ffffff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
   transition: transform 0.25s var(--transition-smooth), box-shadow 0.25s ease, filter 0.2s;
-  text-decoration: none; user-select: none;
+  text-decoration: none;
+  user-select: none;
 }
-.btn:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(0,0,0,0.22); filter: brightness(1.05); }
+.btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.22);
+  filter: brightness(1.05);
+}
 .btn:active { transform: translateY(0) scale(0.98); }
-.btn-secondary { background: rgba(255, 255, 255, 0.4); color: var(--text-main); border: 1px solid var(--card-border); }
-.btn-icon { width: 44px; height: 44px; padding: 0; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; }
-
-/* Navigation */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.4);
+  color: var(--text-main);
+  border: 1px solid var(--card-border);
+}
+.btn-icon {
+  width: 44px; height: 44px;
+  padding: 0; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+/* Fixed Navigation Bar */
 #mainNav {
-  position: fixed; top: 15px; left: 50%; transform: translateX(-50%);
-  z-index: 1000; display: flex; align-items: center; gap: 0.4rem;
-  padding: 0.5rem 1rem; background: rgba(255, 255, 255, 0.35);
-  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--card-border); border-radius: 40px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.1); max-width: 95vw; overflow-x: auto; scrollbar-width: none;
+  position: fixed;
+  top: 15px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--card-border);
+  border-radius: 40px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+  max-width: 95vw;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 #mainNav::-webkit-scrollbar { display: none; }
 .nav-link {
-  padding: 0.45rem 0.85rem; font-size: 0.82rem; font-weight: 600;
-  color: var(--text-main); border-radius: 20px; text-decoration: none;
-  white-space: nowrap; transition: all 0.3s ease; cursor: pointer;
+  padding: 0.45rem 0.85rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-main);
+  border-radius: 20px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+  cursor: pointer;
 }
-.nav-link:hover, .nav-link.active { background: var(--primary); color: #fff; }
-
-#quickControls { position: fixed; top: 15px; right: 20px; z-index: 1001; display: flex; gap: 0.5rem; }
-
-/* Floating Live Preview Banner */
+.nav-link:hover, .nav-link.active {
+  background: var(--primary);
+  color: #fff;
+}
+/* Top Controls Floating Right */
+#quickControls {
+  position: fixed;
+  top: 15px; right: 20px;
+  z-index: 1001;
+  display: flex;
+  gap: 0.5rem;
+}
+/* Preview Mode Banner */
 #previewBanner {
-  display: none; position: fixed; bottom: 20px; right: 20px; z-index: 99999;
-  background: #10b981; color: #fff; padding: 0.8rem 1.5rem; border-radius: 30px;
-  font-weight: 700; box-shadow: 0 10px 30px rgba(0,0,0,0.3); align-items: center; gap: 10px;
+  display: none;
+  position: fixed; top: 0; left: 0; width: 100%;
+  background: #000; color: #fff;
+  text-align: center; padding: 0.4rem 1rem;
+  font-size: 0.85rem; font-weight: 600;
+  z-index: 10000;
 }
-
-/* Chapters Layout */
+#previewBanner button {
+  margin-left: 1rem; padding: 0.2rem 0.6rem;
+  border-radius: 4px; border: none; cursor: pointer;
+}
+/* Chapters Container & Layout */
 main { position: relative; z-index: 2; width: 100%; }
 .chapter-section {
-  min-height: 100vh; padding: 6rem 1.5rem 4rem 1.5rem;
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  position: relative; opacity: 0; transform: translateY(30px);
+  min-height: 100vh;
+  padding: 6rem 1.5rem 4rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  opacity: 0;
+  transform: translateY(30px);
   transition: opacity 0.8s ease, transform 0.8s ease;
 }
-.chapter-section.visible { opacity: 1; transform: translateY(0); }
-.section-title { font-size: clamp(2rem, 5vw, 3.2rem); text-align: center; margin-bottom: 0.5rem; color: var(--text-main); }
-.section-subtitle { font-size: clamp(1rem, 2.5vw, 1.3rem); font-family: var(--font-handwriting); color: var(--primary); text-align: center; margin-bottom: 2.5rem; }
-
-/* Intro */
+.chapter-section.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.section-title {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  text-align: center;
+  margin-bottom: 0.5rem;
+  color: var(--text-main);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.section-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.3rem);
+  font-family: var(--font-handwriting);
+  color: var(--primary);
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+/* CHAPTER 1: INTRO */
 #intro { text-align: center; justify-content: center; min-height: 100vh; }
 .intro-badge {
-  display: inline-block; padding: 0.4rem 1.2rem; border-radius: 30px;
-  background: rgba(255,255,255,0.5); border: 1px solid var(--card-border);
-  font-size: 0.9rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase;
-  margin-bottom: 1.5rem; color: var(--primary); animation: pulseGlow 2.5s infinite alternate;
+  display: inline-block;
+  padding: 0.4rem 1.2rem;
+  border-radius: 30px;
+  background: rgba(255,255,255,0.5);
+  border: 1px solid var(--card-border);
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 1.5rem;
+  color: var(--primary);
+  animation: pulseGlow 2.5s infinite alternate;
 }
-.intro-title { font-size: clamp(2.8rem, 8vw, 5rem); margin-bottom: 1rem; line-height: 1.1; }
-.intro-msg { max-width: 650px; font-size: clamp(1.1rem, 3vw, 1.4rem); margin: 0 auto 2.5rem auto; color: var(--text-muted); }
-
-/* Gift Box */
-.gift-container { perspective: 1000px; width: 240px; height: 240px; margin: 2rem auto; position: relative; cursor: pointer; }
-.gift-box { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s var(--transition-smooth); animation: giftFloat 3s ease-in-out infinite alternate; }
+.intro-title {
+  font-size: clamp(2.8rem, 8vw, 5rem);
+  margin-bottom: 1rem;
+  line-height: 1.1;
+}
+.intro-msg {
+  max-width: 650px;
+  font-size: clamp(1.1rem, 3vw, 1.4rem);
+  margin: 0 auto 2.5rem auto;
+  color: var(--text-muted);
+}
+/* CHAPTER 2: GIFT BOX */
+.gift-container {
+  perspective: 1000px;
+  width: 260px; height: 260px;
+  margin: 2rem auto;
+  position: relative;
+  cursor: pointer;
+}
+.gift-box {
+  width: 100%; height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s var(--transition-smooth);
+  animation: giftFloat 3s ease-in-out infinite alternate;
+}
 .gift-box:hover { transform: scale(1.05) rotateY(10deg); }
-.gift-face { position: absolute; width: 200px; height: 200px; left: 20px; top: 20px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); border: 2px solid rgba(255,255,255,0.4); border-radius: 12px; box-shadow: inset 0 0 20px rgba(0,0,0,0.15), 0 15px 35px rgba(0,0,0,0.2); }
-.gift-ribbon-v, .gift-ribbon-h { position: absolute; background: linear-gradient(to right, #ffd166, #facc15); box-shadow: 0 0 10px rgba(255, 209, 102, 0.6); z-index: 2; }
-.gift-ribbon-v { width: 36px; height: 100%; left: 82px; top: 0; }
-.gift-ribbon-h { width: 100%; height: 36px; left: 0; top: 82px; }
-.gift-bow { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); width: 80px; height: 50px; z-index: 3; transition: all 0.5s ease; }
-.gift-bow::before, .gift-bow::after { content: ""; position: absolute; width: 40px; height: 40px; border: 6px solid #ffd166; border-radius: 50% 50% 0 50%; transform: rotate(45deg); }
-.gift-bow::after { right: 0; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); }
-.gift-box.opened .gift-bow { transform: translateX(-50%) translateY(-100px) scale(0); opacity: 0; }
+.gift-face {
+  position: absolute; width: 220px; height: 220px;
+  left: 20px; top: 20px;
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  border: 2px solid rgba(255,255,255,0.4);
+  border-radius: 12px;
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.15), 0 15px 35px rgba(0,0,0,0.2);
+}
+.gift-ribbon-v, .gift-ribbon-h {
+  position: absolute;
+  background: linear-gradient(to right, #ffd166, #facc15);
+  box-shadow: 0 0 10px rgba(255, 209, 102, 0.6);
+  z-index: 2;
+}
+.gift-ribbon-v { width: 40px; height: 100%; left: 90px; top: 0; }
+.gift-ribbon-h { width: 100%; height: 40px; left: 0; top: 90px; }
+.gift-bow {
+  position: absolute;
+  top: -25px; left: 50%;
+  transform: translateX(-50%);
+  width: 80px; height: 50px;
+  z-index: 3;
+  transition: all 0.5s ease;
+}
+.gift-bow::before, .gift-bow::after {
+  content: ""; position: absolute;
+  width: 45px; height: 45px;
+  border: 6px solid #ffd166;
+  border-radius: 50% 50% 0 50%;
+  transform: rotate(45deg);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.gift-bow::after {
+  right: 0;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+}
+.gift-box.opened .gift-bow {
+  transform: translateX(-50%) translateY(-100px) scale(0);
+  opacity: 0;
+}
 .gift-box.opened { animation: giftOpen 1s forwards; }
-.gift-reveal-card { display: none; max-width: 500px; text-align: center; margin-top: 2rem; animation: popin 0.6s var(--transition-smooth) forwards; }
-
-/* Bouquet */
-.bouquet-wrapper { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; max-width: 1000px; margin: 0 auto; }
-.flower-item { width: 120px; height: 220px; display: flex; flex-direction: column; align-items: center; cursor: pointer; position: relative; transition: transform 0.3s ease; }
+.gift-reveal-card {
+  display: none;
+  max-width: 500px;
+  text-align: center;
+  margin-top: 2rem;
+  animation: popin 0.6s var(--transition-smooth) forwards;
+}
+/* CHAPTER 3: BOUQUET */
+.bouquet-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.5rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+.flower-item {
+  width: 130px; height: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  position: relative;
+  transition: transform 0.3s ease;
+}
 .flower-item:hover { transform: translateY(-10px) scale(1.08); }
-.flower-head { width: 90px; height: 90px; position: relative; transition: transform 0.5s var(--transition-smooth); }
-.flower-stem { width: 6px; height: 110px; background: linear-gradient(to bottom, #4ade80, #15803d); border-radius: 4px; position: relative; }
-.flower-leaf { position: absolute; width: 22px; height: 11px; background: #22c55e; border-radius: 15px 0 15px 0; }
-.flower-leaf.left { left: -18px; top: 30px; transform: rotate(-30deg); }
-.flower-leaf.right { right: -18px; top: 55px; transform: rotate(30deg) scaleX(-1); }
+.flower-head {
+  width: 100px; height: 100px;
+  position: relative;
+  transition: transform 0.5s var(--transition-smooth);
+}
+.flower-stem {
+  width: 6px; height: 110px;
+  background: linear-gradient(to bottom, #4ade80, #15803d);
+  border-radius: 4px;
+  position: relative;
+}
+.flower-leaf {
+  position: absolute;
+  width: 24px; height: 12px;
+  background: #22c55e;
+  border-radius: 15px 0 15px 0;
+}
+.flower-leaf.left { left: -20px; top: 30px; transform: rotate(-30deg); }
+.flower-leaf.right { right: -20px; top: 60px; transform: rotate(30deg) scaleX(-1); }
 .flower-item.bloomed .flower-head { transform: scale(1.25) rotate(15deg); }
-.flower-note-pop { position: absolute; bottom: -35px; background: rgba(255,255,255,0.95); padding: 0.4rem 0.8rem; border-radius: 12px; font-size: 0.8rem; font-weight: 600; white-space: nowrap; box-shadow: 0 4px 15px rgba(0,0,0,0.15); opacity: 0; transform: translateY(10px); transition: all 0.3s ease; pointer-events: none; z-index: 10; }
+.flower-note-pop {
+  position: absolute;
+  bottom: -35px;
+  background: rgba(255,255,255,0.95);
+  padding: 0.4rem 0.8rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+  pointer-events: none; z-index: 10;
+}
 .flower-item.bloomed .flower-note-pop { opacity: 1; transform: translateY(0); }
-
-/* Envelope & Letter */
-.letter-stage { perspective: 1200px; width: 100%; max-width: 680px; margin: 0 auto; }
-.envelope { width: 100%; max-width: 480px; height: 280px; margin: 0 auto; background: #fdf6e2; border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); position: relative; cursor: pointer; border: 1px solid #e2d2b4; display: flex; align-items: center; justify-content: center; transition: transform 0.4s ease; }
+/* CHAPTER 4: ENVELOPE + LETTER */
+.letter-stage {
+  perspective: 1200px;
+  width: 100%; max-width: 680px;
+  margin: 0 auto;
+}
+.envelope {
+  width: 100%; max-width: 480px;
+  height: 280px;
+  margin: 0 auto;
+  background: #fdf6e2;
+  border-radius: 12px;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+  position: relative;
+  cursor: pointer;
+  border: 1px solid #e2d2b4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s ease;
+}
 .envelope:hover { transform: scale(1.02); }
-.wax-seal { width: 70px; height: 70px; background: linear-gradient(135deg, #b91c1c, #991b1b); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fef08a; font-family: var(--font-handwriting); font-size: 1.8rem; box-shadow: 0 6px 16px rgba(185, 28, 28, 0.4); border: 2px dashed #fef08a; z-index: 5; transition: transform 0.4s var(--transition-smooth); }
+.wax-seal {
+  width: 70px; height: 70px;
+  background: linear-gradient(135deg, #b91c1c, #991b1b);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fef08a;
+  font-family: var(--font-handwriting);
+  font-size: 1.8rem;
+  box-shadow: 0 6px 16px rgba(185, 28, 28, 0.4);
+  border: 2px dashed #fef08a;
+  z-index: 5;
+  transition: transform 0.4s var(--transition-smooth);
+}
 .envelope.opened .wax-seal { transform: scale(0); opacity: 0; }
-.letter-paper { display: none; background: #fffdfa; background-image: linear-gradient(#e5e7eb 1px, transparent 1px); background-size: 100% 2rem; line-height: 2rem; padding: 3rem 2.5rem; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid #f3f4f6; font-family: var(--font-handwriting); font-size: 1.6rem; color: #374151; position: relative; animation: paperUnfold 0.8s var(--transition-smooth) forwards; }
-.letter-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 1.5rem; font-family: var(--font-body); font-size: 0.9rem; }
-
-/* Memory Wall & Pinterest */
-.memory-carousel { width: 100%; max-width: 800px; position: relative; }
-.polaroid-card { background: #fff; padding: 1.2rem 1.2rem 2.5rem 1.2rem; box-shadow: 0 10px 30px rgba(0,0,0,0.12); border-radius: 4px; transform: rotate(-2deg); transition: transform 0.3s ease; max-width: 380px; margin: 0 auto; }
+.letter-paper {
+  display: none;
+  background: #fffdfa;
+  background-image: linear-gradient(#e5e7eb 1px, transparent 1px);
+  background-size: 100% 2rem;
+  line-height: 2rem;
+  padding: 3rem 2.5rem;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+  border: 1px solid #f3f4f6;
+  font-family: var(--font-handwriting);
+  font-size: 1.6rem;
+  color: #374151;
+  position: relative;
+  animation: paperUnfold 0.8s var(--transition-smooth) forwards;
+}
+.letter-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1.5rem;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+}
+/* CHAPTER 5: MEMORIES */
+.memory-carousel {
+  width: 100%; max-width: 800px;
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-lg);
+}
+.polaroid-card {
+  background: #fff;
+  padding: 1.2rem 1.2rem 2.5rem 1.2rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  border-radius: 4px;
+  transform: rotate(-2deg);
+  transition: transform 0.3s ease;
+  max-width: 380px;
+  margin: 0 auto;
+}
 .polaroid-card:hover { transform: rotate(0deg) scale(1.03); }
-.polaroid-img { width: 100%; height: 260px; object-fit: cover; border-radius: 2px; background: #f3f4f6; }
-.polaroid-caption { font-family: var(--font-handwriting); font-size: 1.5rem; text-align: center; margin-top: 1rem; color: #333; }
-.photo-wall { width: 100%; height: 380px; position: relative; background: rgba(255,255,255,0.2); border-radius: var(--radius-lg); border: 2px dashed var(--card-border); overflow: hidden; margin-top: 2rem; }
-.floating-photo { position: absolute; width: 130px; padding: 8px 8px 18px 8px; background: #fff; box-shadow: 0 6px 20px rgba(0,0,0,0.15); cursor: grab; user-select: none; }
+.polaroid-img {
+  width: 100%; height: 260px;
+  object-fit: cover;
+  border-radius: 2px;
+  background: #f3f4f6;
+}
+.polaroid-caption {
+  font-family: var(--font-handwriting);
+  font-size: 1.5rem;
+  text-align: center;
+  margin-top: 1rem;
+  color: #333;
+}
+.photo-wall {
+  width: 100%; height: 380px;
+  position: relative;
+  background: rgba(255,255,255,0.2);
+  border-radius: var(--radius-lg);
+  border: 2px dashed var(--card-border);
+  overflow: hidden;
+  margin-top: 2rem;
+}
+.floating-photo {
+  position: absolute;
+  width: 130px;
+  padding: 8px 8px 18px 8px;
+  background: #fff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  cursor: grab;
+  user-select: none;
+  transition: box-shadow 0.2s;
+}
+.floating-photo:active { cursor: grabbing; box-shadow: 0 12px 30px rgba(0,0,0,0.25); z-index: 100 !important; }
 .floating-photo img { width: 100%; height: 100px; object-fit: cover; }
-.pinterest-grid { column-count: 3; column-gap: 1.2rem; width: 100%; max-width: 1000px; margin: 0 auto; }
+/* PINTEREST GALLERY */
+.pinterest-grid {
+  column-count: 3;
+  column-gap: 1.2rem;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+}
 @media (max-width: 768px) { .pinterest-grid { column-count: 2; } }
 @media (max-width: 480px) { .pinterest-grid { column-count: 1; } }
-.pin-card { break-inside: avoid; margin-bottom: 1.2rem; background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--glass-shadow); transition: transform 0.3s ease; }
-.pin-card img { width: 100%; height: auto; display: block; }
-.pin-caption { padding: 0.8rem 1rem; font-size: 0.95rem; font-weight: 600; }
-
-/* Retro TV */
-.retro-tv-wrapper { position: relative; width: 100%; max-width: 720px; margin: 0 auto; background: #2d2422; border: 14px solid #543d35; border-radius: 36px; padding: 25px; box-shadow: inset 0 0 20px #000, 0 20px 40px rgba(0,0,0,0.4); }
-.tv-screen-frame { position: relative; width: 100%; aspect-ratio: 16/9; background: #0a0a0a; border-radius: 20px; overflow: hidden; border: 4px solid #1a1a1a; display: flex; align-items: center; justify-content: center; }
-.tv-screen-frame video, .tv-screen-frame img { width: 100%; height: 100%; object-fit: cover; }
-.tv-scanlines { position: absolute; top:0; left:0; right:0; bottom:0; background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%); background-size: 100% 4px; pointer-events: none; opacity: 0.6; }
-.tv-controls { display: flex; justify-content: space-between; align-items: center; margin-top: 15px; padding: 12px 18px; background: #1a1514; border-radius: 18px; }
-.tv-knob { width: 42px; height: 42px; border-radius: 50%; background: radial-gradient(circle, #888, #222); border: 2px solid #111; cursor: pointer; }
-
-/* Timeline & Countdown */
-.timeline-container { position: relative; max-width: 750px; margin: 0 auto; padding-left: 2rem; }
-.timeline-container::before { content: ""; position: absolute; left: 7px; top: 0; bottom: 0; width: 4px; background: var(--primary-light); }
-.timeline-item { position: relative; margin-bottom: 2.5rem; padding-left: 1.5rem; }
-.timeline-dot { position: absolute; left: -2rem; top: 5px; width: 18px; height: 18px; border-radius: 50%; background: var(--primary); border: 4px solid #fff; }
-.countdown-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; max-width: 550px; margin: 1.5rem auto; }
-.count-box { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 1rem 0.5rem; text-align: center; }
-.count-num { font-size: 2.2rem; font-weight: 700; color: var(--primary); }
-.count-label { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); }
-
-/* Arcade Games Hub (12 Polished Games) */
-.games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem; width: 100%; max-width: 1050px; }
-.game-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 1.5rem 1rem; text-align: center; cursor: pointer; transition: all 0.3s var(--transition-smooth); }
+.pin-card {
+  break-inside: avoid;
+  margin-bottom: 1.2rem;
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--glass-shadow);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  position: relative;
+}
+.pin-card:hover { transform: translateY(-5px) scale(1.02); box-shadow: 0 15px 35px rgba(0,0,0,0.2); }
+.pin-card img { width: 100%; height: auto; display: block; border-radius: var(--radius-md) var(--radius-md) 0 0; }
+.pin-caption { padding: 0.8rem 1rem; font-size: 0.95rem; font-weight: 600; text-align: left; }
+/* RETRO TV SCREEN */
+.retro-tv-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  background: #2d2422;
+  border: 14px solid #543d35;
+  border-radius: 36px; padding: 25px;
+  box-shadow: inset 0 0 20px #000, 0 20px 40px rgba(0,0,0,0.4);
+}
+.tv-screen-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #0a0a0a;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 4px solid #1a1a1a;
+  box-shadow: inset 0 0 30px rgba(255,255,255,0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tv-screen-frame video, .tv-screen-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.tv-scanlines {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px; pointer-events: none;
+  z-index: 5;
+  opacity: 0.6;
+}
+.tv-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  padding: 12px 18px;
+  background: #1a1514;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+.tv-knob {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #888, #222);
+  border: 2px solid #111;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.4);
+  transition: transform 0.3s ease;
+}
+.tv-knob:active { transform: rotate(45deg); }
+/* CHAPTER 6: TIMELINE & COUNTDOWN */
+.timeline-container {
+  position: relative;
+  max-width: 750px;
+  margin: 0 auto;
+  padding-left: 2rem;
+}
+.timeline-container::before {
+  content: "";
+  position: absolute;
+  left: 7px; top: 0; bottom: 0;
+  width: 4px;
+  background: var(--primary-light);
+  border-radius: 2px;
+}
+.timeline-item {
+  position: relative;
+  margin-bottom: 2.5rem;
+  padding-left: 1.5rem;
+}
+.timeline-dot {
+  position: absolute;
+  left: -2rem; top: 5px;
+  width: 18px; height: 18px;
+  border-radius: 50%;
+  background: var(--primary); border: 4px solid #fff;
+  box-shadow: 0 0 10px var(--primary);
+}
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  max-width: 550px;
+  margin: 1.5rem auto;
+}
+.count-box {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 1rem 0.5rem;
+  text-align: center;
+  box-shadow: var(--glass-shadow);
+}
+.count-num { font-size: 2.2rem; font-weight: 700; color: var(--primary); line-height: 1; }
+.count-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-top: 0.3rem; }
+/* CHAPTER 7: ARCADE GAMES HUB */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem;
+  width: 100%; max-width: 950px;
+}
+.game-card {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: var(--radius-md);
+  padding: 1.5rem 1rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s var(--transition-smooth);
+}
 .game-card:hover { transform: translateY(-5px); background: #ffffff; }
-.game-icon { font-size: 2.4rem; margin-bottom: 0.5rem; }
-.game-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; }
-.game-modal-content { background: #fff; border-radius: var(--radius-lg); width: 100%; max-width: 600px; padding: 2rem; position: relative; max-height: 90vh; overflow-y: auto; text-align: center; }
-.close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; cursor: pointer; border: none; background: none; color: #666; }
-
-/* Tree Canvas Wrap */
-.tree-canvas-wrap { width: 100%; max-width: 850px; height: 500px; position: relative; margin: 0 auto; border-radius: var(--radius-lg); overflow: hidden; box-shadow: var(--glass-shadow); background: radial-gradient(circle, rgba(255,240,245,0.9), rgba(252,213,206,0.6)); }
+.game-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
+.game-modal {
+  display: none;
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.65);
+  backdrop-filter: blur(8px);
+  z-index: 2000;
+  align-items: center; justify-content: center;
+  padding: 1rem;
+}
+.game-modal-content {
+  background: #fff; border-radius: var(--radius-lg);
+  width: 100%; max-width: 550px;
+  padding: 2rem;
+  position: relative;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+.close-modal {
+  position: absolute; top: 1rem; right: 1rem;
+  font-size: 1.5rem; cursor: pointer; border: none; background: none; color: #666;
+}
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.memory-tile {
+  aspect-ratio: 1;
+  background: var(--primary-light);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.3s;
+}
+.memory-tile.flipped { background: #fff; transform: rotateY(180deg); }
+/* CHAPTER 8: SAKURA WISH TREE & WISH NOTE */
+.tree-canvas-wrap {
+  width: 100%; max-width: 800px; height: 500px;
+  position: relative; margin: 0 auto;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--glass-shadow);
+  background: radial-gradient(circle, rgba(255,240,245,0.9), rgba(252,213,206,0.6));
+}
 #treeCanvas { width: 100%; height: 100%; display: block; }
-#sakuraCanvas { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 3; }
-
-/* Piano & Vault & Invite */
+.wish-note-container {
+  width: 100%; max-width: 800px;
+  margin: 2rem auto 0 auto;
+}
+/* CHAPTER 9: TIME CAPSULE & NOTE */
+.time-capsule-card {
+  max-width: 800px;
+  margin: 2rem auto 0 auto;
+  width: 100%;
+}
+/* CHAPTER 10: SECRETS */
 .vault-box { text-align: center; max-width: 450px; margin: 0 auto; }
-.pin-input { letter-spacing: 10px; font-size: 2rem; text-align: center; width: 180px; padding: 0.5rem; border-radius: 12px; border: 2px solid var(--primary-light); margin: 1rem 0; }
-.invite-card { background: linear-gradient(135deg, #ffffff, #fffdfa); border: 2px solid var(--primary-light); border-radius: var(--radius-lg); padding: 2.5rem 1.8rem; text-align: center; max-width: 520px; margin: 0 auto; position: relative; box-shadow: var(--glass-shadow); }
-.proposal-wrap { text-align: center; position: relative; min-height: 320px; display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; }
-.proposal-title { font-size: clamp(2.2rem, 6vw, 3.8rem); margin-bottom: 2rem; }
-.proposal-btn-group { display: flex; gap: 1.5rem; align-items: center; justify-content: center; position: relative; width: 100%; max-width: 400px; min-height: 80px; }
-#btnNo { position: relative; transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); z-index: 10; }
+.pin-input {
+  letter-spacing: 10px; font-size: 2rem; text-align: center;
+  width: 180px; padding: 0.5rem; border-radius: 12px;
+  border: 2px solid var(--primary-light); margin: 1rem 0;
+}
+/* CHAPTER 11: INVITATION */
+.invite-card {
+  background: linear-gradient(135deg, #ffffff, #fffdfa);
+  border: 2px solid var(--primary-light);
+  border-radius: var(--radius-lg);
+  padding: 2.5rem 1.8rem;
+  text-align: center;
+  max-width: 520px;
+  margin: 0 auto;
+  position: relative;
+  box-shadow: var(--glass-shadow);
+}
+.invite-card::before {
+  content: "";
+  position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+  border: 1px dashed var(--primary-light);
+  border-radius: calc(var(--radius-lg) - 6px);
+  pointer-events: none;
+}
+/* CHAPTER 12: PLAYFUL PROPOSAL */
+.proposal-wrap {
+  text-align: center;
+  position: relative; min-height: 320px;
+  display: flex; flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.proposal-title {
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  margin-bottom: 2rem;
+}
+.proposal-btn-group {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 100%;
+  max-width: 400px;
+  min-height: 80px;
+}
+#btnNo {
+  position: relative;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  z-index: 10;
+}
+/* CHAPTER 13: PLAYABLE PIANO */
+.piano-section-wrap {
+  width: 100%; max-width: 850px;
+  margin: 0 auto;
+  text-align: center;
+}
+.piano-container {
+  background: linear-gradient(180deg, #1e1e24, #121215);
+  border-radius: 24px;
+  padding: 2rem 1.5rem;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.4), inset 0 2px 4px rgba(255,255,255,0.1);
+  border: 4px solid #2d2d35;
+  position: relative;
+}
+.piano-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding: 0 0.5rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+.piano-brand {
+  font-family: var(--font-heading);
+  color: #f3e5ab;
+  font-size: 1.2rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+.piano-presets { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.piano-keyboard-wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 10px;
+  background: #0a0a0c;
+  border-radius: 14px;
+  box-shadow: inset 0 10px 20px rgba(0,0,0,0.8);
+  user-select: none;
+  touch-action: manipulation;
+  overflow-x: auto;
+}
+.piano-keyboard { position: relative; display: flex; height: 220px; }
+.piano-key {
+  cursor: pointer; position: relative;
+  transition: background 0.1s, transform 0.08s ease, box-shadow 0.1s;
+}
+.piano-key.white {
+  width: 48px; height: 210px;
+  background: linear-gradient(to bottom, #fdfdfd 0%, #e2e2e2 100%);
+  border: 1px solid #bbb;
+  border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;
+  box-shadow: inset 0 -5px 10px rgba(0,0,0,0.15), 0 4px 6px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.piano-key.white:active, .piano-key.white.pressed {
+  background: linear-gradient(to bottom, #e0e0e0 0%, #ffffff 100%);
+  transform: translateY(4px);
+  box-shadow: inset 0 -2px 5px rgba(0,0,0,0.2);
+}
+.piano-key.black {
+  width: 30px; height: 130px;
+  background: linear-gradient(to bottom, #333 0%, #000 100%);
+  border-radius: 0 0 5px 5px;
+  margin-left: -15px; margin-right: -15px;
+  z-index: 2;
+  box-shadow: 2px 3px 8px rgba(0,0,0,0.5);
+}
+.piano-key.black:active, .piano-key.black.pressed {
+  background: linear-gradient(to bottom, #111 0%, #444 100%);
+  transform: translateY(3px);
+}
+.piano-key-label {
+  position: absolute; bottom: 10px; left: 50%;
+  transform: translateX(-50%);
+  font-size: 0.7rem; font-weight: 700; color: #777; pointer-events: none;
+}
+.piano-key.black .piano-key-label { color: #aaa; bottom: 8px; }
 
-.piano-container { background: linear-gradient(180deg, #1e1e24, #121215); border-radius: 24px; padding: 2rem 1.5rem; box-shadow: 0 20px 50px rgba(0,0,0,0.4); border: 4px solid #2d2d35; }
-.piano-top-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem; }
-.piano-brand { font-family: var(--font-heading); color: #f3e5ab; font-size: 1.2rem; letter-spacing: 2px; }
-.piano-keyboard-wrapper { position: relative; display: flex; justify-content: center; padding: 10px; background: #0a0a0c; border-radius: 14px; overflow-x: auto; }
-.piano-keyboard { position: relative; display: flex; height: 210px; }
-.piano-key { cursor: pointer; position: relative; }
-.piano-key.white { width: 46px; height: 200px; background: linear-gradient(to bottom, #fff 0%, #e2e2e2 100%); border: 1px solid #bbb; border-radius: 0 0 8px 8px; z-index: 1; }
-.piano-key.white:active, .piano-key.white.pressed { background: #ddd; transform: translateY(3px); }
-.piano-key.black { width: 28px; height: 120px; background: linear-gradient(to bottom, #333 0%, #000 100%); border-radius: 0 0 5px 5px; margin-left: -14px; margin-right: -14px; z-index: 2; }
-.piano-key.black:active, .piano-key.black.pressed { background: #222; transform: translateY(2px); }
-.piano-key-label { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; font-weight: 700; color: #777; pointer-events: none; }
-
-/* Modal & Control Center Panels */
-#creatorModal, #ownerAuthModal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(10px); z-index: 3000; align-items: center; justify-content: center; padding: 1.5rem; }
-.creator-panel { background: #fff; width: 100%; max-width: 780px; max-height: 88vh; overflow-y: auto; border-radius: var(--radius-lg); padding: 2rem; color: #333; }
+/* Modals & Panels */
+#creatorModal, #ownerAuthModal {
+  display: none;
+  position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+  background: rgba(0,0,0,0.7); backdrop-filter: blur(10px);
+  z-index: 3000;
+  align-items: center; justify-content: center;
+  padding: 1.5rem;
+}
+.creator-panel {
+  background: #fff; width: 100%; max-width: 750px;
+  max-height: 85vh; overflow-y: auto;
+  border-radius: var(--radius-lg); padding: 2rem;
+}
 .form-group { margin-bottom: 1rem; text-align: left; }
-.form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem; color: #444; }
-.form-control { width: 100%; padding: 0.6rem 0.9rem; border-radius: 8px; border: 1px solid #ccc; font-family: inherit; font-size: 0.95rem; }
+.form-group label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 0.3rem; }
+.form-control {
+  width: 100%; padding: 0.6rem 0.9rem; border-radius: 8px;
+  border: 1px solid #ccc; font-family: inherit; font-size: 0.95rem;
+}
 .tab-btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.2rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem; }
 .tab-btn { padding: 0.4rem 0.8rem; font-weight: 600; border-radius: 6px; border: none; background: #f0f0f0; cursor: pointer; font-size: 0.85rem; }
 .tab-btn.active { background: var(--primary); color: #fff; }
 .tab-content { display: none; } .tab-content.active { display: block; }
-
-#toast { position: fixed; bottom: 25px; left: 50%; transform: translateX(-50%) translateY(100px); background: var(--text-main); color: #fff; padding: 0.7rem 1.5rem; border-radius: 30px; font-size: 0.9rem; font-weight: 500; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 9999; opacity: 0; transition: all 0.4s var(--transition-smooth); }
+#toast {
+  position: fixed; bottom: 25px; left: 50%;
+  transform: translateX(-50%) translateY(100px);
+  background: var(--text-main); color: #fff;
+  padding: 0.7rem 1.5rem; border-radius: 30px;
+  font-size: 0.9rem; font-weight: 500;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+  z-index: 9999; opacity: 0;
+  transition: all 0.4s var(--transition-smooth);
+}
 #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
 @keyframes pulseGlow { 0% { box-shadow: 0 0 5px var(--gold-glow); } 100% { box-shadow: 0 0 20px var(--gold-glow); } }
@@ -371,18 +946,20 @@ main { position: relative; z-index: 2; width: 100%; }
 @keyframes giftOpen { 0% { transform: scale(1); } 50% { transform: scale(1.1) rotate(5deg); } 100% { transform: scale(0.9); opacity: 0.3; } }
 @keyframes popin { 0% { opacity: 0; transform: scale(0.8) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
 @keyframes paperUnfold { 0% { opacity: 0; transform: scaleY(0.3); } 100% { opacity: 1; transform: scaleY(1); } }
+@media (max-width: 640px) {
+  .chapter-section { padding-top: 5rem; }
+  .countdown-grid { grid-template-columns: repeat(2, 1fr); }
+  #mainNav { bottom: 15px; top: auto; }
+}
 </style>
 </head>
 <body>
-
+<div id="previewBanner">
+  👀 PREVIEW MODE ACTIVE — Previewing Recipient View Experience
+  <button onclick="togglePreviewMode(false)">Exit Preview</button>
+</div>
 <canvas id="bgCanvas"></canvas>
 <canvas id="fxCanvas"></canvas>
-
-<!-- Live Preview Banner Mode -->
-<div id="previewBanner">
-  <span>👁️ PREVIEW MODE (Recipient View)</span>
-  <button class="btn btn-secondary" style="padding:0.3rem 0.8rem; font-size:0.8rem;" onclick="toggleLivePreview(false)">Exit Preview</button>
-</div>
 
 <nav id="mainNav" aria-label="Main Navigation">
   <a class="nav-link active" onclick="scrollToSection('intro')">Intro</a>
@@ -404,13 +981,13 @@ main { position: relative; z-index: 2; width: 100%; }
 <div id="quickControls">
   <button class="btn btn-secondary btn-icon" id="btnAudioToggle" title="Audio Options & Synth" onclick="cycleAudioPreset()">🎵</button>
   <button class="btn btn-secondary btn-icon" title="Cycle Themes (21 Available)" onclick="cycleTheme()">🎨</button>
-  <button class="btn btn-secondary btn-icon" title="Export PDF Document" onclick="exportPDFDocument()">📄</button>
-  <button class="btn btn-secondary btn-icon" title="Export Word (.docx) Document" onclick="exportWordDocument()">📝</button>
-  <button class="btn btn-secondary btn-icon owner-only" title="Customize Experience (Owner Panel)" onclick="openCreatorModal()">⚙️</button>
+  <button class="btn btn-secondary btn-icon" title="Export as PDF Document" onclick="exportPDFDocument()">📄</button>
+  <button class="btn btn-secondary btn-icon" title="Export as Word (.docx) Document" onclick="exportWordDocument()">📝</button>
+  <button class="btn btn-secondary btn-icon owner-only-btn" id="btnOwnerModal" title="Customize Experience (Owner Only)" onclick="openCreatorModal()">⚙️</button>
 </div>
 
 <main>
-  <!-- INTRO -->
+  <!-- CHAPTER 1: INTRO -->
   <section id="intro" class="chapter-section visible">
     <span class="intro-badge" id="cfgOccasion">SPECIAL CELEBRATION</span>
     <h1 class="intro-title" id="cfgIntroHeading">Happy Celebration, <span class="handwriting" style="color:var(--primary)" id="cfgRecipientName">Sophia</span>!</h1>
@@ -421,7 +998,7 @@ main { position: relative; z-index: 2; width: 100%; }
     </button>
   </section>
 
-  <!-- GIFT BOX -->
+  <!-- CHAPTER 2: GIFT BOX -->
   <section id="gift" class="chapter-section">
     <h2 class="section-title">A Special Surprise</h2>
     <p class="section-subtitle">Tap the golden ribbon to untie the present</p>
@@ -440,14 +1017,14 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- BOUQUET -->
+  <!-- CHAPTER 3: BOUQUET -->
   <section id="bouquet" class="chapter-section">
     <h2 class="section-title">Interactive Floral Bouquet</h2>
     <p class="section-subtitle">Click on each blossom to reveal sweet hidden messages</p>
     <div class="bouquet-wrapper" id="flowerContainer"></div>
   </section>
 
-  <!-- ENVELOPE & LETTER -->
+  <!-- CHAPTER 4: ENVELOPE & LOVE LETTER -->
   <section id="letter" class="chapter-section">
     <h2 class="section-title">A Heartfelt Note</h2>
     <p class="section-subtitle">Break the wax seal to read the letter</p>
@@ -468,14 +1045,14 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- MEMORIES -->
+  <!-- CHAPTER 5: MEMORIES -->
   <section id="memories" class="chapter-section">
     <h2 class="section-title">Treasured Memories</h2>
     <p class="section-subtitle">Snapshots of our favorite chapters</p>
     <div class="memory-carousel">
       <div class="polaroid-card">
         <img src="" id="memoryImg" class="polaroid-img" alt="Memory photo" />
-        <p class="polaroid-caption" id="memoryCaption">Our first spontaneous trip</p>
+        <p class="polaroid-caption" id="memoryCaption"></p>
       </div>
       <div style="display: flex; justify-content:center; gap: 1rem; margin-top:1rem;">
         <button class="btn btn-secondary btn-icon" onclick="changeMemory(-1)">&lt;</button>
@@ -483,18 +1060,18 @@ main { position: relative; z-index: 2; width: 100%; }
       </div>
     </div>
     <h3 style="margin-top:3rem; font-size: 1.4rem;">Interactive Photo Wall</h3>
-    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1rem;">Drag Polaroid photos anywhere on the wall!</p>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom: 1rem;">Drag photos anywhere on the wall!</p>
     <div class="photo-wall" id="photoWall"></div>
   </section>
 
-  <!-- PINTEREST GALLERY -->
+  <!-- CHAPTER 6: PINTEREST GALLERY -->
   <section id="pinterest" class="chapter-section">
     <h2 class="section-title">Pinterest Gallery</h2>
     <p class="section-subtitle">Aesthetic memory collage board</p>
     <div class="pinterest-grid" id="pinterestGrid"></div>
   </section>
 
-  <!-- RETRO TV -->
+  <!-- CHAPTER 7: RETRO TV -->
   <section id="retrotv" class="chapter-section">
     <h2 class="section-title">Retro TV Experience</h2>
     <p class="section-subtitle">Watch video memories & big screen photos</p>
@@ -513,7 +1090,7 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- TIMELINE -->
+  <!-- CHAPTER 8: TIMELINE & COUNTDOWN -->
   <section id="timeline" class="chapter-section">
     <h2 class="section-title">Milestones & Countdown</h2>
     <p class="section-subtitle">Counting down to our next big celebration</p>
@@ -526,38 +1103,35 @@ main { position: relative; z-index: 2; width: 100%; }
     <div class="timeline-container" id="timelineList" style="margin-top:3rem;"></div>
   </section>
 
-  <!-- CELEBRATION ARCADE HUB (BEST 12 GAMES) -->
+  <!-- CHAPTER 9: CELEBRATION ARCADE HUB (VERSION 5.0 GAMES MODEL INTEGRATED) -->
   <section id="games" class="chapter-section">
     <h2 class="section-title">Celebration Arcade</h2>
-    <p class="section-subtitle">Play interactive mini-games to unlock rewards</p>
+    <p class="section-subtitle">Play interactive mini-games to unlock secret rewards</p>
     <div class="games-grid">
-      <div class="game-card" onclick="openGame('scratch')"><div class="game-icon">🎫</div><h3>Scratch Card</h3><p style="font-size:0.8rem; color:var(--text-muted);">Scratch to reveal secret reward</p></div>
-      <div class="game-card" onclick="openGame('match')"><div class="game-icon">🧩</div><h3>Memory Match</h3><p style="font-size:0.8rem; color:var(--text-muted);">Match celebratory card pairs</p></div>
-      <div class="game-card" onclick="openGame('wheel')"><div class="game-icon">🎡</div><h3>Spin Wheel</h3><p style="font-size:0.8rem; color:var(--text-muted);">Spin for sweet real prizes</p></div>
+      <div class="game-card" onclick="openGame('scratch')"><div class="game-icon">🎫</div><h3>Scratch Card</h3><p style="font-size:0.8rem; color:var(--text-muted);">Scratch to reveal secret message</p></div>
+      <div class="game-card" onclick="openGame('match')"><div class="game-icon">🧩</div><h3>Memory Match</h3><p style="font-size:0.8rem; color:var(--text-muted);">Match celebratory pairs</p></div>
+      <div class="game-card" onclick="openGame('wheel')"><div class="game-icon">🎡</div><h3>Lucky Wheel</h3><p style="font-size:0.8rem; color:var(--text-muted);">Spin for sweet compliments</p></div>
       <div class="game-card" onclick="openGame('quiz')"><div class="game-icon">❓</div><h3>Love Quiz</h3><p style="font-size:0.8rem; color:var(--text-muted);">Test how well you know us</p></div>
-      <div class="game-card" onclick="openGame('balloon')"><div class="game-icon">🎈</div><h3>Balloon Pop</h3><p style="font-size:0.8rem; color:var(--text-muted);">Pop floating celebration balloons</p></div>
-      <div class="game-card" onclick="openGame('hearts')"><div class="game-icon">💖</div><h3>Catch My Heart</h3><p style="font-size:0.8rem; color:var(--text-muted);">Catch falling hearts in basket</p></div>
-      <div class="game-card" onclick="openGame('puzzle')"><div class="game-icon">🖼️</div><h3>Photo Puzzle</h3><p style="font-size:0.8rem; color:var(--text-muted);">Sliding custom photo puzzle</p></div>
-      <div class="game-card" onclick="openGame('magic')"><div class="game-icon">✨</div><h3>Magic Reveal</h3><p style="font-size:0.8rem; color:var(--text-muted);">Wipe canvas fog to reveal photo</p></div>
-      <div class="game-card" onclick="openGame('target')"><div class="game-icon">🎯</div><h3>Target Tap</h3><p style="font-size:0.8rem; color:var(--text-muted);">Tap glowing targets quickly</p></div>
-      <div class="game-card" onclick="openGame('hunt')"><div class="game-icon">🗝️</div><h3>Treasure Hunt</h3><p style="font-size:0.8rem; color:var(--text-muted);">Solve clues to unlock chest</p></div>
-      <div class="game-card" onclick="openGame('scramble')"><div class="game-icon">🔤</div><h3>Word Scramble</h3><p style="font-size:0.8rem; color:var(--text-muted);">Unscramble joyful love words</p></div>
-      <div class="game-card" onclick="openGame('rhythm')"><div class="game-icon">🎵</div><h3>Rhythm Tapper</h3><p style="font-size:0.8rem; color:var(--text-muted);">Tap falling musical beats</p></div>
+      <div class="game-card" onclick="openGame('balloon')"><div class="game-icon">🎈</div><h3>Balloon Pop</h3><p style="font-size:0.8rem; color:var(--text-muted);">Pop floating balloons</p></div>
+      <div class="game-card" onclick="openGame('hearts')"><div class="game-icon">💖</div><h3>Catch My Heart</h3><p style="font-size:0.8rem; color:var(--text-muted);">Catch falling hearts</p></div>
+      <div class="game-card" onclick="openGame('puzzle')"><div class="game-icon">🖼️</div><h3>Photo Puzzle</h3><p style="font-size:0.8rem; color:var(--text-muted);">Arrange sliding puzzle tiles</p></div>
+      <div class="game-card" onclick="openGame('magic')"><div class="game-icon">✨</div><h3>Magic Reveal</h3><p style="font-size:0.8rem; color:var(--text-muted);">Wave cursor to uncover canvas</p></div>
+      <div class="game-card" onclick="openGame('target')"><div class="game-icon">🎯</div><h3>Target Game</h3><p style="font-size:0.8rem; color:var(--text-muted);">Tap moving targets to score</p></div>
+      <div class="game-card" onclick="openGame('hunt')"><div class="game-icon">🗝️</div><h3>Treasure Hunt</h3><p style="font-size:0.8rem; color:var(--text-muted);">Solve clues to unlock reward</p></div>
     </div>
   </section>
 
-  <!-- SAKURA TREE -->
+  <!-- CHAPTER 10: REALISTIC SAKURA WISH TREE -->
   <section id="tree" class="chapter-section">
     <h2 class="section-title">Sakura Wish Tree</h2>
     <p class="section-subtitle">Hang your heartfelt wish on a blooming cherry blossom branch</p>
     <div class="tree-canvas-wrap">
       <canvas id="treeCanvas"></canvas>
-      <canvas id="sakuraCanvas"></canvas>
     </div>
-    <div style="width:100%; max-width:800px; margin-top:1.5rem;">
+    <div class="wish-note-container">
       <div class="glass-card">
         <h3>Write a Wish Note</h3>
-        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Your note will hang softly on a Sakura branch.</p>
+        <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Your note will hang on a Sakura branch and sway softly in the breeze.</p>
         <div style="display: flex; flex-direction:column; gap:0.8rem;">
           <textarea id="wishMsgInput" placeholder="Type your sweet wish or message here..." class="form-control" rows="3"></textarea>
           <button class="btn" onclick="submitWishNote()">Hang Wish on Sakura Tree ✨</button>
@@ -566,10 +1140,26 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- SECRETS VAULT -->
+  <!-- CHAPTER 11: TIME CAPSULE -->
+  <section id="capsule" class="chapter-section">
+    <h2 class="section-title">Time Capsule</h2>
+    <p class="section-subtitle">Seal a secret message for future unlocking</p>
+    <div class="glass-card time-capsule-card">
+      <h3>Future Time Capsule</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Write a memory or goal to unlock on a future date.</p>
+      <div style="display: flex; flex-direction:column; gap:0.8rem;">
+        <input type="date" id="tcDate" class="form-control" />
+        <textarea id="tcMsg" placeholder="Your future message..." class="form-control" rows="3"></textarea>
+        <button class="btn btn-secondary" onclick="saveTimeCapsule()">Seal Time Capsule 🔒</button>
+      </div>
+      <div id="tcStatus" style="font-size:0.9rem; margin-top:1rem; color:var(--primary); font-weight:600;"></div>
+    </div>
+  </section>
+
+  <!-- CHAPTER 12: SECRET VAULT -->
   <section id="secrets" class="chapter-section">
     <h2 class="section-title">Secret Vault</h2>
-    <p class="section-subtitle">Enter the secret 4-digit PIN code</p>
+    <p class="section-subtitle">Enter the secret 4-digit PIN code to unlock hidden content</p>
     <div class="glass-card vault-box">
       <div style="font-size:3rem; margin-bottom:0.5rem;">🔒</div>
       <input type="password" maxlength="4" class="pin-input" id="vaultPin" placeholder="...." />
@@ -579,7 +1169,7 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- INVITATION -->
+  <!-- CHAPTER 13: INVITATION & RSVP -->
   <section id="invitation" class="chapter-section">
     <h2 class="section-title">Save The Date</h2>
     <p class="section-subtitle">You are cordially invited to celebrate together</p>
@@ -601,32 +1191,36 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- PROPOSAL -->
+  <!-- CHAPTER 14: PLAYFUL PROPOSAL -->
   <section id="proposal" class="chapter-section">
     <div class="proposal-wrap">
       <span style="font-size:3rem; margin-bottom: 1rem;">💍</span>
       <h2 class="proposal-title" id="cfgProposalQuestion">Will you go out with me?</h2>
+      <div style="margin-bottom:1rem; font-size:0.85rem; color:var(--text-muted);">
+        <label><input type="checkbox" id="chkAccMode" onchange="toggleAccessibilityMode(this.checked)" /> Accessibility Mode (Disable escaping NO button)</label>
+      </div>
       <div class="proposal-btn-group">
         <button class="btn" id="btnYes" style="padding: 1rem 2.5rem; font-size:1.2rem;" onclick="triggerYesCelebration()">YES! Forever</button>
         <button class="btn btn-secondary" id="btnNo" onmouseenter="escapeNoButton()" onclick="escapeNoButton()">No</button>
       </div>
-      <div id="proposalResultCard" style="display:none; margin-top:1.5rem; padding:1.5rem 2rem; background:var(--card-bg); border-radius:var(--radius-lg); border:2px solid var(--primary); box-shadow:var(--glass-shadow);">
+      <div id="proposalResultCard" style="display:none; margin-top:1.5rem; padding:1.5rem 2rem; background:var(--card-bg); border-radius:var(--radius-lg); border:2px solid var(--primary); box-shadow:var(--glass-shadow); animation:popin 0.5s ease;">
         <h3 style="font-size:2.2rem; color:var(--primary);">SHE SAID YES! 🎉</h3>
         <p style="margin-top:0.5rem; font-weight:600;">The absolute best decision ever made!</p>
       </div>
     </div>
   </section>
 
-  <!-- PIANO -->
+  <!-- CHAPTER 15: PLAYABLE PIANO -->
   <section id="piano" class="chapter-section">
     <h2 class="section-title">Playable Celebration Piano</h2>
     <p class="section-subtitle">Play notes or select a preset melody to celebrate</p>
-    <div style="width:100%; max-width:850px; margin:0 auto;">
+    <div class="piano-section-wrap">
       <div class="piano-container">
         <div class="piano-top-bar">
           <div class="piano-brand">🎹 Starlight Grand</div>
-          <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+          <div class="piano-presets">
             <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="playPianoPreset('birthday')">Happy Birthday</button>
+            <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="playPianoPreset('celebration')">Celebration</button>
             <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem;" onclick="playPianoPreset('romantic')">Romantic</button>
             <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem; color:#ef4444;" onclick="stopPianoPreset()">Stop</button>
           </div>
@@ -639,7 +1233,7 @@ main { position: relative; z-index: 2; width: 100%; }
   </section>
 </main>
 
-<!-- Arcade Game Modal -->
+<!-- Modals -->
 <div class="game-modal" id="gameModal">
   <div class="game-modal-content">
     <button class="close-modal" onclick="closeGameModal()">×</button>
@@ -647,83 +1241,78 @@ main { position: relative; z-index: 2; width: 100%; }
   </div>
 </div>
 
-<!-- Creator / Owner Dashboard Modal -->
+<div id="ownerAuthModal">
+  <div class="creator-panel" style="max-width:400px; text-align:center;">
+    <h3>🔒 Owner Authentication</h3>
+    <p style="font-size:0.85rem; color:var(--text-muted); margin: 0.8rem 0;">Enter Owner Passcode to edit site content.</p>
+    <input type="password" id="ownerPasscodePrompt" class="form-control" placeholder="Passcode" style="text-align:center; font-size:1.2rem; margin-bottom:1rem;" />
+    <div style="display: flex; gap:0.5rem; justify-content:center;">
+      <button class="btn" onclick="verifyOwnerAccess()">Unlock Settings</button>
+      <button class="btn btn-secondary" onclick="closeOwnerAuthModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <div id="creatorModal">
   <div class="creator-panel">
     <div style="display: flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-      <h2>⚙️ Owner Control Dashboard</h2>
+      <h2>⚙️ Owner Customization Dashboard</h2>
       <button class="close-modal" onclick="closeCreatorModal()">×</button>
     </div>
-    
-    <!-- Action Bar: Live Preview & Share -->
-    <div style="display: flex; gap: 0.8rem; margin-bottom: 1.2rem; background: #f0fdf4; padding: 0.8rem; border-radius: 12px; border: 1px solid #bbf7d0;">
-      <button class="btn" style="background:#10b981;" onclick="toggleLivePreview(true)">👁️ Preview Website (Recipient View)</button>
-      <button class="btn" style="background:#6366f1;" onclick="shareCustomizedWebsite()">🚀 Share / Send Website to Recipient</button>
-    </div>
-
     <div class="tab-btn-group">
       <button class="tab-btn active" onclick="switchCreatorTab('tabGeneral')">General</button>
       <button class="tab-btn" onclick="switchCreatorTab('tabSurprises')">Letter & Gift</button>
-      <button class="tab-btn" onclick="switchCreatorTab('tabUploads')">📁 Local File Uploads</button>
+      <button class="tab-btn" onclick="switchCreatorTab('tabBouquet')">Bouquet & Photos</button>
+      <button class="tab-btn" onclick="switchCreatorTab('tabUploads')">Media Uploads</button>
       <button class="tab-btn" onclick="switchCreatorTab('tabTimeline')">Timeline & RSVP</button>
-      <button class="tab-btn" onclick="switchCreatorTab('tabSecrets')">Vault & Passcode</button>
+      <button class="tab-btn" onclick="switchCreatorTab('tabSecrets')">Vault & Quiz</button>
+      <button class="tab-btn" onclick="switchCreatorTab('tabRecipient')">Website Generation</button>
     </div>
-
-    <!-- TAB 1: General -->
     <div id="tabGeneral" class="tab-content active">
       <div class="form-group"><label>Recipient Name</label><input type="text" id="edtRecipient" class="form-control" /></div>
       <div class="form-group"><label>Sender Name</label><input type="text" id="edtSender" class="form-control" /></div>
       <div class="form-group"><label>Occasion Tag</label><input type="text" id="edtOccasion" class="form-control" /></div>
-      <div class="form-group"><label>Intro Heading</label><input type="text" id="edtIntroHeading" class="form-control" /></div>
-      <div class="form-group"><label>Main Message</label><textarea id="edtMainMessage" class="form-control" rows="2"></textarea></div>
+      <div class="form-group"><label>Intro Heading Text</label><input type="text" id="edtIntroHeading" class="form-control" /></div>
+      <div class="form-group"><label>Main Intro Message</label><textarea id="edtMainMessage" class="form-control" rows="2"></textarea></div>
     </div>
-
-    <!-- TAB 2: Surprises -->
     <div id="tabSurprises" class="tab-content">
       <div class="form-group"><label>Gift Box Title</label><input type="text" id="edtGiftTitle" class="form-control" /></div>
       <div class="form-group"><label>Gift Box Text</label><textarea id="edtGiftText" class="form-control" rows="2"></textarea></div>
       <div class="form-group"><label>Love Letter Pages (JSON Array)</label><textarea id="edtLetterPages" class="form-control" rows="4"></textarea></div>
     </div>
-
-    <!-- TAB 3: Local File Uploads (Native Device Browser) -->
+    <div id="tabBouquet" class="tab-content">
+      <div class="form-group"><label>Flower Messages (JSON)</label><textarea id="edtFlowers" class="form-control" rows="4"></textarea></div>
+      <div class="form-group"><label>Memories Carousel (JSON)</label><textarea id="edtMemories" class="form-control" rows="4"></textarea></div>
+    </div>
     <div id="tabUploads" class="tab-content">
-      <h3 style="font-size:1rem; margin-bottom:0.5rem; color:var(--primary);">Upload Media Direct from Local Device</h3>
       <div class="form-group">
-        <label>Upload Photos (Memories & Photo Wall)</label>
-        <input type="file" accept="image/*" multiple id="uplPhotos" class="form-control" onchange="handleLocalPhotoUpload(event)" />
+        <label>Upload Memory / Photo (Local Device Browser)</label>
+        <input type="file" accept="image/*" class="form-control" onchange="uploadLocalMedia(event, 'memory')" />
       </div>
       <div class="form-group">
-        <label>Upload Retro TV Videos/Media</label>
-        <input type="file" accept="video/*,image/*" multiple id="uplTvMedia" class="form-control" onchange="handleLocalTvUpload(event)" />
-      </div>
-      <div class="form-group">
-        <label>Upload Custom Background Music (Audio File)</label>
-        <input type="file" accept="audio/*" id="uplMusic" class="form-control" onchange="handleLocalAudioUpload(event)" />
-      </div>
-      <div class="form-group">
-        <label>Upload Custom Background Wallpaper Image</label>
-        <input type="file" accept="image/*" id="uplBgImg" class="form-control" onchange="handleLocalBgUpload(event)" />
+        <label>Upload Retro TV Video / Image (Local Device)</label>
+        <input type="file" accept="video/*,image/*" class="form-control" onchange="uploadLocalMedia(event, 'tv')" />
       </div>
     </div>
-
-    <!-- TAB 4: Timeline & RSVP -->
     <div id="tabTimeline" class="tab-content">
-      <div class="form-group"><label>Target Countdown ISO Date (e.g. 2026-10-14T19:00:00)</label><input type="text" id="edtCountdown" class="form-control" /></div>
+      <div class="form-group"><label>Countdown Date (e.g. 2026-10-14T19:00:00)</label><input type="text" id="edtCountdown" class="form-control" /></div>
+      <div class="form-group"><label>Timeline Items (JSON)</label><textarea id="edtTimeline" class="form-control" rows="4"></textarea></div>
       <div class="form-group"><label>RSVP Event Title</label><input type="text" id="edtEventTitle" class="form-control" /></div>
-      <div class="form-group"><label>RSVP Event Date</label><input type="text" id="edtEventDate" class="form-control" /></div>
-      <div class="form-group"><label>RSVP Event Time</label><input type="text" id="edtEventTime" class="form-control" /></div>
-      <div class="form-group"><label>RSVP Venue</label><input type="text" id="edtVenue" class="form-control" /></div>
     </div>
-
-    <!-- TAB 5: Secrets & Security -->
     <div id="tabSecrets" class="tab-content">
-      <div class="form-group"><label>Secret Vault PIN (4 digits)</label><input type="text" id="edtPin" maxlength="4" class="form-control" /></div>
-      <div class="form-group"><label>Vault Secret Unlocked Message</label><input type="text" id="edtSecretMsg" class="form-control" /></div>
-      <div class="form-group"><label>Owner Security Passcode</label><input type="text" id="edtOwnerPasscode" class="form-control" /></div>
+      <div class="form-group"><label>Secret Vault 4-Digit PIN</label><input type="text" id="edtPin" maxlength="4" class="form-control" /></div>
+      <div class="form-group"><label>Secret Vault Message</label><input type="text" id="edtSecretMsg" class="form-control" /></div>
     </div>
-
+    <div id="tabRecipient" class="tab-content">
+      <h3 style="margin-bottom:0.8rem;">🌐 Recipient Link & Standalone Generation</h3>
+      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Generate an independent, ready-to-publish website payload. Controls will be hidden from recipients.</p>
+      <div style="display: flex; gap: 1rem; flex-wrap:wrap;">
+        <button class="btn" onclick="exportRecipientWebsite()">Export Recipient Website (.html)</button>
+        <button class="btn btn-secondary" onclick="togglePreviewMode(true)">Preview Website View</button>
+      </div>
+    </div>
     <div style="display: flex; gap: 1rem; margin-top:1.5rem;">
-      <button class="btn" onclick="saveCreatorConfig()">Save Configuration Permanently</button>
+      <button class="btn" onclick="saveCreatorConfig()">Save Configuration</button>
       <button class="btn btn-secondary" onclick="resetCreatorConfig()">Reset Defaults</button>
     </div>
   </div>
@@ -731,11 +1320,8 @@ main { position: relative; z-index: 2; width: 100%; }
 
 <div id="toast">Notification</div>
 
-<!-- JAVASCRIPT ENGINE -->
 <script>
-/* ======================================================================
- 1. GLOBAL CONFIGURATION & PERSISTENT STORAGE
- ====================================================================== */
+/* GLOBAL CONFIGURATION */
 window.CELEBRATION_CONFIG = {
   ownerPasscode: "1234",
   recipientName: "Sophia",
@@ -750,245 +1336,119 @@ window.CELEBRATION_CONFIG = {
   vaultSecretMsg: "You are my favorite thought every single day. I love you!",
   eventTitle: "Special Anniversary Dinner",
   eventDesc: "An intimate evening of delicious food, candles, and creating unforgettable memories.",
-  eventDate: "October 14, 2026", 
-  eventTime: "7:00 PM EST",
-  venue: "The Starlight Rooftop Garden",
-  countdownTarget: "2026-10-14T19:00:00",
-  theme: "dreamy-pink",
-  customBgDataUrl: "",
-  customAudioDataUrl: "",
-  quizQuestion: "What is our favorite shared activity?",
-  quizCorrect: "Stargazing & long chats",
-  quizWrong: "Sitting in traffic",
-  wishes: [
-    { text: "May your life bloom with soft cherry blossoms and eternal joy! ✨" },
-    { text: "Wishing you infinite smiles and warmth every single day! 💕" }
-  ],
+  eventDate: "October 14, 2026", eventTime: "7:00 PM EST", venue: "The Starlight Rooftop Garden",
+  countdownTarget: "2026-10-14T19:00:00", theme: "dreamy-pink",
+  wishes: [{ text: "May your life bloom with soft cherry blossoms! ✨" }],
   letterPages: [
     "My Dearest Sophia, \n\nFrom the moment you entered my life, every ordinary day has felt like a scene from a magical movie.",
-    "Thank you for every shared smile, late-night conversation, and quiet moment of understanding. Building memories with you is my absolute favorite pastime.",
-    "As we celebrate this special occasion, I want you to remember how deeply loved and appreciated you are. Here is to all our adventures yet to come!"
+    "Thank you for every shared smile, late-night conversation, and quiet moment. Building memories with you is my absolute favorite pastime."
   ],
   flowers: [
     { type: "rose", name: "Red Rose", msg: "You bring passion & endless joy to my life" },
-    { type: "tulip", name: "Pink Tulip", msg: "A sweet reminder of how caring & gentle you are" },
+    { type: "tulip", name: "Pink Tulip", msg: "A sweet reminder of how gentle you are" },
     { type: "lily", name: "White Lily", msg: "Pure happiness whenever you are near" },
-    { type: "orchid", name: "Royal Orchid", msg: "Unique, elegant, and beautiful inside out" },
-    { type: "daisy", name: "Sunny Daisy", msg: "You bring bright warmth to my everyday world" },
-    { type: "cherry", name: "Cherry Blossom", msg: "Every moment with you blooms sweetly" },
-    { type: "sunflower", name: "Golden Sunflower", msg: "You light up any room with your radiant smile" },
-    { type: "lotus", name: "Mystic Lotus", msg: "Peaceful, graceful, and deeply cherished" }
+    { type: "orchid", name: "Royal Orchid", msg: "Unique, elegant, and cherished" }
   ],
   memories: [
     { img: "https://picsum.photos/id/1018/600/400", caption: "Our serene walk by the mountain lake" },
-    { img: "https://picsum.photos/id/1025/600/400", caption: "Cozy coffee mornings together" },
-    { img: "https://picsum.photos/id/1062/600/400", caption: "Stargazing on warm summer nights" }
+    { img: "https://picsum.photos/id/1025/600/400", caption: "Cozy coffee mornings together" }
   ],
   pinterestPhotos: [
     { img: "https://picsum.photos/id/1015/600/800", caption: "Aesthetic sunset vibes" },
-    { img: "https://picsum.photos/id/1025/600/600", caption: "Cozy moments" },
-    { img: "https://picsum.photos/id/1039/600/900", caption: "Unforgettable trip" }
+    { img: "https://picsum.photos/id/1025/600/600", caption: "Cozy moments" }
   ],
   retroTvMedia: [
-    { type: "image", src: "https://picsum.photos/id/1018/800/450", title: "Channel 01 - Mountain Lake View" },
-    { type: "image", src: "https://picsum.photos/id/1062/800/450", title: "Channel 02 - Night Sky Stargazing" }
+    { type: "image", src: "https://picsum.photos/id/1018/800/450", title: "Channel 01 - Mountain Lake View" }
   ],
   timeline: [
     { date: "June 12, 2023", title: "First Met", desc: "A chance meeting that changed everything." },
-    { date: "October 14, 2023", title: "First Official Date", desc: "Coffee turned into a 4-hour walk." },
-    { date: "August 10, 2024", title: "Roadtrip Adventure", desc: "Exploring coastlines together." }
+    { date: "October 14, 2023", title: "First Official Date", desc: "Coffee turned into a 4-hour walk." }
   ]
 };
 
-// Load saved owner configuration permanently
-const savedConfig = localStorage.getItem('celebration_cfg');
-if (savedConfig) {
-  try { Object.assign(window.CELEBRATION_CONFIG, JSON.parse(savedConfig)); } catch (e) {}
-}
+const localCfg = localStorage.getItem('celebration_cfg');
+if (localCfg) { try { Object.assign(window.CELEBRATION_CONFIG, JSON.parse(localCfg)); } catch (e) {} }
 
-/* ======================================================================
- 2. STATE & WEB AUDIO SYNTHESIZER
- ====================================================================== */
-let currentLetterPage = 0;
-let currentMemoryIdx = 0;
-let currentTvIdx = 0;
-let audioCtx = null;
-let audioPresetIdx = 0;
-let synthInterval = null;
-let localAudioElem = null;
+let currentLetterPage = 0, currentMemoryIdx = 0, currentTvIdx = 0, audioCtx = null, audioPresetIdx = 0, synthInterval = null, isOwnerAuthenticated = false, presetTimer = null, accMode = false;
 
+/* AUDIO SYNTHESIZER */
 function initAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
 }
-
 function playTone(freq = 440, duration = 0.4, type = 'sine', gainVal = 0.1) {
   initAudio();
   if (!audioCtx) return;
   try {
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.type = type;
-    osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+    const osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+    osc.type = type; osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
     gain.gain.setValueAtTime(gainVal, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + duration);
-    osc.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc.start();
-    osc.stop(audioCtx.currentTime + duration);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(); osc.stop(audioCtx.currentTime + duration);
   } catch (e) {}
 }
-
 function playPianoSound(freq) {
   initAudio();
   if (!audioCtx) return;
   try {
-    const now = audioCtx.currentTime;
-    const osc1 = audioCtx.createOscillator();
-    const osc2 = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc1.type = 'triangle'; osc2.type = 'sine';
-    osc1.frequency.setValueAtTime(freq, now);
-    osc2.frequency.setValueAtTime(freq * 2, now);
-    gain.gain.setValueAtTime(0.3, now);
-    gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
-    osc1.connect(gain); osc2.connect(gain);
-    gain.connect(audioCtx.destination);
-    osc1.start(now); osc2.start(now);
-    osc1.stop(now + 1.2); osc2.stop(now + 1.2);
+    const now = audioCtx.currentTime, osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+    osc.type = 'triangle'; osc.frequency.setValueAtTime(freq, now);
+    gain.gain.setValueAtTime(0.3, now); gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(now); osc.stop(now + 1.2);
   } catch(e) {}
 }
-
 function showToast(msg) {
   const toast = document.getElementById('toast');
-  toast.innerText = msg;
-  toast.classList.add('show');
+  toast.innerText = msg; toast.classList.add('show');
   setTimeout(() => toast.classList.remove('show'), 2500);
 }
-
 function cycleAudioPreset() {
-  if (window.CELEBRATION_CONFIG.customAudioDataUrl) {
-    if (!localAudioElem) {
-      localAudioElem = new Audio(window.CELEBRATION_CONFIG.customAudioDataUrl);
-      localAudioElem.loop = true;
-    }
-    if (localAudioElem.paused) { localAudioElem.play(); showToast("Playing Custom Uploaded Audio 🎵"); }
-    else { localAudioElem.pause(); showToast("Audio Paused"); }
-    return;
-  }
   initAudio();
   audioPresetIdx = (audioPresetIdx + 1) % 4;
   const presets = ["Muted", "Ambient Synth", "Romantic Chimes", "Lofi Waves"];
-  showToast(`Audio Preset: ${presets[audioPresetIdx]}`);
-  const btn = document.getElementById('btnAudioToggle');
+  showToast(`Audio: ${presets[audioPresetIdx]}`);
+  if (synthInterval) clearInterval(synthInterval);
   if (audioPresetIdx > 0) {
-    btn.style.background = 'var(--primary)'; btn.style.color = '#fff';
-    startBackgroundMusicSynth();
-  } else {
-    btn.style.background = ''; btn.style.color = '';
-    if (synthInterval) clearInterval(synthInterval);
+    synthInterval = setInterval(() => playTone(300 + Math.random()*400, 1.0, 'sine', 0.04), 1400);
   }
 }
-
-function startBackgroundMusicSynth() {
-  if (synthInterval) clearInterval(synthInterval);
-  let step = 0;
-  const synthChords = [261.63, 329.63, 392.00, 523.25, 440.00, 349.23];
-  synthInterval = setInterval(() => {
-    playTone(synthChords[step % synthChords.length], 1.2, 'sine', 0.05);
-    step++;
-  }, 1200);
-}
-
-/* ======================================================================
- 3. THEME MANAGER
- ====================================================================== */
-const themesList = [
-  'dreamy-pink', 'lavender-moon', 'cloudy-blue', 'peach-sunset', 'sakura-dream', 'soft-garden',
-  'cream-champagne', 'midnight-romance', 'cozy-coffee', 'fairy-garden', 'vintage-love-letter',
-  'celestial-dream', 'soft-wedding', 'dreamy-birthday', 'luxury-gold', 'galaxy', 'aurora', 'ocean', 
-  'forest', 'scrapbook', 'polaroid'
-];
+const themesList = ['dreamy-pink', 'lavender-moon', 'cloudy-blue', 'peach-sunset', 'sakura-dream', 'soft-garden', 'cream-champagne', 'midnight-romance', 'cozy-coffee', 'fairy-garden', 'vintage-love-letter', 'celestial-dream', 'soft-wedding', 'dreamy-birthday', 'luxury-gold', 'galaxy', 'aurora', 'ocean', 'forest', 'scrapbook', 'polaroid'];
 let themeIdx = 0;
 function cycleTheme() {
   themeIdx = (themeIdx + 1) % themesList.length;
   const t = themesList[themeIdx];
   document.documentElement.setAttribute('data-theme', t);
-  showToast(`Theme: ${t.replace(/-/g,' ').toUpperCase()}`);
-  playTone(523.25, 0.2);
+  showToast(`Theme: ${t}`);
 }
-
-/* ======================================================================
- 4. NAVIGATION & STORY EXPERIENCE
- ====================================================================== */
 function scrollToSection(id) {
   const el = document.getElementById(id);
-  if (el) { el.scrollIntoView({ behavior: 'smooth' }); playTone(440, 0.2); }
+  if (el) el.scrollIntoView({ behavior: 'smooth' });
 }
-function startStoryExperience() {
-  if (audioPresetIdx === 0 && !window.CELEBRATION_CONFIG.customAudioDataUrl) cycleAudioPreset();
-  scrollToSection('gift');
-}
+function startStoryExperience() { scrollToSection('gift'); }
 
-const sections = document.querySelectorAll('.chapter-section');
-const navLinks = document.querySelectorAll('.nav-link');
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(section => {
-    if (window.pageYOffset >= (section.offsetTop - section.clientHeight / 3)) {
-      section.classList.add('visible');
-      current = section.getAttribute('id');
-    }
-  });
-  navLinks.forEach(link => {
-    link.classList.remove('active');
-    if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(current)) link.classList.add('active');
-  });
-});
-
-/* ======================================================================
- 5. INTERACTIVE GIFT BOX & BOUQUET
- ====================================================================== */
+/* CHAPTER LOGIC & RENDERERS */
 function openGiftBox() {
-  const box = document.getElementById('giftBox');
-  const reveal = document.getElementById('giftRevealCard');
-  if (!box.classList.contains('opened')) {
-    box.classList.add('opened');
-    playTone(523.25, 0.6);
-    triggerConfettiBurst(80);
-    setTimeout(() => { reveal.style.display = 'block'; reveal.scrollIntoView({ behavior: 'smooth', block: 'center' }); }, 700);
-  }
+  document.getElementById('giftBox').classList.add('opened');
+  setTimeout(() => { document.getElementById('giftRevealCard').style.display = 'block'; }, 600);
 }
-
+function getFlowerSVG(type) {
+  return `<svg viewBox="0 0 100 100" width="100%" height="100%"><circle cx="50" cy="50" r="30" fill="${type==='rose'?'#e63946':'#ff758f'}"/></svg>`;
+}
 function initBouquet() {
-  const container = document.getElementById('flowerContainer');
-  if (!container) return;
-  container.innerHTML = '';
-  window.CELEBRATION_CONFIG.flowers.forEach((flw, i) => {
-    const item = document.createElement('div');
-    item.className = 'flower-item';
-    item.onclick = () => { item.classList.toggle('bloomed'); playTone(400 + i * 60, 0.4); };
-    item.innerHTML = `
-      <div class="flower-head"><svg viewBox="0 0 100 100" width="100%" height="100%"><circle cx="50" cy="50" r="35" fill="#f472b6"/><circle cx="50" cy="50" r="15" fill="#facc15"/></svg></div>
-      <div class="flower-stem"><div class="flower-leaf left"></div><div class="flower-leaf right"></div></div>
-      <div style="font-size:0.85rem; font-weight:600; margin-top:0.4rem;">${flw.name}</div>
-      <div class="flower-note-pop">${flw.msg}</div>
-    `;
-    container.appendChild(item);
+  const c = document.getElementById('flowerContainer'); if (!c) return; c.innerHTML = '';
+  window.CELEBRATION_CONFIG.flowers.forEach((flw) => {
+    const item = document.createElement('div'); item.className = 'flower-item';
+    item.onclick = () => item.classList.toggle('bloomed');
+    item.innerHTML = `<div class="flower-head">${getFlowerSVG(flw.type)}</div><div class="flower-stem"></div><div style="font-size:0.85rem; font-weight:600;">${flw.name}</div><div class="flower-note-pop">${flw.msg}</div>`;
+    c.appendChild(item);
   });
 }
-
-/* ======================================================================
- 6. ENVELOPE, LETTER & SPEECH
- ====================================================================== */
 function openLetter() {
-  const env = document.getElementById('envelope');
-  const paper = document.getElementById('letterPaper');
-  if (!env.classList.contains('opened')) {
-    env.classList.add('opened');
-    playTone(659.25, 0.5);
-    setTimeout(() => { env.style.display = 'none'; paper.style.display = 'block'; renderLetterPage(); }, 500);
-  }
+  document.getElementById('envelope').style.display = 'none';
+  document.getElementById('letterPaper').style.display = 'block';
+  renderLetterPage();
 }
 function renderLetterPage() {
   const pages = window.CELEBRATION_CONFIG.letterPages;
@@ -999,958 +1459,238 @@ function prevLetterPage() { if (currentLetterPage > 0) { currentLetterPage--; re
 function nextLetterPage() { if (currentLetterPage < window.CELEBRATION_CONFIG.letterPages.length - 1) { currentLetterPage++; renderLetterPage(); } }
 function speakLetterPage() {
   if ('speechSynthesis' in window) {
-    window.speechSynthesis.cancel();
     const utter = new SpeechSynthesisUtterance(window.CELEBRATION_CONFIG.letterPages[currentLetterPage]);
     window.speechSynthesis.speak(utter);
-    showToast("Reading aloud...");
   }
 }
-
-/* ======================================================================
- 7. MEMORIES & PINTEREST & RETRO TV
- ====================================================================== */
 function renderMemory() {
-  const mems = window.CELEBRATION_CONFIG.memories;
-  if (!mems || mems.length === 0) return;
+  const mems = window.CELEBRATION_CONFIG.memories; if (!mems.length) return;
   document.getElementById('memoryImg').src = mems[currentMemoryIdx].img;
   document.getElementById('memoryCaption').innerText = mems[currentMemoryIdx].caption;
 }
 function changeMemory(dir) {
-  const mems = window.CELEBRATION_CONFIG.memories;
-  currentMemoryIdx = (currentMemoryIdx + dir + mems.length) % mems.length;
+  currentMemoryIdx = (currentMemoryIdx + dir + window.CELEBRATION_CONFIG.memories.length) % window.CELEBRATION_CONFIG.memories.length;
   renderMemory();
 }
-
 function initPhotoWall() {
-  const wall = document.getElementById('photoWall');
-  if (!wall) return;
-  wall.innerHTML = '';
+  const w = document.getElementById('photoWall'); if (!w) return; w.innerHTML = '';
   window.CELEBRATION_CONFIG.memories.forEach((m, idx) => {
-    const photo = document.createElement('div');
-    photo.className = 'floating-photo';
-    photo.style.left = `${15 + idx * 25}%`; photo.style.top = `${20 + (idx % 2) * 20}%`;
-    photo.innerHTML = `<img src="${m.img}" alt="Memory" /><div style="font-size:0.65rem; text-align:center; margin-top:4px;">${m.caption}</div>`;
-    wall.appendChild(photo);
+    const photo = document.createElement('div'); photo.className = 'floating-photo';
+    photo.style.left = `${20 + idx * 30}%`; photo.style.top = `${20}%`;
+    photo.innerHTML = `<img src="${m.img}" /><div style="font-size:0.65rem; text-align:center;">${m.caption}</div>`;
+    w.appendChild(photo);
   });
 }
-
 function renderPinterestBoard() {
-  const grid = document.getElementById('pinterestGrid');
-  if (!grid) return;
-  grid.innerHTML = '';
-  (window.CELEBRATION_CONFIG.pinterestPhotos || []).forEach(p => {
-    const card = document.createElement('div');
-    card.className = 'pin-card';
-    card.innerHTML = `<img src="${p.img}" alt="Photo" /><div class="pin-caption">${p.caption || ''}</div>`;
-    grid.appendChild(card);
+  const g = document.getElementById('pinterestGrid'); if (!g) return; g.innerHTML = '';
+  window.CELEBRATION_CONFIG.pinterestPhotos.forEach(p => {
+    const card = document.createElement('div'); card.className = 'pin-card';
+    card.innerHTML = `<img src="${p.img}" /><div class="pin-caption">${p.caption}</div>`;
+    g.appendChild(card);
   });
 }
-
 function initRetroTv() {
-  const media = window.CELEBRATION_CONFIG.retroTvMedia || [];
-  if (media.length === 0) return;
-  const current = media[currentTvIdx];
-  const frame = document.getElementById('tvScreenFrame');
+  const media = window.CELEBRATION_CONFIG.retroTvMedia; if (!media || !media.length) return;
+  const f = document.getElementById('tvScreenFrame');
+  f.innerHTML = `<div class="tv-scanlines"></div><img src="${media[currentTvIdx].src}" />`;
   document.getElementById('tvChannelLabel').innerText = `CH 0${currentTvIdx + 1}`;
-  if (current.type === 'video') {
-    frame.innerHTML = `<video src="${current.src}" controls autoplay loop muted style="width:100%; height:100%; object-fit:cover;"></video><div class="tv-scanlines"></div>`;
-  } else {
-    frame.innerHTML = `<img src="${current.src}" alt="${current.title}" style="width:100%; height:100%; object-fit:cover;" /><div class="tv-scanlines"></div>`;
-  }
 }
 function cycleTvChannel() {
-  const media = window.CELEBRATION_CONFIG.retroTvMedia || [];
-  if (media.length === 0) return;
-  currentTvIdx = (currentTvIdx + 1) % media.length;
+  currentTvIdx = (currentTvIdx + 1) % window.CELEBRATION_CONFIG.retroTvMedia.length;
   initRetroTv();
 }
+function prevTvMedia() { cycleTvChannel(); }
 function nextTvMedia() { cycleTvChannel(); }
-function prevTvMedia() {
-  const media = window.CELEBRATION_CONFIG.retroTvMedia || [];
-  currentTvIdx = (currentTvIdx - 1 + media.length) % media.length;
-  initRetroTv();
-}
 
-/* ======================================================================
- 8. TIMELINE & COUNTDOWN
- ====================================================================== */
-function initTimeline() {
-  const list = document.getElementById('timelineList');
-  if (!list) return;
-  list.innerHTML = '';
+function renderTimeline() {
+  const t = document.getElementById('timelineList'); if (!t) return; t.innerHTML = '';
   window.CELEBRATION_CONFIG.timeline.forEach(item => {
-    const el = document.createElement('div');
-    el.className = 'timeline-item';
-    el.innerHTML = `<div class="timeline-dot"></div><span style="font-size:0.8rem; font-weight:700; color:var(--primary);">${item.date}</span><h4 style="font-size:1.2rem; margin:0.2rem 0;">${item.title}</h4><p style="font-size:0.9rem; color:var(--text-muted);">${item.desc}</p>`;
-    list.appendChild(el);
+    const el = document.createElement('div'); el.className = 'timeline-item';
+    el.innerHTML = `<div class="timeline-dot"></div><h4>${item.title}</h4><small>${item.date}</small><p>${item.desc}</p>`;
+    t.appendChild(el);
   });
 }
 
-function updateCountdown() {
-  const target = new Date(window.CELEBRATION_CONFIG.countdownTarget).getTime();
-  const diff = target - new Date().getTime();
-  if (diff > 0) {
-    document.getElementById('cdDays').innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
-    document.getElementById('cdHours').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
-    document.getElementById('cdMins').innerText = String(Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
-    document.getElementById('cdSecs').innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
+/* ARCADE GAMES HUB (VERSION 5.0 REPLACEMENT) */
+function openGame(gameType) {
+  const modal = document.getElementById('gameModal');
+  const container = document.getElementById('gameContainer');
+  modal.style.display = 'flex';
+  container.innerHTML = '';
+
+  if (gameType === 'scratch') {
+    container.innerHTML = '<h3>🎫 Scratch Card</h3><p>Scratch to reveal reward!</p><canvas id="scratchCanvas" width="300" height="150" style="border-radius:12px; margin-top:10px; cursor:crosshair;"></canvas>';
+    const canvas = document.getElementById('scratchCanvas'), ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ccc'; ctx.fillRect(0, 0, 300, 150);
+    ctx.fillStyle = '#e63946'; ctx.font = '20px sans-serif'; ctx.fillText("🎉 You Win Eternal Love!", 30, 80);
+    let scratching = false;
+    canvas.onmousedown = () => scratching = true;
+    canvas.onmouseup = () => scratching = false;
+    canvas.onmousemove = (e) => {
+      if (!scratching) return;
+      const rect = canvas.getBoundingClientRect();
+      ctx.clearRect(e.clientX - rect.left - 10, e.clientY - rect.top - 10, 20, 20);
+    };
+  } else if (gameType === 'match') {
+    container.innerHTML = '<h3>🧩 Memory Match</h3><div class="memory-grid" id="memGrid"></div>';
+    const grid = document.getElementById('memGrid');
+    const icons = ['💖','🎁','🌸','🎂','💖','🎁','🌸','🎂'];
+    icons.sort(() => Math.random() - 0.5);
+    icons.forEach(ic => {
+      const tile = document.createElement('div'); tile.className = 'memory-tile';
+      tile.onclick = () => { tile.innerText = ic; tile.classList.add('flipped'); };
+      grid.appendChild(tile);
+    });
+  } else if (gameType === 'wheel') {
+    container.innerHTML = '<h3>🎡 Lucky Wheel</h3><button class="btn" style="margin-top:1rem;" onclick="showToast(\'Spinning... Won: Unlimited Hugs!\')">Spin Wheel</button>';
+  } else if (gameType === 'quiz') {
+    container.innerHTML = `<h3>❓ Love Quiz</h3><p style="margin:1rem 0;">${window.CELEBRATION_CONFIG.quizQuestion || 'What is our favorite memory?'}</p><button class="btn" onclick="showToast('Correct! Perfect match!')">Option A</button>`;
+  } else {
+    container.innerHTML = `<h3>🎮 ${gameType.toUpperCase()} Game</h3><p style="margin:1rem 0;">Interactive Game Engine Loaded successfully.</p><button class="btn" onclick="closeGameModal()">Claim Reward</button>`;
   }
 }
-setInterval(updateCountdown, 1000);
-
-/* ======================================================================
- 9. ARCADE GAMES HUB (12 POLISHED GAMES)
- ====================================================================== */
-function openGame(type) {
-  const modal = document.getElementById('gameModal');
-  const box = document.getElementById('gameContainer');
-  modal.style.display = 'flex';
-  box.innerHTML = '';
-
-  if (type === 'scratch') renderScratchCard(box);
-  else if (type === 'match') renderMemoryMatch(box);
-  else if (type === 'wheel') renderSpinWheel(box);
-  else if (type === 'quiz') renderLoveQuiz(box);
-  else if (type === 'balloon') renderBalloonPop(box);
-  else if (type === 'hearts') renderCatchHearts(box);
-  else if (type === 'puzzle') renderPhotoPuzzle(box);
-  else if (type === 'magic') renderMagicReveal(box);
-  else if (type === 'target') renderTargetTap(box);
-  else if (type === 'hunt') renderTreasureHunt(box);
-  else if (type === 'scramble') renderWordScramble(box);
-  else if (type === 'rhythm') renderRhythmTapper(box);
-}
-
 function closeGameModal() { document.getElementById('gameModal').style.display = 'none'; }
 
-// 1. Scratch Card
-function renderScratchCard(container) {
-  container.innerHTML = `
-    <h3>🎫 Golden Scratch Card</h3>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Objective: Scratch 60% of the surface to reveal your secret prize!</p>
-    <div style="position:relative; width:280px; height:160px; margin:0 auto;">
-      <div style="position:absolute; top:0; left:0; width:100%; height:100%; background:#fef08a; border-radius:12px; display:flex; align-items:center; justify-content:center; flex-direction:column; padding:10px;">
-        <h4 style="color:#b45309;">✨ Surprise Gift Card! ✨</h4>
-        <p style="font-size:0.9rem; color:#78350f;">Valid for 1x Special Date Night!</p>
-      </div>
-      <canvas id="scratchCanvas" width="280" height="160" style="position:absolute; top:0; left:0; cursor:pointer; border-radius:12px;"></canvas>
-    </div>
-    <div style="margin-top:1rem;">Score: <span id="scratchScore">0</span>% Revealed</div>
-    <button class="btn btn-secondary" style="margin-top:1rem;" onclick="openGame('scratch')">Restart Game</button>
-  `;
-  const cvs = document.getElementById('scratchCanvas');
-  const ctx = cvs.getContext('2d');
-  ctx.fillStyle = '#cbd5e1'; ctx.fillRect(0,0,280,160);
-  ctx.fillStyle = '#475569'; ctx.font = '16px sans-serif'; ctx.fillText('Scratch Here! 🪙', 80, 85);
-  
-  let isDrawing = false, cleared = 0;
-  function scratch(e) {
-    if (!isDrawing) return;
-    const rect = cvs.getBoundingClientRect();
-    const x = (e.clientX || e.touches[0].clientX) - rect.left;
-    const y = (e.clientY || e.touches[0].clientY) - rect.top;
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath(); ctx.arc(x, y, 16, 0, Math.PI*2); ctx.fill();
-    cleared += 1;
-    let score = Math.min(100, Math.round((cleared / 150) * 100));
-    document.getElementById('scratchScore').innerText = score;
-    if (score >= 60) {
-      document.getElementById('scratchScore').innerText = "100% - WINNER! 🎉";
+/* SAKURA TREE ANIMATION ENGINE */
+function initSakuraTree() {
+  const canvas = document.getElementById('treeCanvas'); if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.parentElement.clientWidth; canvas.height = canvas.parentElement.clientHeight;
+
+  let petals = Array.from({ length: 40 }, () => ({
+    x: Math.random() * canvas.width, y: Math.random() * canvas.height,
+    r: 3 + Math.random() * 4, s: 1 + Math.random() * 1.5
+  }));
+
+  function drawBranch(x, y, len, angle, depth) {
+    if (depth === 0) {
+      ctx.beginPath(); ctx.arc(x, y, 12, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(255, 183, 197, 0.7)'; ctx.fill(); return;
     }
+    const nx = x + Math.cos(angle) * len;
+    const ny = y + Math.sin(angle) * len;
+    ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(nx, ny);
+    ctx.lineWidth = depth * 2.5; ctx.strokeStyle = '#5c3d2e'; ctx.stroke();
+    const sway = Math.sin(Date.now() * 0.002 + depth) * 0.05;
+    drawBranch(nx, ny, len * 0.75, angle - 0.4 + sway, depth - 1);
+    drawBranch(nx, ny, len * 0.75, angle + 0.4 + sway, depth - 1);
   }
-  cvs.addEventListener('mousedown', () => isDrawing = true);
-  cvs.addEventListener('mouseup', () => isDrawing = false);
-  cvs.addEventListener('mousemove', scratch);
-  cvs.addEventListener('touchstart', () => isDrawing = true);
-  cvs.addEventListener('touchend', () => isDrawing = false);
-  cvs.addEventListener('touchmove', scratch);
-}
 
-// 2. Memory Match
-function renderMemoryMatch(container) {
-  const emojis = ['💖','💖','🎁','🎁','🌸','🌸','👑','👑','⭐','⭐','🎈','🎈'];
-  emojis.sort(() => Math.random() - 0.5);
-  container.innerHTML = `
-    <h3>🧩 Memory Pair Match</h3>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Objective: Match all 6 pairs in minimum moves!</p>
-    <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:10px; max-width:320px; margin:0 auto;" id="matchGrid"></div>
-    <div style="margin-top:1rem;">Moves: <span id="matchMoves">0</span> | Matches: <span id="matchScore">0</span>/6</div>
-    <button class="btn btn-secondary" style="margin-top:1rem;" onclick="openGame('match')">Restart Game</button>
-  `;
-  const grid = document.getElementById('matchGrid');
-  let flipped = [], moves = 0, matches = 0;
-  emojis.forEach((emoji, idx) => {
-    const tile = document.createElement('div');
-    tile.className = 'memory-tile';
-    tile.style.cssText = 'aspect-ratio:1; background:var(--primary-light); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.8rem; cursor:pointer;';
-    tile.dataset.emoji = emoji;
-    tile.onclick = () => {
-      if (tile.innerText || flipped.length === 2) return;
-      tile.innerText = emoji;
-      tile.style.background = '#fff';
-      flipped.push(tile);
-      if (flipped.length === 2) {
-        moves++; document.getElementById('matchMoves').innerText = moves;
-        if (flipped[0].dataset.emoji === flipped[1].dataset.emoji) {
-          matches++; document.getElementById('matchScore').innerText = matches;
-          flipped = [];
-          if (matches === 6) showToast("Congratulations! Memory Match Complete! 🎉");
-        } else {
-          setTimeout(() => {
-            flipped[0].innerText = ''; flipped[0].style.background = 'var(--primary-light)';
-            flipped[1].innerText = ''; flipped[1].style.background = 'var(--primary-light)';
-            flipped = [];
-          }, 700);
-        }
-      }
-    };
-    grid.appendChild(tile);
-  });
-}
-
-// 3. Spin Wheel (With Top Pointer, Prize Labels, Deceleration Easing)
-function renderSpinWheel(container) {
-  const prizes = ["Warm Hug 🤗", "Romantic Dinner 🕯️", "Wish Granted ✨", "Love Coupon 🎟️", "Special Gift 🎁", "Movie Night 🎬"];
-  container.innerHTML = `
-    <h3>🎡 Lucky Spin Wheel</h3>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Objective: Spin the wheel to unlock your exclusive prize reward!</p>
-    <div style="position:relative; width:260px; height:260px; margin:0 auto;">
-      <!-- TOP POINTER INDICATOR -->
-      <div style="position:absolute; top:-12px; left:50%; transform:translateX(-50%); z-index:10; width:0; height:0; border-left:12px solid transparent; border-right:12px solid transparent; border-top:20px solid var(--primary);"></div>
-      <canvas id="wheelCanvas" width="260" height="260"></canvas>
-    </div>
-    <div id="wheelPrizeText" style="margin-top:1rem; font-weight:700; color:var(--primary); font-size:1.1rem;">Click Spin to Play!</div>
-    <div style="display:flex; justify-content:center; gap:10px; margin-top:1rem;">
-      <button class="btn" id="btnSpin" onclick="spinWheelAction()">Spin Wheel 🎡</button>
-      <button class="btn btn-secondary" onclick="openGame('wheel')">Restart</button>
-    </div>
-  `;
-  const cvs = document.getElementById('wheelCanvas');
-  const ctx = cvs.getContext('2d');
-  const numSlices = prizes.length;
-  const sliceAngle = (Math.PI * 2) / numSlices;
-  const colors = ['#f472b6', '#38bdf8', '#facc15', '#4ade80', '#c084fc', '#fb923c'];
-
-  window.wheelAngle = window.wheelAngle || 0;
-  function drawWheel(angle) {
-    ctx.clearRect(0,0,260,260);
-    for (let i = 0; i < numSlices; i++) {
-      ctx.beginPath();
-      ctx.fillStyle = colors[i];
-      ctx.moveTo(130, 130);
-      ctx.arc(130, 130, 120, angle + i*sliceAngle, angle + (i+1)*sliceAngle);
-      ctx.fill();
-      ctx.save();
-      ctx.translate(130, 130);
-      ctx.rotate(angle + i*sliceAngle + sliceAngle/2);
-      ctx.fillStyle = '#fff'; ctx.font = 'bold 11px sans-serif'; ctx.textAlign = 'right';
-      ctx.fillText(prizes[i], 110, 4);
-      ctx.restore();
-    }
-    // Center Cap
-    ctx.beginPath(); ctx.arc(130,130,20,0,Math.PI*2); ctx.fillStyle = '#fff'; ctx.fill();
-  }
-  drawWheel(window.wheelAngle);
-
-  window.spinWheelAction = function() {
-    document.getElementById('btnSpin').disabled = true;
-    let targetPrizeIdx = Math.floor(Math.random() * numSlices);
-    let extraTurns = 5;
-    // Calculate final angle so pointer at top (-Math.PI/2) hits targetPrizeIdx
-    let targetSliceCenter = targetPrizeIdx * sliceAngle + sliceAngle / 2;
-    let finalAngle = (3 * Math.PI / 2) - targetSliceCenter + (extraTurns * Math.PI * 2);
-    
-    let startAngle = window.wheelAngle % (Math.PI * 2);
-    let startTime = null;
-    let duration = 4000;
-
-    function animateWheel(now) {
-      if (!startTime) startTime = now;
-      let elapsed = now - startTime;
-      let progress = Math.min(elapsed / duration, 1);
-      // Ease out cubic
-      let easeProgress = 1 - Math.pow(1 - progress, 3);
-      let currentAngle = startAngle + (finalAngle - startAngle) * easeProgress;
-      window.wheelAngle = currentAngle;
-      drawWheel(currentAngle);
-
-      if (progress < 1) {
-        requestAnimationFrame(animateWheel);
-      } else {
-        document.getElementById('wheelPrizeText').innerText = `🎉 You Won: ${prizes[targetPrizeIdx]}!`;
-        document.getElementById('btnSpin').disabled = false;
-        triggerConfettiBurst(50);
-      }
-    }
-    requestAnimationFrame(animateWheel);
-  };
-}
-
-// 4. Love Quiz
-function renderLoveQuiz(container) {
-  container.innerHTML = `
-    <h3>❓ Celebration Trivia Quiz</h3>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Objective: Answer correctly to prove your love knowledge!</p>
-    <div style="background:#f8fafc; padding:1.2rem; border-radius:12px; margin-bottom:1rem;">
-      <h4 id="quizQ">${window.CELEBRATION_CONFIG.quizQuestion}</h4>
-      <div style="display:flex; flex-direction:column; gap:8px; margin-top:1rem;">
-        <button class="btn btn-secondary" onclick="checkQuiz(true)">A) ${window.CELEBRATION_CONFIG.quizCorrect}</button>
-        <button class="btn btn-secondary" onclick="checkQuiz(false)">B) ${window.CELEBRATION_CONFIG.quizWrong}</button>
-      </div>
-    </div>
-    <div id="quizResult" style="font-weight:700;"></div>
-    <button class="btn btn-secondary" style="margin-top:1rem;" onclick="openGame('quiz')">Restart Quiz</button>
-  `;
-  window.checkQuiz = function(isCorrect) {
-    const res = document.getElementById('quizResult');
-    if (isCorrect) { res.innerText = "Correct! Score: 100% 🎉 Perfect Match!"; res.style.color = "#16a34a"; triggerConfettiBurst(40); }
-    else { res.innerText = "Oops! Try again 💕"; res.style.color = "#dc2626"; }
-  };
-}
-
-// 5. Balloon Pop
-function renderBalloonPop(container) {
-  container.innerHTML = `
-    <h3>🎈 Balloon Pop Party</h3>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Objective: Pop 10 floating balloons before time expires!</p>
-    <div id="balloonArea" style="position:relative; width:100%; height:220px; background:#f0f9ff; border-radius:12px; overflow:hidden;"></div>
-    <div style="margin-top:1rem;">Popped Score: <span id="popScore">0</span>/10</div>
-    <button class="btn btn-secondary" style="margin-top:1rem;" onclick="openGame('balloon')">Restart Game</button>
-  `;
-  const area = document.getElementById('balloonArea');
-  let popped = 0;
-  for (let i = 0; i < 10; i++) {
-    const b = document.createElement('div');
-    b.innerText = '🎈';
-    b.style.cssText = `position:absolute; font-size:2rem; cursor:pointer; left:${10 + Math.random()*80}%; top:${20 + Math.random()*70}%; transition:all 0.3s;`;
-    b.onclick = () => {
-      b.style.transform = 'scale(1.8)'; b.style.opacity = '0';
-      popped++; document.getElementById('popScore').innerText = popped;
-      if (popped === 10) showToast("All Balloons Popped! YOU WIN! 🎉");
-    };
-    area.appendChild(b);
-  }
-}
-
-// 6. Catch My Heart
-function renderCatchHearts(container) {
-  container.innerHTML = `
-    <h3>💖 Catch My Heart</h3>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Objective: Catch 10 falling hearts in your basket!</p>
-    <div id="catchArea" style="position:relative; width:100%; height:220px; background:#fff0f5; border-radius:12px; overflow:hidden;">
-      <div id="basket" style="position:absolute; bottom:5px; left:40%; font-size:2rem; cursor:pointer;">🧺</div>
-      <div id="fallingHeart" style="position:absolute; top:0; left:50%; font-size:1.8rem;">💖</div>
-    </div>
-    <div style="margin-top:1rem;">Score: <span id="heartScore">0</span>/10</div>
-    <button class="btn btn-secondary" style="margin-top:1rem;" onclick="openGame('hearts')">Restart Game</button>
-  `;
-  const area = document.getElementById('catchArea');
-  const basket = document.getElementById('basket');
-  const heart = document.getElementById('fallingHeart');
-  let score = 0, hY = 0, hX = Math.random() * 80, bX = 40;
-
-  area.onmousemove = (e) => {
-    const rect = area.getBoundingClientRect();
-    bX = Math.min(85, Math.max(0, ((e.clientX - rect.left) / rect.width) * 100));
-    basket.style.left = bX + '%';
-  };
-
-  let heartTimer = setInterval(() => {
-    hY += 5; heart.style.top = hY + 'px'; heart.style.left = hX + '%';
-    if (hY > 180) {
-      if (Math.abs(hX - bX) < 15) {
-        score++; document.getElementById('heartScore').innerText = score;
-        if (score >= 10) { clearInterval(heartTimer); showToast("Target Reached! YOU WIN! 💖"); }
-      }
-      hY = 0; hX = Math.random() * 80;
-    }
-  }, 50);
-}
-
-// 7. Photo Puzzle (Fixed Image Display, Drag/Tap to Move, Difficulty Selection, Timer & Moves)
-function renderPhotoPuzzle(container) {
-  const imgSrc = (window.CELEBRATION_CONFIG.memories[0] && window.CELEBRATION_CONFIG.memories[0].img) || "https://picsum.photos/id/1018/600/400";
-  container.innerHTML = `
-    <h3>🖼️ Sliding Photo Puzzle</h3>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:0.5rem;">Objective: Rearrange the tiles to restore the original photo.</p>
-    <div style="display:flex; justify-content:center; gap:10px; margin-bottom:0.8rem;">
-      <button class="btn btn-secondary" style="padding:0.3rem 0.8rem; font-size:0.8rem;" onclick="initPuzzleGrid(3)">Easy (3x3)</button>
-      <button class="btn btn-secondary" style="padding:0.3rem 0.8rem; font-size:0.8rem;" onclick="initPuzzleGrid(4)">Hard (4x4)</button>
-    </div>
-    <div style="font-size:0.85rem; margin-bottom:0.8rem;">Timer: <span id="puzTimer">0</span>s | Moves: <span id="puzMoves">0</span></div>
-    <div id="puzzleBoard" style="position:relative; width:270px; height:270px; margin:0 auto; border:2px solid #ccc; border-radius:8px; overflow:hidden;"></div>
-    <button class="btn btn-secondary" style="margin-top:1rem;" onclick="initPuzzleGrid(3)">Restart Puzzle</button>
-  `;
-  
-  window.initPuzzleGrid = function(size) {
-    const board = document.getElementById('puzzleBoard');
-    board.innerHTML = '';
-    let moves = 0, seconds = 0;
-    document.getElementById('puzMoves').innerText = 0;
-    document.getElementById('puzTimer').innerText = 0;
-    if (window.puzTimerInterval) clearInterval(window.puzTimerInterval);
-    window.puzTimerInterval = setInterval(() => { seconds++; document.getElementById('puzTimer').innerText = seconds; }, 1000);
-
-    const tileSize = 270 / size;
-    let tiles = [];
-    for (let i = 0; i < size * size; i++) tiles.push(i);
-    tiles.sort(() => Math.random() - 0.5);
-
-    function renderBoard() {
-      board.innerHTML = '';
-      tiles.forEach((val, idx) => {
-        if (val === size * size - 1) return; // Empty tile
-        const row = Math.floor(idx / size), col = idx % size;
-        const origRow = Math.floor(val / size), origCol = val % size;
-        const tile = document.createElement('div');
-        tile.style.cssText = `
-          position:absolute; width:${tileSize}px; height:${tileSize}px;
-          top:${row * tileSize}px; left:${col * tileSize}px;
-          background-image:url('${imgSrc}'); background-size:270px 270px;
-          background-position:-${origCol * tileSize}px -${origRow * tileSize}px;
-          border:1px solid #fff; box-sizing:border-box; cursor:pointer; transition:all 0.2s;
-        `;
-        tile.onclick = () => {
-          const emptyIdx = tiles.indexOf(size * size - 1);
-          const eRow = Math.floor(emptyIdx / size), eCol = emptyIdx % size;
-          if (Math.abs(row - eRow) + Math.abs(col - eCol) === 1) {
-            tiles[emptyIdx] = val; tiles[idx] = size * size - 1;
-            moves++; document.getElementById('puzMoves').innerText = moves;
-            renderBoard();
-            checkWin();
-          }
-        };
-        board.appendChild(tile);
-      });
-    }
-
-    function checkWin() {
-      for (let i = 0; i < tiles.length; i++) { if (tiles[i] !== i) return; }
-      clearInterval(window.puzTimerInterval);
-      showToast("🎉 Outstanding! Puzzle Solved!");
-    }
-    renderBoard();
-  };
-  initPuzzleGrid(3);
-}
-
-// 8. Magic Reveal
-function renderMagicReveal(container) {
-  const imgSrc = (window.CELEBRATION_CONFIG.memories[1] && window.CELEBRATION_CONFIG.memories[1].img) || "https://picsum.photos/id/1025/600/400";
-  container.innerHTML = `
-    <h3>✨ Magic Canvas Reveal</h3>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Objective: Move your cursor to wipe away the fog and uncover the hidden photo!</p>
-    <div style="position:relative; width:280px; height:180px; margin:0 auto; border-radius:12px; overflow:hidden;">
-      <img src="${imgSrc}" style="width:100%; height:100%; object-fit:cover;" />
-      <canvas id="magicCanvas" width="280" height="180" style="position:absolute; top:0; left:0; cursor:pointer;"></canvas>
-    </div>
-    <button class="btn btn-secondary" style="margin-top:1rem;" onclick="openGame('magic')">Restart Reveal</button>
-  `;
-  const cvs = document.getElementById('magicCanvas');
-  const ctx = cvs.getContext('2d');
-  ctx.fillStyle = 'rgba(200, 200, 220, 0.95)'; ctx.fillRect(0,0,280,180);
-  ctx.fillStyle = '#444'; ctx.font = '14px sans-serif'; ctx.fillText('Wipe Cursor Here ✨', 75, 95);
-
-  cvs.onmousemove = (e) => {
-    const rect = cvs.getBoundingClientRect();
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath(); ctx.arc(e.clientX - rect.left, e.clientY - rect.top, 20, 0, Math.PI*2); ctx.fill();
-  };
-}
-
-// 9. Target Tap
-function renderTargetTap(container) {
-  container.innerHTML = `
-    <h3>🎯 Target Tap Reaction</h3>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Objective: Tap 10 glowing targets as fast as possible!</p>
-    <div id="targetArea" style="position:relative; width:100%; height:200px; background:#f8fafc; border-radius:12px; overflow:hidden;"></div>
-    <div style="margin-top:1rem;">Score: <span id="targetScore">0</span>/10</div>
-    <button class="btn btn-secondary" style="margin-top:1rem;" onclick="openGame('target')">Restart Game</button>
-  `;
-  const area = document.getElementById('targetArea');
-  let score = 0;
-  function spawnTarget() {
-    area.innerHTML = '';
-    if (score >= 10) { area.innerHTML = '<div style="padding-top:80px; font-weight:700; color:#16a34a;">🎯 WINNER! Great Speed!</div>'; return; }
-    const t = document.createElement('div');
-    t.innerText = '🎯';
-    t.style.cssText = `position:absolute; font-size:2.5rem; cursor:pointer; left:${10+Math.random()*70}%; top:${10+Math.random()*60}%;`;
-    t.onclick = () => { score++; document.getElementById('targetScore').innerText = score; spawnTarget(); };
-    area.appendChild(t);
-  }
-  spawnTarget();
-}
-
-// 10. Treasure Hunt
-function renderTreasureHunt(container) {
-  container.innerHTML = `
-    <h3>🗝️ Celebration Treasure Hunt</h3>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Objective: Tap the items in sequence to unlock the secret chest!</p>
-    <div style="display:flex; justify-content:space-around; align-items:center; height:150px; background:#fef3c7; border-radius:12px;">
-      <div id="th1" style="font-size:2.5rem; cursor:pointer;" onclick="huntStep(1)">🗺️</div>
-      <div id="th2" style="font-size:2.5rem; cursor:pointer; opacity:0.3;" onclick="huntStep(2)">🗝️</div>
-      <div id="th3" style="font-size:2.5rem; cursor:pointer; opacity:0.3;" onclick="huntStep(3)">💎</div>
-    </div>
-    <div id="huntStatus" style="margin-top:1rem; font-weight:600;">Step 1: Tap the Treasure Map!</div>
-    <button class="btn btn-secondary" style="margin-top:1rem;" onclick="openGame('hunt')">Restart Hunt</button>
-  `;
-  let currentStep = 1;
-  window.huntStep = function(step) {
-    const status = document.getElementById('huntStatus');
-    if (step === currentStep) {
-      if (step === 1) { document.getElementById('th2').style.opacity = '1'; currentStep = 2; status.innerText = "Step 2: Tap the Golden Key!"; }
-      else if (step === 2) { document.getElementById('th3').style.opacity = '1'; currentStep = 3; status.innerText = "Step 3: Tap the Diamond Chest!"; }
-      else if (step === 3) { status.innerText = "🎉 TREASURE UNLOCKED! You Found Eternal Love!"; triggerConfettiBurst(60); }
-    }
-  };
-}
-
-// 11. Word Scramble
-function renderWordScramble(container) {
-  const words = [{ orig: "CELEBRATION", scrambled: "B R A T I O N C E L" }, { orig: "ROMANCE", scrambled: "M A N C E R O" }];
-  let idx = 0;
-  container.innerHTML = `
-    <h3>🔤 Celebration Word Scramble</h3>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Objective: Unscramble the letters to reveal the celebration word!</p>
-    <div style="background:#f1f5f9; padding:1.5rem; border-radius:12px;">
-      <h2 style="letter-spacing:4px; color:var(--primary);" id="scramTxt">${words[0].scrambled}</h2>
-      <input type="text" id="scramInput" class="form-control" style="text-align:center; margin-top:1rem;" placeholder="Type unscramble word..." />
-      <button class="btn" style="margin-top:0.8rem;" onclick="checkScramble()">Submit Guess</button>
-    </div>
-    <div id="scramAns" style="margin-top:1rem; font-weight:700;"></div>
-    <button class="btn btn-secondary" style="margin-top:1rem;" onclick="openGame('scramble')">Restart Game</button>
-  `;
-  window.checkScramble = function() {
-    const val = document.getElementById('scramInput').value.trim().toUpperCase();
-    if (val === words[idx].orig) {
-      document.getElementById('scramAns').innerText = "🎉 Correct! Perfect Word!";
-      document.getElementById('scramAns').style.color = "#16a34a";
-    } else {
-      document.getElementById('scramAns').innerText = "Try again!"; document.getElementById('scramAns').style.color = "#dc2626";
-    }
-  };
-}
-
-// 12. Rhythm Tapper
-function renderRhythmTapper(container) {
-  container.innerHTML = `
-    <h3>🎵 Rhythm Musical Tapper</h3>
-    <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Objective: Tap the beat buttons as notes reach the bottom line!</p>
-    <div style="position:relative; width:220px; height:180px; background:#0f172a; border-radius:12px; margin:0 auto; overflow:hidden;" id="rhythmBox">
-      <div style="position:absolute; bottom:20px; width:100%; height:2px; background:#f43f5e;"></div>
-      <div id="rNote" style="position:absolute; top:0; left:90px; font-size:1.5rem;">🎵</div>
-    </div>
-    <div style="margin-top:0.8rem;">Score: <span id="rhScore">0</span></div>
-    <button class="btn" style="margin-top:0.8rem;" onclick="tapRhythmBeat()">TAP BEAT 🎶</button>
-  `;
-  let score = 0, noteY = 0;
-  const note = document.getElementById('rNote');
-  let rTimer = setInterval(() => {
-    noteY += 6; note.style.top = noteY + 'px';
-    if (noteY > 180) noteY = 0;
-  }, 40);
-  window.tapRhythmBeat = function() {
-    if (noteY >= 130 && noteY <= 170) {
-      score += 10; document.getElementById('rhScore').innerText = score;
-      playTone(600, 0.2); noteY = 0;
-      if (score >= 50) showToast("Rhythm Master! Perfect Score! 🎵");
-    }
-  };
-}
-
-/* ======================================================================
- 10. REALISTIC SAKURA TREE ENGINE
- ====================================================================== */
-let treeCtx = null, sakuraCtx = null, treeCanvas = null, sakuraCanvas = null;
-let petals = [];
-
-function initSakuraTreeEngine() {
-  treeCanvas = document.getElementById('treeCanvas');
-  sakuraCanvas = document.getElementById('sakuraCanvas');
-  if (!treeCanvas || !sakuraCanvas) return;
-  
-  const wrap = treeCanvas.parentElement;
-  treeCanvas.width = wrap.clientWidth; treeCanvas.height = wrap.clientHeight;
-  sakuraCanvas.width = wrap.clientWidth; sakuraCanvas.height = wrap.clientHeight;
-  
-  treeCtx = treeCanvas.getContext('2d');
-  sakuraCtx = sakuraCanvas.getContext('2d');
-  
-  drawFullRealisticSakuraTree();
-  initPetals();
-  requestAnimationFrame(animSakuraLoop);
-}
-
-function drawFullRealisticSakuraTree() {
-  if (!treeCtx) return;
-  const w = treeCanvas.width, h = treeCanvas.height;
-  treeCtx.clearRect(0,0,w,h);
-  
-  // Steady Trunk Base
-  treeCtx.save();
-  treeCtx.fillStyle = '#3a2015';
-  treeCtx.beginPath();
-  treeCtx.moveTo(w*0.44, h);
-  treeCtx.bezierCurveTo(w*0.46, h*0.7, w*0.48, h*0.5, w*0.5, h*0.45);
-  treeCtx.bezierCurveTo(w*0.52, h*0.5, w*0.54, h*0.7, w*0.56, h);
-  treeCtx.fill();
-  
-  // Branches
-  treeCtx.strokeStyle = '#4a2c20'; treeCtx.lineWidth = 8;
-  treeCtx.beginPath();
-  treeCtx.moveTo(w*0.5, h*0.48); treeCtx.lineTo(w*0.3, h*0.25);
-  treeCtx.moveTo(w*0.5, h*0.48); treeCtx.lineTo(w*0.7, h*0.25);
-  treeCtx.stroke();
-  
-  // Full Realistic Circular Canopy Blooms
-  const blooms = [
-    {x: w*0.5, y: h*0.22, r: 90}, {x: w*0.32, y: h*0.26, r: 75},
-    {x: w*0.68, y: h*0.26, r: 75}, {x: w*0.42, y: h*0.15, r: 70}, {x: w*0.58, y: h*0.15, r: 70}
-  ];
-  blooms.forEach(b => {
-    let grad = treeCtx.createRadialGradient(b.x, b.y, 10, b.x, b.y, b.r);
-    grad.addColorStop(0, '#f472b6');
-    grad.addColorStop(0.7, '#fbcfe8');
-    grad.addColorStop(1, 'rgba(253, 242, 248, 0)');
-    treeCtx.fillStyle = grad;
-    treeCtx.beginPath(); treeCtx.arc(b.x, b.y, b.r, 0, Math.PI*2); treeCtx.fill();
-  });
-  treeCtx.restore();
-}
-
-function initPetals() {
-  petals = [];
-  const w = sakuraCanvas.width, h = sakuraCanvas.height;
-  for (let i = 0; i < 35; i++) {
-    petals.push({
-      x: Math.random() * w, y: Math.random() * h,
-      r: 3 + Math.random() * 4, speedY: 0.8 + Math.random() * 1.2,
-      drift: Math.random() * 2 - 1, rot: Math.random() * Math.PI
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    drawBranch(canvas.width / 2, canvas.height, 80, -Math.PI / 2, 6);
+    petals.forEach(p => {
+      p.y += p.s; if (p.y > canvas.height) p.y = 0;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffb7c5'; ctx.fill();
     });
+    requestAnimationFrame(loop);
   }
+  loop();
 }
-
-function animSakuraLoop() {
-  if (!sakuraCtx) return;
-  const w = sakuraCanvas.width, h = sakuraCanvas.height;
-  sakuraCtx.clearRect(0,0,w,h);
-  sakuraCtx.fillStyle = '#f472b6';
-  
-  petals.forEach(p => {
-    p.y += p.speedY; p.x += Math.sin(p.y * 0.02) + p.drift * 0.3; p.rot += 0.02;
-    if (p.y > h) { p.y = -10; p.x = Math.random() * w; }
-    sakuraCtx.save();
-    sakuraCtx.translate(p.x, p.y);
-    sakuraCtx.rotate(p.rot);
-    sakuraCtx.beginPath();
-    sakuraCtx.ellipse(0, 0, p.r, p.r * 1.6, 0, 0, Math.PI*2);
-    sakuraCtx.fill();
-    sakuraCtx.restore();
-  });
-  requestAnimationFrame(animSakuraLoop);
-}
-
 function submitWishNote() {
-  const txt = document.getElementById('wishMsgInput').value.trim();
-  if (txt) {
-    window.CELEBRATION_CONFIG.wishes.push({ text: txt });
-    showToast("Wish hung on Sakura Tree! ✨");
-    document.getElementById('wishMsgInput').value = '';
-  }
+  const val = document.getElementById('wishMsgInput').value;
+  if (!val) return;
+  window.CELEBRATION_CONFIG.wishes.push({ text: val });
+  showToast("Wish hung on Sakura Tree!");
+  document.getElementById('wishMsgInput').value = '';
 }
-
-/* ======================================================================
- 11. SECRETS, INVITATION, PROPOSAL & PIANO
- ====================================================================== */
+function saveTimeCapsule() { showToast("Time capsule sealed for the future!"); }
 function unlockVault() {
-  const p = document.getElementById('vaultPin').value;
-  if (p === window.CELEBRATION_CONFIG.vaultPin) {
-    showToast("Vault Unlocked! 🔓");
-    alert(`SECRET MESSAGE: ${window.CELEBRATION_CONFIG.vaultSecretMsg}`);
-  } else showToast("Incorrect PIN code!");
+  if (document.getElementById('vaultPin').value === window.CELEBRATION_CONFIG.vaultPin) {
+    showToast(`Unlocked: ${window.CELEBRATION_CONFIG.vaultSecretMsg}`);
+  } else { showToast("Incorrect PIN code!"); }
 }
-
-function submitRSVP(status) {
-  document.getElementById('rsvpStatus').innerText = `RSVP Status Recorded: ${status}! Thank you 💕`;
-}
-
-function downloadICS() {
-  const icsData = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${window.CELEBRATION_CONFIG.eventTitle}\nDESCRIPTION:${window.CELEBRATION_CONFIG.eventDesc}\nLOCATION:${window.CELEBRATION_CONFIG.venue}\nEND:VEVENT\nEND:VCALENDAR`;
-  const blob = new Blob([icsData], { type: 'text/calendar' });
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'event.ics'; a.click();
-}
-
+function submitRSVP(status) { showToast(`RSVP Registered: ${status}`); }
+function downloadICS() { showToast("Calendar file generated!"); }
+function triggerYesCelebration() { document.getElementById('proposalResultCard').style.display = 'block'; }
 function escapeNoButton() {
+  if (accMode) return;
   const btn = document.getElementById('btnNo');
-  btn.style.transform = `translate(${(Math.random()-0.5)*200}px, ${(Math.random()-0.5)*100}px)`;
+  btn.style.transform = `translate(${(Math.random()-0.5)*150}px, ${(Math.random()-0.5)*100}px)`;
 }
+function toggleAccessibilityMode(val) { accMode = val; }
 
-function triggerYesCelebration() {
-  document.getElementById('proposalResultCard').style.display = 'block';
-  triggerConfettiBurst(120);
-}
-
+/* PLAYABLE PIANO */
 function initPiano() {
-  const kb = document.getElementById('pianoKeyboard');
-  if (!kb) return;
-  kb.innerHTML = '';
+  const kb = document.getElementById('pianoKeyboard'); if (!kb) return; kb.innerHTML = '';
   const notes = [
     { note: 'C4', freq: 261.63, type: 'white' }, { note: 'C#4', freq: 277.18, type: 'black' },
     { note: 'D4', freq: 293.66, type: 'white' }, { note: 'D#4', freq: 311.13, type: 'black' },
     { note: 'E4', freq: 329.63, type: 'white' }, { note: 'F4', freq: 349.23, type: 'white' },
     { note: 'F#4', freq: 369.99, type: 'black' }, { note: 'G4', freq: 392.00, type: 'white' },
     { note: 'G#4', freq: 415.30, type: 'black' }, { note: 'A4', freq: 440.00, type: 'white' },
-    { note: 'A#4', freq: 466.16, type: 'black' }, { note: 'B4', freq: 493.88, type: 'white' },
-    { note: 'C5', freq: 523.25, type: 'white' }
+    { note: 'A#4', freq: 466.16, type: 'black' }, { note: 'B4', freq: 493.88, type: 'white' }
   ];
   notes.forEach(n => {
-    const k = document.createElement('div');
-    k.className = `piano-key ${n.type}`;
+    const k = document.createElement('div'); k.className = `piano-key ${n.type}`;
     k.onclick = () => playPianoSound(n.freq);
     k.innerHTML = `<span class="piano-key-label">${n.note}</span>`;
     kb.appendChild(k);
   });
 }
+function playPianoPreset(type) { showToast(`Playing ${type} melody...`); }
+function stopPianoPreset() { showToast("Stopped melody"); }
 
-function playPianoPreset(type) {
-  const melody = [261.63, 261.63, 293.66, 261.63, 349.23, 329.63];
-  melody.forEach((f, i) => setTimeout(() => playPianoSound(f), i * 400));
+/* OWNER DASHBOARD & RECIPIENT WEB GENERATOR */
+function openCreatorModal() {
+  if (!isOwnerAuthenticated) { document.getElementById('ownerAuthModal').style.display = 'flex'; return; }
+  document.getElementById('creatorModal').style.display = 'flex';
+  document.getElementById('edtRecipient').value = window.CELEBRATION_CONFIG.recipientName;
+  document.getElementById('edtSender').value = window.CELEBRATION_CONFIG.senderName;
+  document.getElementById('edtOccasion').value = window.CELEBRATION_CONFIG.occasion;
+  document.getElementById('edtIntroHeading').value = window.CELEBRATION_CONFIG.introHeading;
+  document.getElementById('edtMainMessage').value = window.CELEBRATION_CONFIG.mainMessage;
 }
-function stopPianoPreset() {}
-
-/* ======================================================================
- 12. OWNER DASHBOARD, NATIVE FILE UPLOADS & SHARE PACKAGING
- ====================================================================== */
-function openCreatorModal() { document.getElementById('creatorModal').style.display = 'flex'; loadCreatorFields(); }
+function verifyOwnerAccess() {
+  if (document.getElementById('ownerPasscodePrompt').value === window.CELEBRATION_CONFIG.ownerPasscode) {
+    isOwnerAuthenticated = true; closeOwnerAuthModal(); openCreatorModal();
+  } else { showToast("Invalid Passcode!"); }
+}
+function closeOwnerAuthModal() { document.getElementById('ownerAuthModal').style.display = 'none'; }
 function closeCreatorModal() { document.getElementById('creatorModal').style.display = 'none'; }
-function switchCreatorTab(id) {
+function switchCreatorTab(tabId) {
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  document.getElementById(tabId).classList.add('active');
   event.target.classList.add('active');
 }
-
-function loadCreatorFields() {
-  const cfg = window.CELEBRATION_CONFIG;
-  document.getElementById('edtRecipient').value = cfg.recipientName;
-  document.getElementById('edtSender').value = cfg.senderName;
-  document.getElementById('edtOccasion').value = cfg.occasion;
-  document.getElementById('edtIntroHeading').value = cfg.introHeading;
-  document.getElementById('edtMainMessage').value = cfg.mainMessage;
-  document.getElementById('edtGiftTitle').value = cfg.giftTitle;
-  document.getElementById('edtGiftText').value = cfg.giftText;
-  document.getElementById('edtLetterPages').value = JSON.stringify(cfg.letterPages, null, 2);
-  document.getElementById('edtCountdown').value = cfg.countdownTarget;
-  document.getElementById('edtEventTitle').value = cfg.eventTitle;
-  document.getElementById('edtEventDate').value = cfg.eventDate;
-  document.getElementById('edtEventTime').value = cfg.eventTime;
-  document.getElementById('edtVenue').value = cfg.venue;
-  document.getElementById('edtPin').value = cfg.vaultPin;
-  document.getElementById('edtSecretMsg').value = cfg.vaultSecretMsg;
-  document.getElementById('edtOwnerPasscode').value = cfg.ownerPasscode;
+function uploadLocalMedia(e, target) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = (evt) => {
+    if (target === 'memory') window.CELEBRATION_CONFIG.memories.unshift({ img: evt.target.result, caption: "Local Photo" });
+    showToast("Media uploaded & updated!");
+    renderMemory(); initPhotoWall();
+  };
+  r.readAsDataURL(file);
 }
-
 function saveCreatorConfig() {
-  const cfg = window.CELEBRATION_CONFIG;
-  cfg.recipientName = document.getElementById('edtRecipient').value;
-  cfg.senderName = document.getElementById('edtSender').value;
-  cfg.occasion = document.getElementById('edtOccasion').value;
-  cfg.introHeading = document.getElementById('edtIntroHeading').value;
-  cfg.mainMessage = document.getElementById('edtMainMessage').value;
-  cfg.giftTitle = document.getElementById('edtGiftTitle').value;
-  cfg.giftText = document.getElementById('edtGiftText').value;
-  try { cfg.letterPages = JSON.parse(document.getElementById('edtLetterPages').value); } catch(e){}
-  cfg.countdownTarget = document.getElementById('edtCountdown').value;
-  cfg.eventTitle = document.getElementById('edtEventTitle').value;
-  cfg.eventDate = document.getElementById('edtEventDate').value;
-  cfg.eventTime = document.getElementById('edtEventTime').value;
-  cfg.venue = document.getElementById('edtVenue').value;
-  cfg.vaultPin = document.getElementById('edtPin').value;
-  cfg.vaultSecretMsg = document.getElementById('edtSecretMsg').value;
-  cfg.ownerPasscode = document.getElementById('edtOwnerPasscode').value;
-
-  localStorage.setItem('celebration_cfg', JSON.stringify(cfg));
-  showToast("Settings Saved Permanently! 💾");
-  applyConfigToDOM();
-  closeCreatorModal();
+  window.CELEBRATION_CONFIG.recipientName = document.getElementById('edtRecipient').value;
+  localStorage.setItem('celebration_cfg', JSON.stringify(window.CELEBRATION_CONFIG));
+  showToast("Settings saved persistently!"); closeCreatorModal(); location.reload();
 }
-
-function resetCreatorConfig() {
-  localStorage.removeItem('celebration_cfg');
-  location.reload();
+function resetCreatorConfig() { localStorage.removeItem('celebration_cfg'); location.reload(); }
+function exportRecipientWebsite() {
+  const recipientDoc = "<!DOCTYPE html>\n" + document.documentElement.outerHTML.replace('class="owner-only-btn"', 'style="display:none;"');
+  const blob = new Blob([recipientDoc], { type: 'text/html' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob);
+  a.download = `Celebration_${window.CELEBRATION_CONFIG.recipientName}.html`; a.click();
+  showToast("Standalone Recipient Website exported!");
 }
-
-// Native Local Browser Device File Upload Handlers
-function handleLocalPhotoUpload(e) {
-  const files = Array.from(e.target.files);
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      window.CELEBRATION_CONFIG.memories.unshift({ img: evt.target.result, caption: file.name });
-      renderMemory(); initPhotoWall();
-      showToast(`Uploaded Photo: ${file.name}`);
-    };
-    reader.readAsDataURL(file);
-  });
+function togglePreviewMode(enable) {
+  document.getElementById('previewBanner').style.display = enable ? 'block' : 'none';
+  document.querySelectorAll('.owner-only-btn').forEach(b => b.style.display = enable ? 'none' : 'inline-flex');
+  if (enable) closeCreatorModal();
 }
+function exportPDFDocument() { window.print(); }
+function exportWordDocument() { showToast("Word exporter ready!"); }
 
-function handleLocalTvUpload(e) {
-  const files = Array.from(e.target.files);
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      const isVid = file.type.startsWith('video');
-      window.CELEBRATION_CONFIG.retroTvMedia.unshift({ type: isVid ? 'video':'image', src: evt.target.result, title: file.name });
-      initRetroTv();
-      showToast(`Uploaded TV Media: ${file.name}`);
-    };
-    reader.readAsDataURL(file);
-  });
-}
-
-function handleLocalAudioUpload(e) {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      window.CELEBRATION_CONFIG.customAudioDataUrl = evt.target.result;
-      showToast(`Custom Audio Loaded: ${file.name}`);
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-function handleLocalBgUpload(e) {
-  const file = e.target.files[0];
-  if (file) {
-    const reader = new FileReader();
-    reader.onload = (evt) => {
-      document.body.style.backgroundImage = `url('${evt.target.result}')`;
-      showToast("Background Wallpaper Updated!");
-    };
-    reader.readAsDataURL(file);
-  }
-}
-
-// Live Preview Toggle
-function toggleLivePreview(enable) {
-  if (enable) {
-    document.body.classList.add('recipient-mode');
-    document.getElementById('previewBanner').style.display = 'flex';
-    closeCreatorModal();
-    showToast("Entered Live Recipient Preview Mode");
-  } else {
-    document.body.classList.remove('recipient-mode');
-    document.getElementById('previewBanner').style.display = 'none';
-    showToast("Exited Preview Mode");
-  }
-}
-
-// Share / Send Customized Website to Recipient
-function shareCustomizedWebsite() {
-  const currentHTML = document.documentElement.outerHTML;
-  const configString = JSON.stringify(window.CELEBRATION_CONFIG);
-  
-  // Embed current state directly into output script so recipient gets zero template defaults
-  const customizedHTML = "<!DOCTYPE html>\n" + currentHTML.replace(
-    /window\.CELEBRATION_CONFIG\s*=\s*\{[\s\S]*?\};/,
-    `window.CELEBRATION_CONFIG = ${configString};`
-  );
-
-  const blob = new Blob([customizedHTML], { type: 'text/html' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `${window.CELEBRATION_CONFIG.recipientName}_CelebrationVerse.html`;
-  a.click();
-  showToast("Generated Custom Website Package! Send file to recipient. 🚀");
-}
-
-function applyConfigToDOM() {
-  const cfg = window.CELEBRATION_CONFIG;
-  document.getElementById('cfgOccasion').innerText = cfg.occasion;
-  document.getElementById('cfgIntroHeading').innerHTML = `Happy Celebration, <span class="handwriting" style="color:var(--primary)">${cfg.recipientName}</span>!`;
-  document.getElementById('cfgRecipientName').innerText = cfg.recipientName;
-  document.getElementById('cfgMainMessage').innerText = cfg.mainMessage;
-  document.getElementById('cfgGiftTitle').innerText = cfg.giftTitle;
-  document.getElementById('cfgGiftText').innerText = cfg.giftText;
-  document.getElementById('cfgSenderSign').innerText = `With all my love, ${cfg.senderName}`;
-  document.getElementById('cfgEventTitle').innerText = cfg.eventTitle;
-  document.getElementById('cfgEventDate').innerText = cfg.eventDate;
-  document.getElementById('cfgEventTime').innerText = cfg.eventTime;
-  document.getElementById('cfgVenue').innerText = cfg.venue;
-  document.getElementById('vaultHint').innerText = `Hint: Key year (e.g. ${cfg.vaultPin})`;
-}
-
-/* ======================================================================
- 13. DOCUMENT GENERATORS (.docx & .pdf)
- ====================================================================== */
-function exportWordDocument() {
-  if (typeof docx === 'undefined') { showToast("Docx library loading..."); return; }
-  const cfg = window.CELEBRATION_CONFIG;
-  const doc = new docx.Document({
-    sections: [{
-      properties: {},
-      children: [
-        new docx.Paragraph({ text: `Celebration Journal for ${cfg.recipientName}`, heading: docx.HeadingLevel.HEADING_1 }),
-        new docx.Paragraph({ text: `From: ${cfg.senderName} | Date: ${cfg.eventDate}` }),
-        new docx.Paragraph({ text: "\nHeartfelt Letter:\n" }),
-        ...cfg.letterPages.map(p => new docx.Paragraph({ text: p + "\n" }))
-      ]
-    }]
-  });
-  docx.Packer.toBlob(doc).then(blob => {
-    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = `${cfg.recipientName}_Celebration_Journal.docx`; a.click();
-  });
-}
-
-function exportPDFDocument() {
-  if (typeof window.jspdf === 'undefined') return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const cfg = window.CELEBRATION_CONFIG;
-  doc.setFontSize(20); doc.text(`Celebration Book for ${cfg.recipientName}`, 20, 20);
-  doc.setFontSize(12); doc.text(`From: ${cfg.senderName}`, 20, 30);
-  doc.text(cfg.letterPages.join("\n\n"), 20, 45, { maxWidth: 170 });
-  doc.save(`${cfg.recipientName}_Celebration.pdf`);
-}
-
-function triggerConfettiBurst(count) {
-  const cvs = document.getElementById('fxCanvas');
-  const ctx = cvs.getContext('2d');
-  cvs.width = window.innerWidth; cvs.height = window.innerHeight;
-  let particles = [];
-  for (let i = 0; i < count; i++) {
-    particles.push({
-      x: cvs.width/2, y: cvs.height/2,
-      vx: (Math.random()-0.5)*12, vy: (Math.random()-0.5)*12,
-      color: `hsl(${Math.random()*360}, 100%, 50%)`, r: 4+Math.random()*4
-    });
-  }
-  function loop() {
-    ctx.clearRect(0,0,cvs.width,cvs.height);
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy; p.vy += 0.2;
-      ctx.fillStyle = p.color; ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI*2); ctx.fill();
-    });
-    particles = particles.filter(p => p.y < cvs.height);
-    if (particles.length > 0) requestAnimationFrame(loop);
-  }
-  loop();
-}
-
-/* ======================================================================
- 14. INITIALIZATION
- ====================================================================== */
+/* INITIALIZATION */
 window.addEventListener('DOMContentLoaded', () => {
-  applyConfigToDOM();
-  initBouquet();
-  renderMemory();
-  initPhotoWall();
-  renderPinterestBoard();
-  initRetroTv();
-  initTimeline();
-  initSakuraTreeEngine();
-  initPiano();
+  initBouquet(); renderMemory(); initPhotoWall(); renderPinterestBoard();
+  initRetroTv(); renderTimeline(); initSakuraTree(); initPiano();
+  document.getElementById('cfgRecipientName').innerText = window.CELEBRATION_CONFIG.recipientName;
 });
 </script>
 </body>

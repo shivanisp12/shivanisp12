@@ -699,62 +699,14 @@ main { position: relative; z-index: 2; width: 100%; }
 .count-num { font-size: 2.2rem; font-weight: 700; color: var(--primary); line-height: 1; }
 .count-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-top: 0.3rem; }
 
-/* CHAPTER 7: ARCADE GAMES HUB */
-.games-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem;
-  width: 100%; max-width: 950px;
-}
-.game-card {
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  border-radius: var(--radius-md);
-  padding: 1.5rem 1rem;
-  text-align: center;
-  cursor: pointer;
-  transition: all 0.3s var(--transition-smooth);
-}
+/* Arcade Games Hub (12 Polished Games) */
+.games-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem; width: 100%; max-width: 1050px; }
+.game-card { background: var(--card-bg); border: 1px solid var(--card-border); border-radius: var(--radius-md); padding: 1.5rem 1rem; text-align: center; cursor: pointer; transition: all 0.3s var(--transition-smooth); }
 .game-card:hover { transform: translateY(-5px); background: #ffffff; }
-.game-icon { font-size: 2.2rem; margin-bottom: 0.5rem; }
-.game-modal {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
-  background: rgba(0,0,0,0.65);
-  backdrop-filter: blur(8px);
-  z-index: 2000;
-  align-items: center; justify-content: center;
-  padding: 1rem;
-}
-.game-modal-content {
-  background: #fff; border-radius: var(--radius-lg);
-  width: 100%; max-width: 550px;
-  padding: 2rem;
-  position: relative;
-  max-height: 90vh;
-  overflow-y: auto;
-}
-.close-modal {
-  position: absolute; top: 1rem; right: 1rem;
-  font-size: 1.5rem; cursor: pointer; border: none; background: none; color: #666;
-}
-.memory-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.6rem;
-  margin-top: 1rem;
-}
-.memory-tile {
-  aspect-ratio: 1;
-  background: var(--primary-light);
-  border-radius: 8px;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.8rem;
-  cursor: pointer;
-  user-select: none;
-  transition: transform 0.3s;
-}
-.memory-tile.flipped { background: #fff; transform: rotateY(180deg); }
+.game-icon { font-size: 2.4rem; margin-bottom: 0.5rem; }
+.game-modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); z-index: 2000; align-items: center; justify-content: center; padding: 1rem; }
+.game-modal-content { background: #fff; border-radius: var(--radius-lg); width: 100%; max-width: 600px; padding: 2rem; position: relative; max-height: 90vh; overflow-y: auto; text-align: center; }
+.close-modal { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; cursor: pointer; border: none; background: none; color: #666; }
 
 /* CHAPTER 8: SAKURA WISH TREE & SIMPLIFIED WISH NOTE (PLACED ABOVE NOTE) */
 .tree-canvas-wrap {
@@ -1156,23 +1108,26 @@ main { position: relative; z-index: 2; width: 100%; }
     <div class="timeline-container" id="timelineList" style="margin-top:3rem;"></div>
   </section>
 
-  <!-- CHAPTER 9: CELEBRATION ARCADE HUB -->
+    <!-- CELEBRATION ARCADE HUB (BEST 12 GAMES) -->
   <section id="games" class="chapter-section">
     <h2 class="section-title">Celebration Arcade</h2>
-    <p class="section-subtitle">Play interactive mini-games to unlock secret rewards</p>
+    <p class="section-subtitle">Play interactive mini-games to unlock rewards</p>
     <div class="games-grid">
-      <div class="game-card" onclick="openGame('scratch')"><div class="game-icon">🎫</div><h3>Scratch Card</h3><p style="font-size:0.8rem; color:var(--text-muted);">Scratch to reveal secret message</p></div>
-      <div class="game-card" onclick="openGame('match')"><div class="game-icon">🧩</div><h3>Memory Match</h3><p style="font-size:0.8rem; color:var(--text-muted);">Match celebratory pairs</p></div>
-      <div class="game-card" onclick="openGame('wheel')"><div class="game-icon">🎡</div><h3>Lucky Wheel</h3><p style="font-size:0.8rem; color:var(--text-muted);">Spin for sweet compliments</p></div>
+      <div class="game-card" onclick="openGame('scratch')"><div class="game-icon">🎫</div><h3>Scratch Card</h3><p style="font-size:0.8rem; color:var(--text-muted);">Scratch to reveal secret reward</p></div>
+      <div class="game-card" onclick="openGame('match')"><div class="game-icon">🧩</div><h3>Memory Match</h3><p style="font-size:0.8rem; color:var(--text-muted);">Match celebratory card pairs</p></div>
+      <div class="game-card" onclick="openGame('wheel')"><div class="game-icon">🎡</div><h3>Spin Wheel</h3><p style="font-size:0.8rem; color:var(--text-muted);">Spin for sweet real prizes</p></div>
       <div class="game-card" onclick="openGame('quiz')"><div class="game-icon">❓</div><h3>Love Quiz</h3><p style="font-size:0.8rem; color:var(--text-muted);">Test how well you know us</p></div>
-      <div class="game-card" onclick="openGame('balloon')"><div class="game-icon">🎈</div><h3>Balloon Pop</h3><p style="font-size:0.8rem; color:var(--text-muted);">Pop floating balloons</p></div>
-      <div class="game-card" onclick="openGame('hearts')"><div class="game-icon">💖</div><h3>Catch My Heart</h3><p style="font-size:0.8rem; color:var(--text-muted);">Catch falling hearts</p></div>
-      <div class="game-card" onclick="openGame('puzzle')"><div class="game-icon">🖼️</div><h3>Photo Puzzle</h3><p style="font-size:0.8rem; color:var(--text-muted);">Arrange sliding puzzle tiles</p></div>
-      <div class="game-card" onclick="openGame('magic')"><div class="game-icon">✨</div><h3>Magic Reveal</h3><p style="font-size:0.8rem; color:var(--text-muted);">Wave cursor to uncover canvas</p></div>
-      <div class="game-card" onclick="openGame('target')"><div class="game-icon">🎯</div><h3>Target Game</h3><p style="font-size:0.8rem; color:var(--text-muted);">Tap moving targets to score</p></div>
-      <div class="game-card" onclick="openGame('hunt')"><div class="game-icon">🗝️</div><h3>Treasure Hunt</h3><p style="font-size:0.8rem; color:var(--text-muted);">Solve clues to unlock reward</p></div>
+      <div class="game-card" onclick="openGame('balloon')"><div class="game-icon">🎈</div><h3>Balloon Pop</h3><p style="font-size:0.8rem; color:var(--text-muted);">Pop floating celebration balloons</p></div>
+      <div class="game-card" onclick="openGame('hearts')"><div class="game-icon">💖</div><h3>Catch My Heart</h3><p style="font-size:0.8rem; color:var(--text-muted);">Catch falling hearts in basket</p></div>
+      <div class="game-card" onclick="openGame('puzzle')"><div class="game-icon">🖼️</div><h3>Photo Puzzle</h3><p style="font-size:0.8rem; color:var(--text-muted);">Sliding custom photo puzzle</p></div>
+      <div class="game-card" onclick="openGame('magic')"><div class="game-icon">✨</div><h3>Magic Reveal</h3><p style="font-size:0.8rem; color:var(--text-muted);">Wipe canvas fog to reveal photo</p></div>
+      <div class="game-card" onclick="openGame('target')"><div class="game-icon">🎯</div><h3>Target Tap</h3><p style="font-size:0.8rem; color:var(--text-muted);">Tap glowing targets quickly</p></div>
+      <div class="game-card" onclick="openGame('hunt')"><div class="game-icon">🗝️</div><h3>Treasure Hunt</h3><p style="font-size:0.8rem; color:var(--text-muted);">Solve clues to unlock chest</p></div>
+      <div class="game-card" onclick="openGame('scramble')"><div class="game-icon">🔤</div><h3>Word Scramble</h3><p style="font-size:0.8rem; color:var(--text-muted);">Unscramble joyful love words</p></div>
+      <div class="game-card" onclick="openGame('rhythm')"><div class="game-icon">🎵</div><h3>Rhythm Tapper</h3><p style="font-size:0.8rem; color:var(--text-muted);">Tap falling musical beats</p></div>
     </div>
   </section>
+
 
   <!-- CHAPTER 10: REALISTIC SAKURA WISH TREE & CONNECTED WISH NOTES (MOVED ABOVE NOTE) -->
   <section id="tree" class="chapter-section">
@@ -1295,13 +1250,22 @@ main { position: relative; z-index: 2; width: 100%; }
   </section>
 </main>
 
-<!-- Interactive Game Modal Container -->
+<!-- Arcade Game Modal -->
 <div class="game-modal" id="gameModal">
   <div class="game-modal-content">
     <button class="close-modal" onclick="closeGameModal()">×</button>
     <div id="gameContainer"></div>
   </div>
 </div>
+
+<!-- Creator / Owner Dashboard Modal -->
+<div id="creatorModal">
+  <div class="creator-panel">
+    <div style="display: flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+      <h2>⚙️ Owner Control Dashboard</h2>
+      <button class="close-modal" onclick="closeCreatorModal()">×</button>
+    </div>
+
 
 <!-- Owner Authentication Modal -->
 <div id="ownerAuthModal">

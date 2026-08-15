@@ -11,7 +11,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
-<!-- Document Export Libraries -->
+<!-- Document Export Libraries for PDF & Word Generation -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="https://unpkg.com/docx@8.2.2/build/index.umd.js"></script>
 
@@ -157,8 +157,6 @@ html { scroll-behavior: smooth; font-size: 16px; overflow-x: hidden; }
 body {
   font-family: var(--font-body);
   background: linear-gradient(135deg, var(--bg-grad-start), var(--bg-grad-end));
-  background-size: cover;
-  background-attachment: fixed;
   color: var(--text-main);
   min-height: 100vh;
   overflow-x: hidden;
@@ -226,7 +224,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
   display: inline-flex; align-items: center; justify-content: center;
 }
 
-/* Navigation Bar */
+/* Fixed Navigation Bar */
 #mainNav {
   position: fixed;
   top: 15px; left: 50%;
@@ -263,7 +261,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
   color: #fff;
 }
 
-/* Floating Controls */
+/* Top Controls Floating Right */
 #quickControls {
   position: fixed;
   top: 15px; right: 20px;
@@ -272,22 +270,7 @@ h1, h2, h3, h4 { font-family: var(--font-heading); font-weight: 700; line-height
   gap: 0.5rem;
 }
 
-/* Recipient Preview Banner */
-#previewBanner {
-  display: none;
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  background: #10b981;
-  color: #ffffff;
-  padding: 0.5rem 1rem;
-  text-align: center;
-  font-weight: 700;
-  font-size: 0.9rem;
-  z-index: 2005;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-}
-
-/* Main Layout & Sections */
+/* Chapters Container & Layout */
 main { position: relative; z-index: 2; width: 100%; }
 .chapter-section {
   min-height: 100vh;
@@ -320,7 +303,7 @@ main { position: relative; z-index: 2; width: 100%; }
   margin-bottom: 2.5rem;
 }
 
-/* Intro */
+/* CHAPTER 1: INTRO (WITH SINGLE RECIPIENT NAME FIX) */
 #intro { text-align: center; justify-content: center; min-height: 100vh; }
 .intro-badge {
   display: inline-block;
@@ -348,7 +331,7 @@ main { position: relative; z-index: 2; width: 100%; }
   color: var(--text-muted);
 }
 
-/* Gift Box */
+/* CHAPTER 2: GIFT BOX */
 .gift-container {
   perspective: 1000px;
   width: 260px; height: 260px;
@@ -414,7 +397,7 @@ main { position: relative; z-index: 2; width: 100%; }
   animation: popin 0.6s var(--transition-smooth) forwards;
 }
 
-/* Bouquet */
+/* CHAPTER 3: BOUQUET */
 .bouquet-wrapper {
   display: flex;
   flex-wrap: wrap;
@@ -470,7 +453,7 @@ main { position: relative; z-index: 2; width: 100%; }
 }
 .flower-item.bloomed .flower-note-pop { opacity: 1; transform: translateY(0); }
 
-/* Envelope & Letter */
+/* CHAPTER 4: ENVELOPE + LETTER */
 .letter-stage {
   perspective: 1200px;
   width: 100%; max-width: 680px;
@@ -533,7 +516,7 @@ main { position: relative; z-index: 2; width: 100%; }
   font-size: 0.9rem;
 }
 
-/* Memories & Photo Wall */
+/* CHAPTER 5: MEMORIES */
 .memory-carousel {
   width: 100%; max-width: 800px;
   position: relative;
@@ -586,7 +569,7 @@ main { position: relative; z-index: 2; width: 100%; }
 .floating-photo:active { cursor: grabbing; box-shadow: 0 12px 30px rgba(0,0,0,0.25); z-index: 100 !important; }
 .floating-photo img { width: 100%; height: 100px; object-fit: cover; }
 
-/* Pinterest Masonry Grid */
+/* PINTEREST MASONRY GALLERY */
 .pinterest-grid {
   column-count: 3;
   column-gap: 1.2rem;
@@ -611,7 +594,7 @@ main { position: relative; z-index: 2; width: 100%; }
 .pin-card img { width: 100%; height: auto; display: block; border-radius: var(--radius-md) var(--radius-md) 0 0; }
 .pin-caption { padding: 0.8rem 1rem; font-size: 0.95rem; font-weight: 600; text-align: left; }
 
-/* Retro TV Wrapper */
+/* RETRO TV BIG SCREEN */
 .retro-tv-wrapper {
   position: relative;
   width: 100%;
@@ -670,7 +653,7 @@ main { position: relative; z-index: 2; width: 100%; }
 }
 .tv-knob:active { transform: rotate(45deg); }
 
-/* Timeline & Countdown */
+/* CHAPTER 6: TIMELINE & COUNTDOWN */
 .timeline-container {
   position: relative;
   max-width: 750px;
@@ -716,7 +699,7 @@ main { position: relative; z-index: 2; width: 100%; }
 .count-num { font-size: 2.2rem; font-weight: 700; color: var(--primary); line-height: 1; }
 .count-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-top: 0.3rem; }
 
-/* Arcade Games Hub (Version 5.0 Integration) */
+/* CHAPTER 7: ARCADE GAMES HUB */
 .games-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.2rem;
@@ -755,8 +738,25 @@ main { position: relative; z-index: 2; width: 100%; }
   position: absolute; top: 1rem; right: 1rem;
   font-size: 1.5rem; cursor: pointer; border: none; background: none; color: #666;
 }
+.memory-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.memory-tile {
+  aspect-ratio: 1;
+  background: var(--primary-light);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.8rem;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.3s;
+}
+.memory-tile.flipped { background: #fff; transform: rotateY(180deg); }
 
-/* Realistic Sakura Wish Tree Container */
+/* CHAPTER 8: SAKURA WISH TREE & SIMPLIFIED WISH NOTE (PLACED ABOVE NOTE) */
 .tree-canvas-wrap {
   width: 100%; max-width: 800px; height: 500px;
   position: relative; margin: 0 auto;
@@ -777,15 +777,22 @@ main { position: relative; z-index: 2; width: 100%; }
   width: 100%; max-width: 800px;
   margin: 2rem auto 0 auto;
 }
+.wish-cards-display {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding: 1rem 0;
+  scrollbar-width: thin;
+}
 
-/* Time Capsule */
+/* CHAPTER 9: TIME CAPSULE & NOTE */
 .time-capsule-card {
   max-width: 800px;
   margin: 2rem auto 0 auto;
   width: 100%;
 }
 
-/* Vault */
+/* CHAPTER 10: SECRETS */
 .vault-box { text-align: center; max-width: 450px; margin: 0 auto; }
 .pin-input {
   letter-spacing: 10px; font-size: 2rem; text-align: center;
@@ -793,7 +800,7 @@ main { position: relative; z-index: 2; width: 100%; }
   border: 2px solid var(--primary-light); margin: 1rem 0;
 }
 
-/* Invitation */
+/* CHAPTER 11: INVITATION */
 .invite-card {
   background: linear-gradient(135deg, #ffffff, #fffdfa);
   border: 2px solid var(--primary-light);
@@ -813,7 +820,7 @@ main { position: relative; z-index: 2; width: 100%; }
   pointer-events: none;
 }
 
-/* Proposal */
+/* CHAPTER 12: PLAYFUL PROPOSAL */
 .proposal-wrap {
   text-align: center;
   position: relative; min-height: 320px;
@@ -842,7 +849,7 @@ main { position: relative; z-index: 2; width: 100%; }
   z-index: 10;
 }
 
-/* Piano */
+/* CHAPTER 13: PLAYABLE PIANO (NEW FINAL SECTION) */
 .piano-section-wrap {
   width: 100%; max-width: 850px;
   margin: 0 auto;
@@ -941,7 +948,7 @@ main { position: relative; z-index: 2; width: 100%; }
 }
 .piano-key.black .piano-key-label { color: #aaa; bottom: 8px; }
 
-/* Control Center & Authentication Modals */
+/* Modal & Control Center Panels */
 #creatorModal, #ownerAuthModal {
   display: none;
   position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
@@ -951,7 +958,7 @@ main { position: relative; z-index: 2; width: 100%; }
   padding: 1.5rem;
 }
 .creator-panel {
-  background: #fff; width: 100%; max-width: 780px;
+  background: #fff; width: 100%; max-width: 750px;
   max-height: 85vh; overflow-y: auto;
   border-radius: var(--radius-lg); padding: 2rem;
 }
@@ -961,12 +968,12 @@ main { position: relative; z-index: 2; width: 100%; }
   width: 100%; padding: 0.6rem 0.9rem; border-radius: 8px;
   border: 1px solid #ccc; font-family: inherit; font-size: 0.95rem;
 }
-.tab-btn-group { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.2rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem; }
+.tab-btn-group { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 1.2rem; border-bottom: 1px solid #ddd; padding-bottom: 0.5rem; }
 .tab-btn { padding: 0.4rem 0.8rem; font-weight: 600; border-radius: 6px; border: none; background: #f0f0f0; cursor: pointer; font-size: 0.85rem; }
 .tab-btn.active { background: var(--primary); color: #fff; }
 .tab-content { display: none; } .tab-content.active { display: block; }
 
-/* Toast */
+/* Toast Notification */
 #toast {
   position: fixed; bottom: 25px; left: 50%;
   transform: translateX(-50%) translateY(100px);
@@ -979,14 +986,14 @@ main { position: relative; z-index: 2; width: 100%; }
 }
 #toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
 
-/* Animations */
+/* Keyframes */
 @keyframes pulseGlow { 0% { box-shadow: 0 0 5px var(--gold-glow); } 100% { box-shadow: 0 0 20px var(--gold-glow); } }
 @keyframes giftFloat { 0% { transform: translateY(0); } 100% { transform: translateY(-12px); } }
 @keyframes giftOpen { 0% { transform: scale(1); } 50% { transform: scale(1.1) rotate(5deg); } 100% { transform: scale(0.9); opacity: 0.3; } }
 @keyframes popin { 0% { opacity: 0; transform: scale(0.8) translateY(20px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
 @keyframes paperUnfold { 0% { opacity: 0; transform: scaleY(0.3); } 100% { opacity: 1; transform: scaleY(1); } }
 
-/* Mobile Adaptations */
+/* Responsive Adjustments */
 @media (max-width: 640px) {
   .chapter-section { padding-top: 5rem; }
   .countdown-grid { grid-template-columns: repeat(2, 1fr); }
@@ -999,12 +1006,6 @@ main { position: relative; z-index: 2; width: 100%; }
 </style>
 </head>
 <body>
-
-<!-- Preview Mode Banner -->
-<div id="previewBanner">
-  <span>👁️ PREVIEW MODE — Viewing Recipient Experience</span>
-  <button onclick="toggleRecipientPreview(false)" style="margin-left:15px; padding:2px 10px; border-radius:12px; border:none; background:#fff; color:#000; cursor:pointer; font-weight:bold;">Exit Preview</button>
-</div>
 
 <!-- Background Canvas Overlays -->
 <canvas id="bgCanvas"></canvas>
@@ -1034,12 +1035,12 @@ main { position: relative; z-index: 2; width: 100%; }
   <button class="btn btn-secondary btn-icon" title="Cycle Themes (21 Available)" onclick="cycleTheme()">🎨</button>
   <button class="btn btn-secondary btn-icon" title="Export as PDF Document" onclick="exportPDFDocument()">📄</button>
   <button class="btn btn-secondary btn-icon" title="Export as Word (.docx) Document" onclick="exportWordDocument()">📝</button>
-  <button class="btn btn-secondary btn-icon owner-ctrl" title="Customize Experience (Owner Only)" onclick="openCreatorModal()">⚙️</button>
+  <button class="btn btn-secondary btn-icon" title="Customize Experience (Owner Only)" onclick="openCreatorModal()">⚙️</button>
 </div>
 
-<!-- Main Container -->
+<!-- Main Narrative Container -->
 <main>
-  <!-- CHAPTER 1: INTRO -->
+  <!-- CHAPTER 1: INTRO (NO DUPLICATE NAME) -->
   <section id="intro" class="chapter-section visible">
     <span class="intro-badge" id="cfgOccasion">SPECIAL CELEBRATION</span>
     <h1 class="intro-title" id="cfgIntroHeading">Happy Celebration, <span class="handwriting" style="color:var(--primary)" id="cfgRecipientName">Sophia</span>!</h1>
@@ -1097,7 +1098,7 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- CHAPTER 5: MEMORIES & DRAGGABLE PHOTO WALL -->
+  <!-- CHAPTER 5: MEMORIES CAROUSEL & DRAGGABLE PHOTO WALL -->
   <section id="memories" class="chapter-section">
     <h2 class="section-title">Treasured Memories</h2>
     <p class="section-subtitle">Snapshots of our favorite chapters</p>
@@ -1155,25 +1156,25 @@ main { position: relative; z-index: 2; width: 100%; }
     <div class="timeline-container" id="timelineList" style="margin-top:3rem;"></div>
   </section>
 
-  <!-- CHAPTER 9: CELEBRATION ARCADE HUB (VERSION 5.0 INTEGRATION) -->
+  <!-- CHAPTER 9: CELEBRATION ARCADE HUB -->
   <section id="games" class="chapter-section">
     <h2 class="section-title">Celebration Arcade</h2>
     <p class="section-subtitle">Play interactive mini-games to unlock secret rewards</p>
     <div class="games-grid">
-      <div class="game-card" onclick="openGameV5('scratch')"><div class="game-icon">🎫</div><h3>Scratch Card</h3><p style="font-size:0.8rem; color:var(--text-muted);">Scratch to reveal secret message</p></div>
-      <div class="game-card" onclick="openGameV5('match')"><div class="game-icon">🧩</div><h3>Memory Match</h3><p style="font-size:0.8rem; color:var(--text-muted);">Match celebratory pairs</p></div>
-      <div class="game-card" onclick="openGameV5('wheel')"><div class="game-icon">🎡</div><h3>Lucky Wheel</h3><p style="font-size:0.8rem; color:var(--text-muted);">Spin for sweet compliments</p></div>
-      <div class="game-card" onclick="openGameV5('quiz')"><div class="game-icon">❓</div><h3>Love Quiz</h3><p style="font-size:0.8rem; color:var(--text-muted);">Test how well you know us</p></div>
-      <div class="game-card" onclick="openGameV5('balloon')"><div class="game-icon">🎈</div><h3>Balloon Pop</h3><p style="font-size:0.8rem; color:var(--text-muted);">Pop floating balloons</p></div>
-      <div class="game-card" onclick="openGameV5('hearts')"><div class="game-icon">💖</div><h3>Catch My Heart</h3><p style="font-size:0.8rem; color:var(--text-muted);">Catch falling hearts</p></div>
-      <div class="game-card" onclick="openGameV5('puzzle')"><div class="game-icon">🖼️</div><h3>Photo Puzzle</h3><p style="font-size:0.8rem; color:var(--text-muted);">Arrange sliding puzzle tiles</p></div>
-      <div class="game-card" onclick="openGameV5('magic')"><div class="game-icon">✨</div><h3>Magic Reveal</h3><p style="font-size:0.8rem; color:var(--text-muted);">Wave cursor to uncover canvas</p></div>
-      <div class="game-card" onclick="openGameV5('target')"><div class="game-icon">🎯</div><h3>Target Game</h3><p style="font-size:0.8rem; color:var(--text-muted);">Tap moving targets to score</p></div>
-      <div class="game-card" onclick="openGameV5('hunt')"><div class="game-icon">🗝️</div><h3>Treasure Hunt</h3><p style="font-size:0.8rem; color:var(--text-muted);">Solve clues to unlock reward</p></div>
+      <div class="game-card" onclick="openGame('scratch')"><div class="game-icon">🎫</div><h3>Scratch Card</h3><p style="font-size:0.8rem; color:var(--text-muted);">Scratch to reveal secret message</p></div>
+      <div class="game-card" onclick="openGame('match')"><div class="game-icon">🧩</div><h3>Memory Match</h3><p style="font-size:0.8rem; color:var(--text-muted);">Match celebratory pairs</p></div>
+      <div class="game-card" onclick="openGame('wheel')"><div class="game-icon">🎡</div><h3>Lucky Wheel</h3><p style="font-size:0.8rem; color:var(--text-muted);">Spin for sweet compliments</p></div>
+      <div class="game-card" onclick="openGame('quiz')"><div class="game-icon">❓</div><h3>Love Quiz</h3><p style="font-size:0.8rem; color:var(--text-muted);">Test how well you know us</p></div>
+      <div class="game-card" onclick="openGame('balloon')"><div class="game-icon">🎈</div><h3>Balloon Pop</h3><p style="font-size:0.8rem; color:var(--text-muted);">Pop floating balloons</p></div>
+      <div class="game-card" onclick="openGame('hearts')"><div class="game-icon">💖</div><h3>Catch My Heart</h3><p style="font-size:0.8rem; color:var(--text-muted);">Catch falling hearts</p></div>
+      <div class="game-card" onclick="openGame('puzzle')"><div class="game-icon">🖼️</div><h3>Photo Puzzle</h3><p style="font-size:0.8rem; color:var(--text-muted);">Arrange sliding puzzle tiles</p></div>
+      <div class="game-card" onclick="openGame('magic')"><div class="game-icon">✨</div><h3>Magic Reveal</h3><p style="font-size:0.8rem; color:var(--text-muted);">Wave cursor to uncover canvas</p></div>
+      <div class="game-card" onclick="openGame('target')"><div class="game-icon">🎯</div><h3>Target Game</h3><p style="font-size:0.8rem; color:var(--text-muted);">Tap moving targets to score</p></div>
+      <div class="game-card" onclick="openGame('hunt')"><div class="game-icon">🗝️</div><h3>Treasure Hunt</h3><p style="font-size:0.8rem; color:var(--text-muted);">Solve clues to unlock reward</p></div>
     </div>
   </section>
 
-  <!-- CHAPTER 10: REALISTIC SAKURA WISH TREE ENGINE -->
+  <!-- CHAPTER 10: REALISTIC SAKURA WISH TREE & CONNECTED WISH NOTES (MOVED ABOVE NOTE) -->
   <section id="tree" class="chapter-section">
     <h2 class="section-title">Sakura Wish Tree</h2>
     <p class="section-subtitle">Hang your heartfelt wish on a blooming cherry blossom branch</p>
@@ -1182,7 +1183,8 @@ main { position: relative; z-index: 2; width: 100%; }
       <canvas id="treeCanvas"></canvas>
       <canvas id="sakuraCanvas"></canvas>
     </div>
-    
+
+    <!-- Simplified Wish Note (Message Field Only) -->
     <div class="wish-note-container">
       <div class="glass-card">
         <h3>Write a Wish Note</h3>
@@ -1195,7 +1197,7 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- CHAPTER 11: TIME CAPSULE -->
+  <!-- CHAPTER 11: WISH TREE NOTE & TIME CAPSULE -->
   <section id="capsule" class="chapter-section">
     <h2 class="section-title">Wish Tree Note & Time Capsule</h2>
     <p class="section-subtitle">Seal a secret message for future unlocking</p>
@@ -1224,7 +1226,7 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- CHAPTER 13: INVITATION -->
+  <!-- CHAPTER 13: INVITATION & RSVP -->
   <section id="invitation" class="chapter-section">
     <h2 class="section-title">Save The Date</h2>
     <p class="section-subtitle">You are cordially invited to celebrate together</p>
@@ -1246,7 +1248,7 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- CHAPTER 14: PROPOSAL -->
+  <!-- CHAPTER 14: PLAYFUL PROPOSAL & FINALE -->
   <section id="proposal" class="chapter-section">
     <div class="proposal-wrap">
       <span style="font-size:3rem; margin-bottom: 1rem;">💍</span>
@@ -1265,7 +1267,7 @@ main { position: relative; z-index: 2; width: 100%; }
     </div>
   </section>
 
-  <!-- CHAPTER 15: PLAYABLE PIANO -->
+  <!-- CHAPTER 15: CUTE INTERACTIVE PLAYABLE PIANO (NEW FINAL SECTION) -->
   <section id="piano" class="chapter-section">
     <h2 class="section-title">Playable Celebration Piano</h2>
     <p class="section-subtitle">Play notes or select a preset melody to celebrate</p>
@@ -1282,8 +1284,11 @@ main { position: relative; z-index: 2; width: 100%; }
             <button class="btn btn-secondary" style="padding:0.4rem 0.8rem; font-size:0.8rem; color:#ef4444;" onclick="stopPianoPreset()">Stop</button>
           </div>
         </div>
+
         <div class="piano-keyboard-wrapper">
-          <div class="piano-keyboard" id="pianoKeyboard"></div>
+          <div class="piano-keyboard" id="pianoKeyboard">
+            <!-- Rendered dynamically by JS -->
+          </div>
         </div>
       </div>
     </div>
@@ -1311,71 +1316,59 @@ main { position: relative; z-index: 2; width: 100%; }
   </div>
 </div>
 
-<!-- Owner Control Dashboard Modal -->
+<!-- Creator Control Center Modal -->
 <div id="creatorModal">
   <div class="creator-panel">
     <div style="display: flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
-      <h2>⚙️ Owner Control Dashboard</h2>
+      <h2>⚙️ Owner Control Center</h2>
       <button class="close-modal" onclick="closeCreatorModal()">×</button>
     </div>
-    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Full customization suite. Upload local media, edit text, and generate recipient links.</p>
-    
+    <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Edit texts, media, and settings below. Changes take effect instantly.</p>
     <div class="tab-btn-group">
       <button class="tab-btn active" onclick="switchCreatorTab('tabGeneral')">General</button>
       <button class="tab-btn" onclick="switchCreatorTab('tabSurprises')">Letter & Gift</button>
       <button class="tab-btn" onclick="switchCreatorTab('tabBouquet')">Bouquet & Photos</button>
-      <button class="tab-btn" onclick="switchCreatorTab('tabMedia')">Local Media Uploads</button>
+      <button class="tab-btn" onclick="switchCreatorTab('tabMedia')">Media & TV</button>
       <button class="tab-btn" onclick="switchCreatorTab('tabTimeline')">Timeline & RSVP</button>
       <button class="tab-btn" onclick="switchCreatorTab('tabSecrets')">Vault & Quiz</button>
-      <button class="tab-btn" onclick="switchCreatorTab('tabMusic')">Background Audio</button>
-      <button class="tab-btn" onclick="switchCreatorTab('tabSecurity')">Passcode</button>
-      <button class="tab-btn" onclick="switchCreatorTab('tabExport')">Generate Website</button>
+      <button class="tab-btn" onclick="switchCreatorTab('tabMusic')">Background Music</button>
+      <button class="tab-btn" onclick="switchCreatorTab('tabSecurity')">Owner Passcode</button>
+      <button class="tab-btn" onclick="switchCreatorTab('tabResponses')">Responses</button>
     </div>
-
-    <!-- TAB 1: General -->
+    <!-- TAB 1: General & Intro -->
     <div id="tabGeneral" class="tab-content active">
       <div class="form-group"><label>Recipient Name</label><input type="text" id="edtRecipient" class="form-control" /></div>
       <div class="form-group"><label>Sender Name</label><input type="text" id="edtSender" class="form-control" /></div>
       <div class="form-group"><label>Occasion Tag</label><input type="text" id="edtOccasion" class="form-control" /></div>
       <div class="form-group"><label>Intro Heading Text</label><input type="text" id="edtIntroHeading" class="form-control" /></div>
       <div class="form-group"><label>Main Intro Message</label><textarea id="edtMainMessage" class="form-control" rows="2"></textarea></div>
-      <div class="form-group"><label>Custom Wallpaper / Background Image Upload</label><input type="file" id="fileBgUpload" accept="image/*" class="form-control" onchange="handleLocalFileUpload(event, 'customBg')" /></div>
     </div>
-
     <!-- TAB 2: Surprises & Letter -->
     <div id="tabSurprises" class="tab-content">
       <div class="form-group"><label>Gift Box Title</label><input type="text" id="edtGiftTitle" class="form-control" /></div>
       <div class="form-group"><label>Gift Box Text</label><textarea id="edtGiftText" class="form-control" rows="2"></textarea></div>
       <div class="form-group"><label>Love Letter Pages (JSON Array)</label><textarea id="edtLetterPages" class="form-control" rows="4"></textarea></div>
     </div>
-
-    <!-- TAB 3: Bouquet & Photos -->
+    <!-- TAB 3: Bouquet & Memories Wall -->
     <div id="tabBouquet" class="tab-content">
       <div class="form-group"><label>Flower Pop-up Messages (JSON Array: [{type, name, msg}])</label><textarea id="edtFlowers" class="form-control" rows="4"></textarea></div>
       <div class="form-group"><label>Memories Carousel (JSON Array: [{img, caption}])</label><textarea id="edtMemories" class="form-control" rows="4"></textarea></div>
     </div>
-
-    <!-- TAB 4: Local Media Browser / Upload -->
+    <!-- TAB 4: Pinterest & Retro TV Media Manager -->
     <div id="tabMedia" class="tab-content">
-      <h3 style="margin-bottom:0.5rem; font-size:1.05rem;">Upload Memory Photo (Polaroid & Carousel)</h3>
-      <div class="form-group">
-        <input type="file" id="filePhotoUpload" accept="image/*" class="form-control" onchange="handleLocalFileUpload(event, 'memoryPhoto')" />
-        <input type="text" id="filePhotoCaption" placeholder="Caption for uploaded photo" class="form-control" style="margin-top:0.4rem;" />
+      <h3 style="margin-bottom:0.5rem; font-size:1.1rem;">Pinterest Collage Photos</h3>
+      <div style="display: flex; gap:0.5rem; margin-bottom:0.5rem;">
+        <input type="text" id="pinPhotoUrl" placeholder="Image URL" class="form-control" />
+        <input type="text" id="pinPhotoCaption" placeholder="Caption" class="form-control" />
+        <button class="btn" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="addPinterestPhotoFromLink()">Add Link</button>
       </div>
-
-      <h3 style="margin-top:1rem; margin-bottom:0.5rem; font-size:1.05rem;">Upload Retro TV Video / Image</h3>
-      <div class="form-group">
-        <input type="file" id="fileTvUpload" accept="video/*,image/*" class="form-control" onchange="handleLocalFileUpload(event, 'tvMedia')" />
-        <input type="text" id="fileTvTitle" placeholder="Title for Retro TV channel" class="form-control" style="margin-top:0.4rem;" />
-      </div>
-
-      <h3 style="margin-top:1rem; margin-bottom:0.5rem; font-size:1.05rem;">Upload Pinterest Collage Photo</h3>
-      <div class="form-group">
-        <input type="file" id="filePinUpload" accept="image/*" class="form-control" onchange="handleLocalFileUpload(event, 'pinterest')" />
-        <input type="text" id="filePinCaption" placeholder="Caption" class="form-control" style="margin-top:0.4rem;" />
+      <h3 style="margin-top:1rem; margin-bottom:0.5rem; font-size:1.1rem;">Retro TV Media</h3>
+      <div style="display: flex; gap:0.5rem; margin-bottom:0.5rem;">
+        <input type="text" id="retroVideoUrl" placeholder="Media URL" class="form-control" />
+        <input type="text" id="retroVideoTitleInput" placeholder="Media Title" class="form-control" />
+        <button class="btn" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="addRetroVideoFromLink()">Add Link</button>
       </div>
     </div>
-
     <!-- TAB 5: Timeline & RSVP -->
     <div id="tabTimeline" class="tab-content">
       <div class="form-group"><label>Target Countdown ISO Date (e.g. 2026-10-14T19:00:00)</label><input type="text" id="edtCountdown" class="form-control" /></div>
@@ -1385,7 +1378,6 @@ main { position: relative; z-index: 2; width: 100%; }
       <div class="form-group"><label>RSVP Event Time</label><input type="text" id="edtEventTime" class="form-control" /></div>
       <div class="form-group"><label>RSVP Venue</label><input type="text" id="edtVenue" class="form-control" /></div>
     </div>
-
     <!-- TAB 6: Vault & Quiz -->
     <div id="tabSecrets" class="tab-content">
       <div class="form-group"><label>Secret Vault 4-Digit PIN</label><input type="text" id="edtPin" maxlength="4" class="form-control" /></div>
@@ -1394,33 +1386,21 @@ main { position: relative; z-index: 2; width: 100%; }
       <div class="form-group"><label>Quiz Correct Option Text</label><input type="text" id="edtQuizCorrect" class="form-control" /></div>
       <div class="form-group"><label>Quiz Wrong Option Text</label><input type="text" id="edtQuizWrong" class="form-control" /></div>
     </div>
-
-    <!-- TAB 7: Background Music Audio File -->
+    <!-- TAB 7: Background Music -->
     <div id="tabMusic" class="tab-content">
-      <div class="form-group"><label>Audio Stream / Direct Audio URL</label><input type="text" id="edtMusicUrlInput" class="form-control" placeholder="https://..." /></div>
-      <div class="form-group">
-        <label>Upload Custom Background Music (.mp3 / .wav / .ogg)</label>
-        <input type="file" id="fileAudioUpload" accept="audio/*" class="form-control" onchange="handleLocalFileUpload(event, 'bgAudio')" />
-      </div>
+      <div class="form-group"><label>Audio / YouTube URL</label><input type="text" id="edtMusicUrlInput" class="form-control" placeholder="https://..." /></div>
+      <div class="form-group"><label>Volume (<span id="volValDisplay">80</span>%)</label><input type="range" id="edtMusicVol" min="0" max="100" value="80" class="form-control" oninput="document.getElementById('volValDisplay').innerText=this.value" /></div>
     </div>
-
-    <!-- TAB 8: Passcode -->
+    <!-- TAB 8: Security -->
     <div id="tabSecurity" class="tab-content">
       <div class="form-group"><label>Owner Security Passcode</label><input type="text" id="edtOwnerPasscode" class="form-control" placeholder="1234" /></div>
     </div>
-
-    <!-- TAB 9: Recipient Website Link Generator & Preview -->
-    <div id="tabExport" class="tab-content">
-      <h3 style="font-size:1.1rem; margin-bottom:0.5rem;">Generate Recipient Website</h3>
-      <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Generates a complete, standalone recipient web experience without owner edit controls.</p>
-      
-      <div style="display:flex; flex-direction:column; gap:0.8rem;">
-        <button class="btn" onclick="generateRecipientShareableLink()">🔗 Copy Unique Recipient Share Link</button>
-        <button class="btn btn-secondary" onclick="exportStandaloneRecipientHTML()">💾 Download Recipient Webpage File (.html)</button>
-        <button class="btn btn-secondary" onclick="toggleRecipientPreview(true)">👁️ Launch Live Recipient Preview</button>
-      </div>
+    <!-- TAB 9: Guest Responses & Analytics -->
+    <div id="tabResponses" class="tab-content">
+      <h3 style="margin-bottom:0.5rem; font-size:1.1rem;">Saved RSVPs & Wish Notes</h3>
+      <div id="responsesContainer" style="max-height:220px; overflow-y:auto; background:#f8fafc; padding:1rem; border-radius:12px; border:1px solid #cbd5e1; font-size:0.85rem;"></div>
+      <button class="btn btn-secondary" style="margin-top:1rem;" onclick="clearGuestData()">Clear Saved Data</button>
     </div>
-
     <div style="display: flex; gap: 1rem; margin-top:1.5rem;">
       <button class="btn" onclick="saveCreatorConfig()">Save Configuration</button>
       <button class="btn btn-secondary" onclick="resetCreatorConfig()">Reset Defaults</button>
@@ -1431,13 +1411,12 @@ main { position: relative; z-index: 2; width: 100%; }
 <!-- Toast Notification -->
 <div id="toast">Notification</div>
 
-<!-- CORE APPLICATION JAVASCRIPT -->
+<!-- JAVASCRIPT APPLICATION CORE -->
 <script>
 /* ======================================================================
- 1. GLOBAL CONFIGURATION & RECIPIENT MODE ENGINE
+ 1. GLOBAL CONFIGURATION & PERSISTENCE
  ====================================================================== */
 window.CELEBRATION_CONFIG = {
-  isRecipientView: false,
   ownerPasscode: "1234",
   recipientName: "Sophia",
   senderName: "Julian",
@@ -1456,13 +1435,13 @@ window.CELEBRATION_CONFIG = {
   venue: "The Starlight Rooftop Garden",
   countdownTarget: "2026-10-14T19:00:00",
   theme: "dreamy-pink",
-  customBg: "",
+  selectedFinale: "confetti",
   quizQuestion: "What is our favorite shared activity?",
   quizCorrect: "Stargazing & long chats",
   quizWrong: "Sitting in traffic",
   wishes: [
-    { text: "May your life bloom with soft cherry blossoms and eternal joy! ✨", xRatio: 0.45, yRatio: 0.35 },
-    { text: "Wishing you infinite smiles and warmth every single day! 💕", xRatio: 0.60, yRatio: 0.40 }
+    { text: "May your life bloom with soft cherry blossoms and eternal joy! ✨", branchIdx: 0, xOffset: -60, yOffset: 120 },
+    { text: "Wishing you infinite smiles and warmth every single day! 💕", branchIdx: 1, xOffset: 70, yOffset: 110 }
   ],
   letterPages: [
     "My Dearest Sophia, \n\nFrom the moment you entered my life, every ordinary day has felt like a scene from a magical movie. Your laughter brightens even the cloudiest afternoons.",
@@ -1502,31 +1481,13 @@ window.CELEBRATION_CONFIG = {
   ]
 };
 
-// Check for Recipient Hash Configuration or Stored Config
-function initConfiguration() {
-  const hash = window.location.hash;
-  if (hash && hash.startsWith('#recipientData=')) {
-    try {
-      const jsonStr = decodeURIComponent(atob(hash.replace('#recipientData=', '')));
-      const parsed = JSON.parse(jsonStr);
-      Object.assign(window.CELEBRATION_CONFIG, parsed);
-      window.CELEBRATION_CONFIG.isRecipientView = true;
-    } catch(e) {}
-  } else {
-    const localCfg = localStorage.getItem('celebration_cfg');
-    if (localCfg) {
-      try { Object.assign(window.CELEBRATION_CONFIG, JSON.parse(localCfg)); } catch (e) {}
-    }
-  }
-
-  if (window.CELEBRATION_CONFIG.isRecipientView) {
-    document.querySelectorAll('.owner-ctrl').forEach(el => el.style.display = 'none');
-  }
+const localCfg = localStorage.getItem('celebration_cfg');
+if (localCfg) {
+  try { Object.assign(window.CELEBRATION_CONFIG, JSON.parse(localCfg)); } catch (e) {}
 }
-initConfiguration();
 
 /* ======================================================================
- 2. STATE & AUDIO SYNTHESIZER
+ 2. STATE & WEB AUDIO SYNTHESIZER
  ====================================================================== */
 let currentLetterPage = 0;
 let currentMemoryIdx = 0;
@@ -1536,11 +1497,13 @@ let audioPresetIdx = 0;
 let accMode = false;
 let synthInterval = null;
 let isOwnerAuthenticated = false;
+let presetTimer = null;
 
 function initAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
 }
+
 function playTone(freq = 440, duration = 0.4, type = 'sine', gainVal = 0.1) {
   initAudio();
   if (!audioCtx) return;
@@ -1557,6 +1520,7 @@ function playTone(freq = 440, duration = 0.4, type = 'sine', gainVal = 0.1) {
     osc.stop(audioCtx.currentTime + duration);
   } catch (e) {}
 }
+
 function playPianoSound(freq) {
   initAudio();
   if (!audioCtx) return;
@@ -1565,17 +1529,27 @@ function playPianoSound(freq) {
     const osc1 = audioCtx.createOscillator();
     const osc2 = audioCtx.createOscillator();
     const gain = audioCtx.createGain();
-    osc1.type = 'triangle'; osc2.type = 'sine';
+    
+    osc1.type = 'triangle';
+    osc2.type = 'sine';
+    
     osc1.frequency.setValueAtTime(freq, now);
-    osc2.frequency.setValueAtTime(freq * 2, now);
+    osc2.frequency.setValueAtTime(freq * 2, now); // 1st harmonic
+    
     gain.gain.setValueAtTime(0.3, now);
     gain.gain.exponentialRampToValueAtTime(0.0001, now + 1.2);
-    osc1.connect(gain); osc2.connect(gain);
+    
+    osc1.connect(gain);
+    osc2.connect(gain);
     gain.connect(audioCtx.destination);
-    osc1.start(now); osc2.start(now);
-    osc1.stop(now + 1.2); osc2.stop(now + 1.2);
+    
+    osc1.start(now);
+    osc2.start(now);
+    osc1.stop(now + 1.2);
+    osc2.stop(now + 1.2);
   } catch(e) {}
 }
+
 function showToast(msg) {
   const toast = document.getElementById('toast');
   toast.innerText = msg;
@@ -1618,7 +1592,7 @@ function startBackgroundMusicSynth() {
 }
 
 /* ======================================================================
- 3. THEME MANAGER (21 PRODUCTION THEMES)
+ 3. THEME MANAGER (21 THEMES)
  ====================================================================== */
 const themesList = [
   'dreamy-pink', 'lavender-moon', 'cloudy-blue', 'peach-sunset', 'sakura-dream', 'soft-garden',
@@ -1650,8 +1624,28 @@ function startStoryExperience() {
   scrollToSection('gift');
 }
 
+const sections = document.querySelectorAll('.chapter-section');
+const navLinks = document.querySelectorAll('.nav-link');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(section => {
+    const sectionTop = section.offsetTop;
+    const sectionHeight = section.clientHeight;
+    if (window.pageYOffset >= (sectionTop - sectionHeight / 3)) {
+      section.classList.add('visible');
+      current = section.getAttribute('id');
+    }
+  });
+  navLinks.forEach(link => {
+    link.classList.remove('active');
+    if (link.getAttribute('onclick') && link.getAttribute('onclick').includes(current)) {
+      link.classList.add('active');
+    }
+  });
+});
+
 /* ======================================================================
- 5. INTERACTIVE GIFT BOX
+ 5. INTERACTIVE GIFT BOX & BIRTHDAY MUSIC
  ====================================================================== */
 function openGiftBox() {
   const box = document.getElementById('giftBox');
@@ -1666,12 +1660,15 @@ function openGiftBox() {
     }, 700);
   }
 }
+
 function playBirthdayTune() {
   const notes = [261.63, 261.63, 293.66, 261.63, 349.23, 329.63];
   const durations = [0.3, 0.3, 0.5, 0.5, 0.5, 0.8];
   let delay = 0;
   notes.forEach((freq, idx) => {
-    setTimeout(() => playPianoSound(freq), delay * 1000);
+    setTimeout(() => {
+      playPianoSound(freq);
+    }, delay * 1000);
     delay += durations[idx];
   });
 }
@@ -1681,10 +1678,23 @@ function playBirthdayTune() {
  ====================================================================== */
 function getFlowerSVG(type) {
   switch (type) {
-    case 'rose': return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M50 20 C30 20 20 40 35 60 C50 80 80 50 65 30 Z" fill="#e63946"/><path d="M50 25 C40 25 35 45 45 55 C55 65 70 45 60 30 Z" fill="#ff4d6d"/></svg>`;
-    case 'tulip': return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M30 70 C20 40 30 20 50 30 C70 20 80 40 70 70 Z" fill="#ff758f"/></svg>`;
-    case 'lily': return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M50 15 L60 45 L90 50 L60 55 L50 85 L40 55 L10 50 L40 45 Z" fill="#ffffff"/><circle cx="50" cy="50" r="8" fill="#facc15"/></svg>`;
-    default: return `<svg viewBox="0 0 100 100" width="100%" height="100%"><circle cx="50" cy="50" r="25" fill="#f472b6"/><circle cx="50" cy="50" r="10" fill="#facc15"/></svg>`;
+    case 'rose':
+      return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M50 20 C30 20 20 40 35 60 C50 80 80 50 65 30 Z" fill="#e63946"/><path d="M50 25 C40 25 35 45 45 55 C55 65 70 45 60 30 Z" fill="#ff4d6d"/><path d="M50 30 C45 35 45 45 50 50 C55 45 55 35 50 30 Z" fill="#ff758f"/></svg>`;
+    case 'tulip':
+      return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M30 70 C20 40 30 20 50 30 C70 20 80 40 70 70 C50 85 50 85 30 70 Z" fill="#ff758f"/><path d="M40 70 C35 45 45 30 50 40 C55 30 65 45 60 70 Z" fill="#ff4d6d"/></svg>`;
+    case 'lily':
+      return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M50 15 L60 45 L90 50 L60 55 L50 85 L40 55 L10 50 L40 45 Z" fill="#ffffff" stroke="#e2e8f0" stroke-width="2"/><circle cx="50" cy="50" r="8" fill="#facc15"/></svg>`;
+    case 'orchid':
+      return `<svg viewBox="0 0 100 100" width="100%" height="100%"><ellipse cx="50" cy="30" rx="18" ry="25" fill="#c084fc"/><ellipse cx="30" cy="60" rx="22" ry="16" fill="#e879f9"/><ellipse cx="70" cy="60" rx="22" ry="16" fill="#e879f9"/><circle cx="50" cy="50" r="10" fill="#facc15"/></svg>`;
+    case 'daisy':
+      return `<svg viewBox="0 0 100 100" width="100%" height="100%">${[0,45,90,135,180,225,270,315].map(a => `<ellipse cx="50" cy="25" rx="7" ry="20" fill="#ffffff" transform="rotate(${a} 50 50)"/>`).join('')}<circle cx="50" cy="50" r="14" fill="#f59e0b"/></svg>`;
+    case 'cherry':
+      return `<svg viewBox="0 0 100 100" width="100%" height="100%">${[0,72,144,216,288].map(a => `<path d="M50 50 C40 20 60 20 50 50" fill="#f472b6" transform="rotate(${a} 50 50)"/>`).join('')}<circle cx="50" cy="50" r="8" fill="#fef08a"/></svg>`;
+    case 'sunflower':
+      return `<svg viewBox="0 0 100 100" width="100%" height="100%">${[0,30,60,90,120,150,180,210,240,270,300,330].map(a => `<ellipse cx="50" cy="20" rx="6" ry="22" fill="#fbbf24" transform="rotate(${a} 50 50)"/>`).join('')}<circle cx="50" cy="50" r="18" fill="#78350f"/></svg>`;
+    case 'lotus':
+    default:
+      return `<svg viewBox="0 0 100 100" width="100%" height="100%"><path d="M50 20 C30 50 70 50 50 20 Z" fill="#f472b6"/><path d="M30 40 C10 65 60 65 30 40 Z" fill="#f472b6"/><path d="M70 40 C90 65 40 65 70 40 Z" fill="#f472b6"/><circle cx="50" cy="55" r="10" fill="#facc15"/></svg>`;
   }
 }
 function initBouquet() {
@@ -1694,10 +1704,16 @@ function initBouquet() {
   window.CELEBRATION_CONFIG.flowers.forEach((flw, i) => {
     const item = document.createElement('div');
     item.className = 'flower-item';
-    item.onclick = () => { item.classList.toggle('bloomed'); playTone(400 + i * 60, 0.4); };
+    item.onclick = () => {
+      item.classList.toggle('bloomed');
+      playTone(400 + i * 60, 0.4);
+    };
     item.innerHTML = `
       <div class="flower-head">${getFlowerSVG(flw.type)}</div>
-      <div class="flower-stem"><div class="flower-leaf left"></div><div class="flower-leaf right"></div></div>
+      <div class="flower-stem">
+        <div class="flower-leaf left"></div>
+        <div class="flower-leaf right"></div>
+      </div>
       <div style="font-size:0.85rem; font-weight:600; margin-top:0.4rem;">${flw.name}</div>
       <div class="flower-note-pop">${flw.msg}</div>
     `;
@@ -1706,7 +1722,7 @@ function initBouquet() {
 }
 
 /* ======================================================================
- 7. LETTER & MEMORIES
+ 7. ENVELOPE, LETTER & SPEECH
  ====================================================================== */
 function openLetter() {
   const env = document.getElementById('envelope');
@@ -1714,23 +1730,51 @@ function openLetter() {
   if (!env.classList.contains('opened')) {
     env.classList.add('opened');
     playTone(659.25, 0.5);
-    setTimeout(() => { env.style.display = 'none'; paper.style.display = 'block'; renderLetterPage(); }, 500);
+    setTimeout(() => {
+      env.style.display = 'none';
+      paper.style.display = 'block';
+      renderLetterPage();
+    }, 500);
   }
 }
 function renderLetterPage() {
   const pages = window.CELEBRATION_CONFIG.letterPages;
   document.getElementById('letterContent').innerText = pages[currentLetterPage] || "";
   document.getElementById('pageIndicator').innerText = `Page ${currentLetterPage + 1}/${pages.length}`;
+  document.getElementById('btnPrevPage').style.opacity = currentLetterPage === 0 ? '0.4' : '1';
+  document.getElementById('btnNextPage').style.opacity = currentLetterPage === pages.length - 1 ? '0.4' : '1';
 }
-function prevLetterPage() { if (currentLetterPage > 0) { currentLetterPage--; renderLetterPage(); } }
-function nextLetterPage() { if (currentLetterPage < window.CELEBRATION_CONFIG.letterPages.length - 1) { currentLetterPage++; renderLetterPage(); } }
+function prevLetterPage() {
+  if (currentLetterPage > 0) {
+    currentLetterPage--;
+    renderLetterPage();
+    playTone(350, 0.2);
+  }
+}
+function nextLetterPage() {
+  const pages = window.CELEBRATION_CONFIG.letterPages;
+  if (currentLetterPage < pages.length - 1) {
+    currentLetterPage++;
+    renderLetterPage();
+    playTone(450, 0.2);
+  }
+}
 function speakLetterPage() {
   if ('speechSynthesis' in window) {
     window.speechSynthesis.cancel();
-    const utter = new SpeechSynthesisUtterance(window.CELEBRATION_CONFIG.letterPages[currentLetterPage]);
+    const text = window.CELEBRATION_CONFIG.letterPages[currentLetterPage];
+    const utter = new SpeechSynthesisUtterance(text);
+    utter.rate = 0.9;
     window.speechSynthesis.speak(utter);
+    showToast("Reading letter aloud...");
+  } else {
+    showToast("Speech synthesis not supported.");
   }
 }
+
+/* ======================================================================
+ 8. MEMORY CAROUSEL & DRAGGABLE PHOTO WALL
+ ====================================================================== */
 function renderMemory() {
   const mems = window.CELEBRATION_CONFIG.memories;
   if (!mems || mems.length === 0) return;
@@ -1742,6 +1786,7 @@ function changeMemory(dir) {
   const mems = window.CELEBRATION_CONFIG.memories;
   currentMemoryIdx = (currentMemoryIdx + dir + mems.length) % mems.length;
   renderMemory();
+  playTone(500, 0.2);
 }
 function initPhotoWall() {
   const wall = document.getElementById('photoWall');
@@ -1750,584 +1795,108 @@ function initPhotoWall() {
   window.CELEBRATION_CONFIG.memories.forEach((m, idx) => {
     const photo = document.createElement('div');
     photo.className = 'floating-photo';
-    photo.style.left = `${15 + idx * 25}%`; photo.style.top = `${20 + (idx % 2) * 20}%`;
-    photo.innerHTML = `<img src="${m.img}" /><div style="font-size:0.65rem; font-family:var(--font-handwriting); text-align:center;">${m.caption}</div>`;
+    photo.style.left = `${15 + idx * 25}%`;
+    photo.style.top = `${20 + (idx % 2) * 20}%`;
+    photo.style.transform = `rotate(${(idx - 1) * 8}deg)`;
+    photo.innerHTML = `<img src="${m.img}" alt="Memory" /><div style="font-size:0.65rem; font-family:var(--font-handwriting); text-align:center; margin-top:4px;">${m.caption}</div>`;
+    
+    let isDragging = false, startX, startY, initialLeft, initialTop;
+    photo.addEventListener('mousedown', startDrag);
+    photo.addEventListener('touchstart', startDrag, { passive: false });
+    function startDrag(e) {
+      isDragging = true;
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      startX = clientX; startY = clientY;
+      initialLeft = photo.offsetLeft; initialTop = photo.offsetTop;
+      document.addEventListener('mousemove', drag);
+      document.addEventListener('touchmove', drag, { passive: false });
+      document.addEventListener('mouseup', stopDrag);
+      document.addEventListener('touchend', stopDrag);
+    }
+    function drag(e) {
+      if (!isDragging) return;
+      if (e.cancelable) e.preventDefault();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      photo.style.left = `${initialLeft + (clientX - startX)}px`;
+      photo.style.top = `${initialTop + (clientY - startY)}px`;
+    }
+    function stopDrag() {
+      isDragging = false;
+      document.removeEventListener('mousemove', drag);
+      document.removeEventListener('touchmove', drag);
+    }
     wall.appendChild(photo);
   });
 }
 
 /* ======================================================================
- 8. VERSION 5.0 GAMES ENGINE INTEGRATION
+ PINTEREST & RETRO TV
  ====================================================================== */
-const gamesV5State = {
-  activeGame: null,
-  scores: {},
-  matchCards: ['💖', '🎈', '🌸', '🎁', '✨', '👑', '💖', '🎈', '🌸', '🎁', '✨', '👑']
-};
-
-function openGameV5(gameId) {
-  gamesV5State.activeGame = gameId;
-  const modal = document.getElementById('gameModal');
-  const container = document.getElementById('gameContainer');
-  modal.style.display = 'flex';
-  container.innerHTML = '';
-
-  switch(gameId) {
-    case 'scratch':
-      container.innerHTML = `
-        <h3>🎫 Scratch Card</h3>
-        <p style="font-size:0.85rem; color:#666; margin-bottom:1rem;">Rub canvas to reveal your secret surprise message!</p>
-        <div style="position:relative; width:300px; height:150px; margin:0 auto;">
-          <div style="position:absolute; width:100%; height:100%; background:var(--card-bg); border:2px dashed var(--primary); display:flex; align-items:center; justify-content:center; text-align:center; font-weight:bold; padding:1rem;">
-            ${window.CELEBRATION_CONFIG.vaultSecretMsg}
-          </div>
-          <canvas id="scratchCanvas" width="300" height="150" style="position:absolute; top:0; left:0; cursor:pointer;"></canvas>
-        </div>`;
-      initScratchGame();
-      break;
-
-    case 'match':
-      container.innerHTML = `
-        <h3>🧩 Memory Match</h3>
-        <p style="font-size:0.85rem; color:#666;">Match all twin pairs!</p>
-        <div class="memory-grid" id="v5MatchGrid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:1rem;"></div>`;
-      initMatchGame();
-      break;
-
-    case 'wheel':
-      container.innerHTML = `
-        <h3>🎡 Lucky Compliment Wheel</h3>
-        <div style="text-align:center; padding:1rem;">
-          <div id="wheelDisplay" style="width:180px; height:180px; border-radius:50%; border:8px solid var(--primary); margin:0 auto; display:flex; align-items:center; justify-content:center; font-weight:bold; font-size:1.1rem; text-align:center; padding:1rem; transition:transform 3s cubic-bezier(0.15,0.9,0.3,1); background:#fdf2f8;">Spin Me!</div>
-          <button class="btn" style="margin-top:1.5rem;" onclick="spinWheelV5()">Spin Wheel ✨</button>
-        </div>`;
-      break;
-
-    case 'quiz':
-      container.innerHTML = `
-        <h3>❓ Celebration Quiz</h3>
-        <p style="margin:1rem 0; font-weight:600;">${window.CELEBRATION_CONFIG.quizQuestion}</p>
-        <div style="display:flex; flex-direction:column; gap:0.6rem;">
-          <button class="btn btn-secondary" onclick="checkQuizV5(true)">${window.CELEBRATION_CONFIG.quizCorrect}</button>
-          <button class="btn btn-secondary" onclick="checkQuizV5(false)">${window.CELEBRATION_CONFIG.quizWrong}</button>
-        </div>`;
-      break;
-
-    case 'balloon':
-      container.innerHTML = `
-        <h3>🎈 Balloon Pop</h3>
-        <p style="font-size:0.85rem; color:#666;">Tap 5 balloons to clear!</p>
-        <div id="balloonArea" style="height:220px; position:relative; overflow:hidden; border:1px solid #ddd; border-radius:12px; margin-top:1rem;"></div>`;
-      initBalloonGame();
-      break;
-
-    default:
-      container.innerHTML = `
-        <h3>🎮 ${gameId.toUpperCase()} Mini-Game</h3>
-        <p style="margin:1.5rem 0;">Interactive mini-game session active!</p>
-        <button class="btn" onclick="triggerConfettiBurst(50); closeGameModal();">Complete Challenge 🎉</button>`;
-      break;
-  }
-}
-
-function closeGameModal() {
-  document.getElementById('gameModal').style.display = 'none';
-}
-
-function initScratchGame() {
-  const cvs = document.getElementById('scratchCanvas');
-  if(!cvs) return;
-  const ctx = cvs.getContext('2d');
-  ctx.fillStyle = '#c0c0c0';
-  ctx.fillRect(0,0,300,150);
-  ctx.fillStyle = '#555'; ctx.font = '16px sans-serif';
-  ctx.fillText('Scratch Here!', 100, 80);
-
-  let isDrawing = false;
-  cvs.onmousedown = cvs.ontouchstart = () => isDrawing = true;
-  cvs.onmouseup = cvs.ontouchend = () => isDrawing = false;
-  cvs.onmousemove = cvs.ontouchmove = (e) => {
-    if(!isDrawing) return;
-    const rect = cvs.getBoundingClientRect();
-    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
-    const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
-    ctx.globalCompositeOperation = 'destination-out';
-    ctx.beginPath(); ctx.arc(x, y, 18, 0, Math.PI * 2); ctx.fill();
-  };
-}
-
-function initMatchGame() {
-  const grid = document.getElementById('v5MatchGrid');
-  const shuffled = [...gamesV5State.matchCards].sort(() => 0.5 - Math.random());
-  let flipped = [];
+function renderPinterestBoard() {
+  const grid = document.getElementById('pinterestGrid');
+  if (!grid) return;
   grid.innerHTML = '';
-  shuffled.forEach((symbol, i) => {
-    const tile = document.createElement('div');
-    tile.className = 'memory-tile';
-    tile.style.cssText = 'height:60px; background:var(--primary-light); border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:1.5rem; cursor:pointer;';
-    tile.onclick = () => {
-      if(flipped.length < 2 && !tile.classList.contains('flipped')) {
-        tile.innerText = symbol;
-        tile.classList.add('flipped');
-        tile.style.background = '#fff';
-        flipped.push({tile, symbol});
-        if(flipped.length === 2) {
-          if(flipped[0].symbol === flipped[1].symbol) {
-            flipped = [];
-            triggerConfettiBurst(30);
-          } else {
-            setTimeout(() => {
-              flipped.forEach(f => { f.tile.innerText = ''; f.tile.style.background = 'var(--primary-light)'; f.tile.classList.remove('flipped'); });
-              flipped = [];
-            }, 800);
-          }
-        }
-      }
-    };
-    grid.appendChild(tile);
+  const photos = window.CELEBRATION_CONFIG.pinterestPhotos || [];
+  photos.forEach(p => {
+    const card = document.createElement('div');
+    card.className = 'pin-card';
+    card.innerHTML = `<img src="${p.img}" alt="Photo" /><div class="pin-caption">${p.caption || ''}</div>`;
+    grid.appendChild(card);
   });
 }
 
-function spinWheelV5() {
-  const compliments = ["You are Sunshine! ☀️", "Pure Magic! ✨", "Deeply Loved! 💕", "Simply Amazing! 🌟"];
-  const el = document.getElementById('wheelDisplay');
-  const randDeg = 1440 + Math.floor(Math.random() * 360);
-  el.style.transform = `rotate(${randDeg}deg)`;
-  setTimeout(() => {
-    const pick = compliments[Math.floor(Math.random() * compliments.length)];
-    el.innerText = pick;
-    triggerConfettiBurst(50);
-  }, 3000);
-}
-
-function checkQuizV5(isCorrect) {
-  if(isCorrect) {
-    showToast("Correct! You know us so well! ❤️");
-    triggerConfettiBurst(60);
-    setTimeout(closeGameModal, 1500);
-  } else {
-    showToast("Try again! 😅");
-  }
-}
-
-function initBalloonGame() {
-  const area = document.getElementById('balloonArea');
-  let popped = 0;
-  for(let i=0; i<5; i++) {
-    const b = document.createElement('div');
-    b.innerText = '🎈';
-    b.style.cssText = `position:absolute; font-size:2rem; cursor:pointer; left:${15 + i*18}%; top:${30 + (i%3)*25}%; transition:transform 0.2s;`;
-    b.onclick = () => {
-      b.style.transform = 'scale(0)';
-      popped++;
-      playTone(600 + popped*100, 0.2);
-      if(popped === 5) {
-        showToast("All balloons popped! 🎉");
-        triggerConfettiBurst(50);
-        setTimeout(closeGameModal, 1200);
-      }
-    };
-    area.appendChild(b);
-  }
-}
-
-/* ======================================================================
- 9. ORGANIC BLOOMING SAKURA CANOPY ENGINE (CANVAS INTEGRATION)
- ====================================================================== */
-let treeCtx = null, sakuraCtx = null;
-let treeAnimFrame = null;
-let petals = [];
-
-function initSakuraTreeEngine() {
-  const tCanvas = document.getElementById('treeCanvas');
-  const sCanvas = document.getElementById('sakuraCanvas');
-  if(!tCanvas || !sCanvas) return;
-
-  const rect = tCanvas.parentElement.getBoundingClientRect();
-  tCanvas.width = sCanvas.width = rect.width || 800;
-  tCanvas.height = sCanvas.height = rect.height || 500;
-
-  treeCtx = tCanvas.getContext('2d');
-  sakuraCtx = sCanvas.getContext('2d');
-
-  // Spawn Petals
-  petals = [];
-  for(let i=0; i<45; i++) {
-    petals.push({
-      x: Math.random() * sCanvas.width,
-      y: Math.random() * sCanvas.height,
-      r: 3 + Math.random() * 4,
-      vx: -0.5 + Math.random() * 1,
-      vy: 0.8 + Math.random() * 1.2,
-      rot: Math.random() * 360,
-      vRot: -2 + Math.random() * 4
-    });
-  }
-
-  renderSakuraTreeLoop(0);
-}
-
-function drawBranchSpline(ctx, x1, y1, len, angle, branchWidth, depth) {
-  ctx.beginPath();
-  ctx.save();
-  ctx.strokeStyle = depth > 2 ? '#4a2c11' : '#6b4226';
-  ctx.lineWidth = branchWidth;
-  ctx.lineCap = 'round';
-  ctx.moveTo(x1, y1);
-
-  const x2 = x1 + Math.sin(angle) * len;
-  const y2 = y1 - Math.cos(angle) * len;
-
-  ctx.lineTo(x2, y2);
-  ctx.stroke();
-
-  if (depth < 4) {
-    const sway = Math.sin(Date.now() * 0.0015 + depth) * 0.03;
-    drawBranchSpline(ctx, x2, y2, len * 0.75, angle - 0.35 + sway, branchWidth * 0.7, depth + 1);
-    drawBranchSpline(ctx, x2, y2, len * 0.75, angle + 0.35 + sway, branchWidth * 0.7, depth + 1);
-  } else {
-    // Fully Bloomed Rounded Canopy Clusters
-    drawBlossomCluster(ctx, x2, y2);
-  }
-  ctx.restore();
-}
-
-function drawBlossomCluster(ctx, x, y) {
-  const clusterRadius = 22;
-  ctx.fillStyle = 'rgba(244, 114, 182, 0.75)';
-  for(let i=0; i<6; i++) {
-    const angle = (i / 6) * Math.PI * 2;
-    const cx = x + Math.cos(angle) * (clusterRadius * 0.5);
-    const cy = y + Math.sin(angle) * (clusterRadius * 0.5);
-    ctx.beginPath();
-    ctx.arc(cx, cy, 12, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  ctx.fillStyle = '#fbcfe8';
-  ctx.beginPath(); ctx.arc(x, y, 14, 0, Math.PI * 2); ctx.fill();
-}
-
-function renderSakuraTreeLoop(time) {
-  if(!treeCtx || !sakuraCtx) return;
-
-  const w = treeCtx.canvas.width;
-  const h = treeCtx.canvas.height;
-
-  treeCtx.clearRect(0, 0, w, h);
-  sakuraCtx.clearRect(0, 0, w, h);
-
-  // Gentle Trunk & Branch Sway
-  const trunkSway = Math.sin(time * 0.001) * 0.02;
-
-  // Draw Trunk & Canopy
-  drawBranchSpline(treeCtx, w / 2, h - 20, 110, trunkSway, 18, 0);
-
-  // Draw Wish Notes Hung on Tree
-  renderTreeWishNotes(treeCtx, w, h);
-
-  // Draw Soft Falling Petals Physics
-  sakuraCtx.fillStyle = '#f472b6';
-  petals.forEach(p => {
-    p.x += p.vx + Math.sin(time * 0.001) * 0.5;
-    p.y += p.vy;
-    p.rot += p.vRot;
-    if(p.y > h) { p.y = -10; p.x = Math.random() * w; }
-
-    sakuraCtx.save();
-    sakuraCtx.translate(p.x, p.y);
-    sakuraCtx.rotate((p.rot * Math.PI) / 180);
-    sakuraCtx.beginPath();
-    sakuraCtx.ellipse(0, 0, p.r, p.r * 1.5, 0, 0, Math.PI * 2);
-    sakuraCtx.fill();
-    sakuraCtx.restore();
-  });
-
-  treeAnimFrame = requestAnimationFrame(renderSakuraTreeLoop);
-}
-
-function renderTreeWishNotes(ctx, w, h) {
-  const wishes = window.CELEBRATION_CONFIG.wishes || [];
-  wishes.forEach(wish => {
-    const nx = w * (wish.xRatio || 0.5);
-    const ny = h * (wish.yRatio || 0.4);
-
-    ctx.strokeStyle = '#d4af37'; ctx.lineWidth = 1.5;
-    ctx.beginPath(); ctx.moveTo(nx, ny - 25); ctx.lineTo(nx, ny); ctx.stroke();
-
-    ctx.fillStyle = '#ffffff';
-    ctx.shadowColor = 'rgba(0,0,0,0.15)'; ctx.shadowBlur = 8;
-    ctx.beginPath(); ctx.roundRect(nx - 55, ny, 110, 36, 6); ctx.fill();
-    ctx.shadowBlur = 0;
-
-    ctx.fillStyle = '#333333'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
-    const text = wish.text.length > 18 ? wish.text.substring(0, 16) + '...' : wish.text;
-    ctx.fillText(text, nx, ny + 20);
-  });
-}
-
-function submitWishNote() {
-  const input = document.getElementById('wishMsgInput');
-  if(!input.value.trim()) return;
-  window.CELEBRATION_CONFIG.wishes.push({
-    text: input.value.trim(),
-    xRatio: 0.35 + Math.random() * 0.3,
-    yRatio: 0.3 + Math.random() * 0.2
-  });
-  input.value = '';
-  showToast("Wish note hung on the Sakura Tree! ✨");
-  triggerConfettiBurst(40);
-}
-
-/* ======================================================================
- 10. OWNER SETTINGS, FILE UPLOAD & RECIPIENT LINK GENERATOR
- ====================================================================== */
-function openCreatorModal() {
-  if (!isOwnerAuthenticated) {
-    document.getElementById('ownerAuthModal').style.display = 'flex';
-  } else {
-    populateCreatorFields();
-    document.getElementById('creatorModal').style.display = 'flex';
-  }
-}
-function verifyOwnerAccess() {
-  const pass = document.getElementById('ownerPasscodePrompt').value;
-  if (pass === window.CELEBRATION_CONFIG.ownerPasscode) {
-    isOwnerAuthenticated = true;
-    document.getElementById('ownerAuthModal').style.display = 'none';
-    populateCreatorFields();
-    document.getElementById('creatorModal').style.display = 'flex';
-  } else {
-    showToast("Incorrect Security Passcode!");
-  }
-}
-function closeOwnerAuthModal() { document.getElementById('ownerAuthModal').style.display = 'none'; }
-function closeCreatorModal() { document.getElementById('creatorModal').style.display = 'none'; }
-
-function switchCreatorTab(tabId) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-  event.target.classList.add('active');
-  document.getElementById(tabId).classList.add('active');
-}
-
-function handleLocalFileUpload(event, type) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const dataUrl = e.target.result;
-    if (type === 'customBg') {
-      window.CELEBRATION_CONFIG.customBg = dataUrl;
-      document.body.style.backgroundImage = `url(${dataUrl})`;
-      showToast("Custom Background Applied!");
-    } else if (type === 'memoryPhoto') {
-      const cap = document.getElementById('filePhotoCaption').value || "Uploaded Memory";
-      window.CELEBRATION_CONFIG.memories.push({ img: dataUrl, caption: cap });
-      renderMemory(); initPhotoWall();
-      showToast("Memory Photo Uploaded!");
-    } else if (type === 'tvMedia') {
-      const title = document.getElementById('fileTvTitle').value || "Custom Channel";
-      const isVideo = file.type.startsWith('video');
-      window.CELEBRATION_CONFIG.retroTvMedia.push({ type: isVideo ? 'video' : 'image', src: dataUrl, title: title });
-      initRetroTv();
-      showToast("Retro TV Media Added!");
-    } else if (type === 'pinterest') {
-      const cap = document.getElementById('filePinCaption').value || "";
-      window.CELEBRATION_CONFIG.pinterestPhotos.push({ img: dataUrl, caption: cap });
-      renderPinterestBoard();
-      showToast("Pinterest Image Added!");
-    } else if (type === 'bgAudio') {
-      document.getElementById('edtMusicUrlInput').value = dataUrl;
-      showToast("Background Audio File Loaded!");
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
-function populateCreatorFields() {
-  const cfg = window.CELEBRATION_CONFIG;
-  document.getElementById('edtRecipient').value = cfg.recipientName;
-  document.getElementById('edtSender').value = cfg.senderName;
-  document.getElementById('edtOccasion').value = cfg.occasion;
-  document.getElementById('edtIntroHeading').value = cfg.introHeading;
-  document.getElementById('edtMainMessage').value = cfg.mainMessage;
-  document.getElementById('edtGiftTitle').value = cfg.giftTitle;
-  document.getElementById('edtGiftText').value = cfg.giftText;
-  document.getElementById('edtLetterPages').value = JSON.stringify(cfg.letterPages, null, 2);
-  document.getElementById('edtFlowers').value = JSON.stringify(cfg.flowers, null, 2);
-  document.getElementById('edtMemories').value = JSON.stringify(cfg.memories, null, 2);
-  document.getElementById('edtCountdown').value = cfg.countdownTarget;
-  document.getElementById('edtTimeline').value = JSON.stringify(cfg.timeline, null, 2);
-  document.getElementById('edtEventTitle').value = cfg.eventTitle;
-  document.getElementById('edtEventDate').value = cfg.eventDate;
-  document.getElementById('edtEventTime').value = cfg.eventTime;
-  document.getElementById('edtVenue').value = cfg.venue;
-  document.getElementById('edtPin').value = cfg.vaultPin;
-  document.getElementById('edtSecretMsg').value = cfg.vaultSecretMsg;
-  document.getElementById('edtQuizQuestion').value = cfg.quizQuestion;
-  document.getElementById('edtQuizCorrect').value = cfg.quizCorrect;
-  document.getElementById('edtQuizWrong').value = cfg.quizWrong;
-  document.getElementById('edtOwnerPasscode').value = cfg.ownerPasscode;
-}
-
-function saveCreatorConfig() {
-  const cfg = window.CELEBRATION_CONFIG;
-  cfg.recipientName = document.getElementById('edtRecipient').value;
-  cfg.senderName = document.getElementById('edtSender').value;
-  cfg.occasion = document.getElementById('edtOccasion').value;
-  cfg.introHeading = document.getElementById('edtIntroHeading').value;
-  cfg.mainMessage = document.getElementById('edtMainMessage').value;
-  cfg.giftTitle = document.getElementById('edtGiftTitle').value;
-  cfg.giftText = document.getElementById('edtGiftText').value;
-  cfg.countdownTarget = document.getElementById('edtCountdown').value;
-  cfg.eventTitle = document.getElementById('edtEventTitle').value;
-  cfg.eventDate = document.getElementById('edtEventDate').value;
-  cfg.eventTime = document.getElementById('edtEventTime').value;
-  cfg.venue = document.getElementById('edtVenue').value;
-  cfg.vaultPin = document.getElementById('edtPin').value;
-  cfg.vaultSecretMsg = document.getElementById('edtSecretMsg').value;
-  cfg.quizQuestion = document.getElementById('edtQuizQuestion').value;
-  cfg.quizCorrect = document.getElementById('edtQuizCorrect').value;
-  cfg.quizWrong = document.getElementById('edtQuizWrong').value;
-  cfg.ownerPasscode = document.getElementById('edtOwnerPasscode').value;
-
-  try {
-    cfg.letterPages = JSON.parse(document.getElementById('edtLetterPages').value);
-    cfg.flowers = JSON.parse(document.getElementById('edtFlowers').value);
-    cfg.memories = JSON.parse(document.getElementById('edtMemories').value);
-    cfg.timeline = JSON.parse(document.getElementById('edtTimeline').value);
-  } catch(e) {}
-
-  localStorage.setItem('celebration_cfg', JSON.stringify(cfg));
-  updateDOMFromConfig();
-  showToast("Owner Settings Saved Successfully!");
-  closeCreatorModal();
-}
-
-function resetCreatorConfig() {
-  localStorage.removeItem('celebration_cfg');
-  location.reload();
-}
-
-/* ======================================================================
- 11. RECIPIENT LINK & STANDALONE WEBSITE GENERATOR
- ====================================================================== */
-function generateRecipientShareableLink() {
-  const cleanCfg = JSON.parse(JSON.stringify(window.CELEBRATION_CONFIG));
-  cleanCfg.isRecipientView = true;
-  const encoded = btoa(encodeURIComponent(JSON.stringify(cleanCfg)));
-  const shareUrl = `${window.location.origin}${window.location.pathname}#recipientData=${encoded}`;
-  
-  navigator.clipboard.writeText(shareUrl);
-  showToast("Recipient Share Link Copied to Clipboard!");
-}
-
-function exportStandaloneRecipientHTML() {
-  const cleanCfg = JSON.parse(JSON.stringify(window.CELEBRATION_CONFIG));
-  cleanCfg.isRecipientView = true;
-  
-  let htmlContent = document.documentElement.outerHTML;
-  const scriptTag = `<script>window.CELEBRATION_CONFIG = ${JSON.stringify(cleanCfg)}; window.CELEBRATION_CONFIG.isRecipientView = true;<\/script>`;
-  htmlContent = htmlContent.replace('<head>', '<head>\n' + scriptTag);
-  
-  const blob = new Blob([htmlContent], { type: 'text/html' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `${cleanCfg.recipientName}_CelebrationExperience.html`;
-  a.click();
-  showToast("Standalone Recipient Webpage Downloaded!");
-}
-
-function toggleRecipientPreview(enable) {
-  const banner = document.getElementById('previewBanner');
-  if (enable) {
-    banner.style.display = 'block';
-    document.querySelectorAll('.owner-ctrl').forEach(e => e.style.display = 'none');
-    closeCreatorModal();
-    showToast("Entered Recipient Preview Mode");
-  } else {
-    banner.style.display = 'none';
-    if (!window.CELEBRATION_CONFIG.isRecipientView) {
-      document.querySelectorAll('.owner-ctrl').forEach(e => e.style.display = 'inline-flex');
-    }
-    showToast("Exited Recipient Preview Mode");
-  }
-}
-
-function updateDOMFromConfig() {
-  const cfg = window.CELEBRATION_CONFIG;
-  document.getElementById('cfgRecipientName').innerText = cfg.recipientName;
-  document.getElementById('cfgOccasion').innerText = cfg.occasion;
-  document.getElementById('cfgIntroHeading').innerHTML = cfg.introHeading;
-  document.getElementById('cfgMainMessage').innerText = cfg.mainMessage;
-  document.getElementById('cfgGiftTitle').innerText = cfg.giftTitle;
-  document.getElementById('cfgGiftText').innerText = cfg.giftText;
-  document.getElementById('cfgSenderSign').innerText = `With all my love, ${cfg.senderName}`;
-  document.getElementById('cfgEventTitle').innerText = cfg.eventTitle;
-  document.getElementById('cfgEventDesc').innerText = cfg.eventDesc;
-  document.getElementById('cfgEventDate').innerText = cfg.eventDate;
-  document.getElementById('cfgEventTime').innerText = cfg.eventTime;
-  document.getElementById('cfgVenue').innerText = cfg.venue;
-  document.getElementById('cfgProposalQuestion').innerText = cfg.proposalQuestion;
-
-  if (cfg.customBg) {
-    document.body.style.backgroundImage = `url(${cfg.customBg})`;
-  }
-
-  initBouquet(); renderMemory(); initPhotoWall(); renderPinterestBoard(); initRetroTv(); renderTimeline();
-}
-
-/* ======================================================================
- 12. RETRO TV & TIMELINE
- ====================================================================== */
 function initRetroTv() {
   const media = window.CELEBRATION_CONFIG.retroTvMedia || [];
   if (media.length === 0) return;
-  const item = media[currentTvIdx];
+  const current = media[currentTvIdx];
   const frame = document.getElementById('tvScreenFrame');
   document.getElementById('tvChannelLabel').innerText = `CH 0${currentTvIdx + 1}`;
-  
-  if (item.type === 'video') {
-    frame.innerHTML = `<video src="${item.src}" controls autoplay loop muted></video><div class="tv-scanlines"></div>`;
+  if (current.type === 'video') {
+    frame.innerHTML = `<video src="${current.src}" controls autoplay loop muted style="width:100%; height:100%; object-fit:cover;"></video><div class="tv-scanlines"></div>`;
   } else {
-    frame.innerHTML = `<img src="${item.src}" alt="${item.title}" /><div class="tv-scanlines"></div>`;
+    frame.innerHTML = `<img src="${current.src}" alt="${current.title}" style="width:100%; height:100%; object-fit:cover;" /><div class="tv-scanlines"></div>`;
   }
 }
-function prevTvMedia() {
-  const media = window.CELEBRATION_CONFIG.retroTvMedia;
-  currentTvIdx = (currentTvIdx - 1 + media.length) % media.length;
-  initRetroTv();
-}
-function nextTvMedia() {
-  const media = window.CELEBRATION_CONFIG.retroTvMedia;
+function cycleTvChannel() {
+  const media = window.CELEBRATION_CONFIG.retroTvMedia || [];
+  if (media.length === 0) return;
   currentTvIdx = (currentTvIdx + 1) % media.length;
   initRetroTv();
+  playTone(600, 0.2);
 }
-function cycleTvChannel() { nextTvMedia(); }
+function nextTvMedia() { cycleTvChannel(); }
+function prevTvMedia() {
+  const media = window.CELEBRATION_CONFIG.retroTvMedia || [];
+  if (media.length === 0) return;
+  currentTvIdx = (currentTvIdx - 1 + media.length) % media.length;
+  initRetroTv();
+  playTone(500, 0.2);
+}
 
-function renderTimeline() {
-  const container = document.getElementById('timelineList');
-  if (!container) return;
-  container.innerHTML = '';
+/* ======================================================================
+ TIMELINE & COUNTDOWN
+ ====================================================================== */
+function initTimeline() {
+  const list = document.getElementById('timelineList');
+  if (!list) return;
+  list.innerHTML = '';
   window.CELEBRATION_CONFIG.timeline.forEach(item => {
-    const div = document.createElement('div');
-    div.className = 'timeline-item';
-    div.innerHTML = `
+    const el = document.createElement('div');
+    el.className = 'timeline-item';
+    el.innerHTML = `
       <div class="timeline-dot"></div>
-      <div style="font-size:0.8rem; font-weight:700; color:var(--primary);">${item.date}</div>
-      <h3 style="font-size:1.2rem; margin:0.2rem 0;">${item.title}</h3>
+      <span style="font-size:0.8rem; font-weight:700; color:var(--primary);">${item.date}</span>
+      <h4 style="font-size:1.2rem; margin:0.2rem 0;">${item.title}</h4>
       <p style="font-size:0.9rem; color:var(--text-muted);">${item.desc}</p>
     `;
-    container.appendChild(div);
+    list.appendChild(el);
   });
 }
-
 function updateCountdown() {
   const target = new Date(window.CELEBRATION_CONFIG.countdownTarget).getTime();
-  const now = new Date().getTime();
-  const diff = target - now;
-
+  const diff = target - new Date().getTime();
   if (diff > 0) {
     document.getElementById('cdDays').innerText = String(Math.floor(diff / (1000 * 60 * 60 * 24))).padStart(2, '0');
     document.getElementById('cdHours').innerText = String(Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
@@ -2335,51 +1904,331 @@ function updateCountdown() {
     document.getElementById('cdSecs').innerText = String(Math.floor((diff % (1000 * 60)) / 1000)).padStart(2, '0');
   }
 }
+setInterval(updateCountdown, 1000);
 
 /* ======================================================================
- 13. VAULT, TIME CAPSULE & PROPOSAL
+ REALISTIC SAKURA TREE CANVAS ENGINE WITH HANGING WISH NOTES
  ====================================================================== */
-function unlockVault() {
-  const pin = document.getElementById('vaultPin').value;
-  if (pin === window.CELEBRATION_CONFIG.vaultPin) {
-    showToast("Vault Unlocked!");
-    triggerConfettiBurst(80);
-    alert(`🔓 Vault Content:\n\n${window.CELEBRATION_CONFIG.vaultSecretMsg}`);
-  } else {
-    showToast("Incorrect PIN!");
+let treeCtx = null;
+let sakuraCtx = null;
+let treeCanvas = null;
+let sakuraCanvas = null;
+let fallingPetals = [];
+
+function initSakuraTreeEngine() {
+  treeCanvas = document.getElementById('treeCanvas');
+  sakuraCanvas = document.getElementById('sakuraCanvas');
+  if (!treeCanvas || !sakuraCanvas) return;
+  
+  const wrap = treeCanvas.parentElement;
+  treeCanvas.width = wrap.clientWidth;
+  treeCanvas.height = wrap.clientHeight;
+  sakuraCanvas.width = wrap.clientWidth;
+  sakuraCanvas.height = wrap.clientHeight;
+  
+  treeCtx = treeCanvas.getContext('2d');
+  sakuraCtx = sakuraCanvas.getContext('2d');
+  
+  drawFullRealisticSakuraTree();
+  initPetals();
+  requestAnimationFrame(animSakuraLoop);
+
+  // Click handling for hanging wish notes on the tree
+  treeCanvas.addEventListener('click', handleTreeClick);
+}
+
+const branchAnchors = [
+  { xRatio: 0.35, yRatio: 0.35 },
+  { xRatio: 0.65, yRatio: 0.32 },
+  { xRatio: 0.25, yRatio: 0.48 },
+  { xRatio: 0.75, yRatio: 0.45 },
+  { xRatio: 0.50, yRatio: 0.28 },
+  { xRatio: 0.42, yRatio: 0.42 }
+];
+
+function drawFullRealisticSakuraTree() {
+  if (!treeCtx) return;
+  const w = treeCanvas.width;
+  const h = treeCanvas.height;
+  
+  treeCtx.clearRect(0, 0, w, h);
+
+  // Draw Organic Trunk & Branches
+  treeCtx.save();
+  treeCtx.strokeStyle = '#4a2c20';
+  treeCtx.fillStyle = '#3a2015';
+  
+  // Trunk Base
+  treeCtx.beginPath();
+  treeCtx.moveTo(w * 0.44, h);
+  treeCtx.quadraticCurveTo(w * 0.48, h * 0.7, w * 0.42, h * 0.55);
+  treeCtx.quadraticCurveTo(w * 0.50, h * 0.7, w * 0.56, h);
+  treeCtx.fill();
+  
+  // Recursive Branches
+  function drawBranch(x, y, length, angle, depth, width) {
+    if (depth <= 0) return;
+    
+    const endX = x + Math.cos(angle) * length;
+    const endY = y + Math.sin(angle) * length;
+    
+    treeCtx.beginPath();
+    treeCtx.moveTo(x, y);
+    treeCtx.lineTo(endX, endY);
+    treeCtx.lineWidth = width;
+    treeCtx.strokeStyle = depth > 2 ? '#4a2c20' : '#6b4226';
+    treeCtx.lineCap = 'round';
+    treeCtx.stroke();
+
+    // Draw Cherry Blossom Clusters on smaller branches
+    if (depth < 4) {
+      for (let i = 0; i < 6; i++) {
+        const blossomX = endX + (Math.random() - 0.5) * 35;
+        const blossomY = endY + (Math.random() - 0.5) * 35;
+        drawCherryBlossomCluster(blossomX, blossomY, 12 + Math.random() * 10);
+      }
+    }
+    
+    drawBranch(endX, endY, length * 0.75, angle - 0.38 + (Math.random() * 0.1), depth - 1, width * 0.68);
+    drawBranch(endX, endY, length * 0.72, angle + 0.35 - (Math.random() * 0.1), depth - 1, width * 0.68);
+  }
+
+  function drawCherryBlossomCluster(cx, cy, radius) {
+    const colors = ['#fbcfe8', '#f472b6', '#f43f5e', '#ffffff', '#ffb7c5'];
+    for (let j = 0; j < 5; j++) {
+      treeCtx.beginPath();
+      const rx = cx + (Math.random() - 0.5) * radius;
+      const ry = cy + (Math.random() - 0.5) * radius;
+      const r = 4 + Math.random() * 6;
+      treeCtx.arc(rx, ry, r, 0, Math.PI * 2);
+      treeCtx.fillStyle = colors[Math.floor(Math.random() * colors.length)];
+      treeCtx.globalAlpha = 0.85;
+      treeCtx.fill();
+    }
+    treeCtx.globalAlpha = 1.0;
+  }
+
+  // Draw main trunk branches
+  drawBranch(w * 0.48, h * 0.65, h * 0.22, -Math.PI / 2 - 0.2, 6, 18);
+  drawBranch(w * 0.52, h * 0.62, h * 0.20, -Math.PI / 2 + 0.25, 6, 16);
+  
+  treeCtx.restore();
+
+  // Draw Hanging Paper Wish Cards with Threads
+  drawHangingWishNotes();
+}
+
+let timeCycle = 0;
+function drawHangingWishNotes() {
+  if (!treeCtx) return;
+  const wishes = window.CELEBRATION_CONFIG.wishes || [];
+  const w = treeCanvas.width;
+  const h = treeCanvas.height;
+
+  timeCycle += 0.03;
+
+  wishes.forEach((wish, idx) => {
+    const anchor = branchAnchors[idx % branchAnchors.length];
+    const anchorX = w * anchor.xRatio;
+    const anchorY = h * anchor.yRatio;
+    
+    // Swaying motion physics
+    const sway = Math.sin(timeCycle + idx) * 8;
+    const cardX = anchorX + sway;
+    const cardY = anchorY + 65;
+
+    // Hanging String/Thread
+    treeCtx.beginPath();
+    treeCtx.moveTo(anchorX, anchorY);
+    treeCtx.lineTo(cardX, cardY);
+    treeCtx.strokeStyle = 'rgba(120, 100, 80, 0.7)';
+    treeCtx.lineWidth = 1.5;
+    treeCtx.stroke();
+
+    // Small Paper Wish Card
+    treeCtx.save();
+    treeCtx.translate(cardX, cardY);
+    treeCtx.rotate((sway * Math.PI) / 180);
+
+    // Card Shadow
+    treeCtx.fillStyle = 'rgba(0,0,0,0.12)';
+    treeCtx.fillRect(-38, 2, 80, 50);
+
+    // Paper Card Background
+    treeCtx.fillStyle = '#fffdfa';
+    treeCtx.strokeStyle = '#e2d2b4';
+    treeCtx.lineWidth = 1;
+    treeCtx.fillRect(-40, 0, 80, 50);
+    treeCtx.strokeRect(-40, 0, 80, 50);
+
+    // Decorative Hanging Hole/Clip
+    treeCtx.beginPath();
+    treeCtx.arc(0, 5, 3, 0, Math.PI * 2);
+    treeCtx.fillStyle = '#e63946';
+    treeCtx.fill();
+
+    // Wish Snippet Text
+    treeCtx.fillStyle = '#3d0c11';
+    treeCtx.font = '10px "Plus Jakarta Sans", sans-serif';
+    treeCtx.textAlign = 'center';
+    const textSnippet = wish.text.length > 18 ? wish.text.substring(0, 16) + '..' : wish.text;
+    treeCtx.fillText(textSnippet, 0, 28);
+
+    treeCtx.restore();
+    
+    // Store click hit region
+    wish.hitX = cardX;
+    wish.hitY = cardY;
+  });
+}
+
+function handleTreeClick(e) {
+  const rect = treeCanvas.getBoundingClientRect();
+  const clickX = e.clientX - rect.left;
+  const clickY = e.clientY - rect.top;
+
+  const wishes = window.CELEBRATION_CONFIG.wishes || [];
+  wishes.forEach(w => {
+    if (w.hitX && Math.abs(clickX - w.hitX) < 45 && Math.abs(clickY - w.hitY) < 35) {
+      playTone(587.33, 0.3);
+      alert(`🌸 Hanging Wish Note:\n\n"${w.text}"`);
+    }
+  });
+}
+
+function submitWishNote() {
+  const input = document.getElementById('wishMsgInput');
+  const msg = input.value.trim();
+  if (!msg) {
+    showToast("Please write a wish message first!");
+    return;
+  }
+  
+  const wishes = window.CELEBRATION_CONFIG.wishes || [];
+  const newWish = {
+    text: msg,
+    branchIdx: wishes.length % branchAnchors.length
+  };
+  wishes.push(newWish);
+  window.CELEBRATION_CONFIG.wishes = wishes;
+  
+  // Persist to local storage
+  localStorage.setItem('celebration_cfg', JSON.stringify(window.CELEBRATION_CONFIG));
+  
+  input.value = '';
+  showToast("Your wish was hung on the Sakura tree! 🌸");
+  playTone(659.25, 0.4);
+  drawFullRealisticSakuraTree();
+}
+
+function initPetals() {
+  fallingPetals = [];
+  const count = 30;
+  for (let i = 0; i < count; i++) {
+    fallingPetals.push({
+      x: Math.random() * sakuraCanvas.width,
+      y: Math.random() * sakuraCanvas.height,
+      r: 3 + Math.random() * 4,
+      d: Math.random() * count,
+      color: ['#fbcfe8', '#f472b6', '#ffffff'][Math.floor(Math.random() * 3)]
+    });
   }
 }
+
+function animSakuraLoop() {
+  if (!sakuraCtx) return;
+  sakuraCtx.clearRect(0, 0, sakuraCanvas.width, sakuraCanvas.height);
+  
+  // Redraw swinging notes
+  drawFullRealisticSakuraTree();
+
+  // Render falling petals
+  fallingPetals.forEach(p => {
+    sakuraCtx.beginPath();
+    sakuraCtx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    sakuraCtx.fillStyle = p.color;
+    sakuraCtx.globalAlpha = 0.8;
+    sakuraCtx.fill();
+
+    p.y += Math.cos(p.d) + 1 + p.r / 2;
+    p.x += Math.sin(p.d) * 0.8;
+
+    if (p.y > sakuraCanvas.height) {
+      p.y = -10;
+      p.x = Math.random() * sakuraCanvas.width;
+    }
+  });
+
+  requestAnimationFrame(animSakuraLoop);
+}
+
+/* ======================================================================
+ 9. TIME CAPSULE & SECRETS
+ ====================================================================== */
 function saveTimeCapsule() {
   const dt = document.getElementById('tcDate').value;
   const msg = document.getElementById('tcMsg').value;
-  if (dt && msg) {
-    document.getElementById('tcStatus').innerText = `🔒 Capsule Sealed until ${dt}!`;
-    showToast("Time Capsule Sealed!");
+  if (!dt || !msg) { showToast("Please select a date and enter a message."); return; }
+  
+  localStorage.setItem('celebration_time_capsule', JSON.stringify({ date: dt, msg: msg }));
+  document.getElementById('tcStatus').innerText = `🔒 Capsule Sealed until ${dt}!`;
+  showToast("Time Capsule Sealed Successfully!");
+  playTone(523.25, 0.4);
+}
+
+function unlockVault() {
+  const pin = document.getElementById('vaultPin').value;
+  if (pin === window.CELEBRATION_CONFIG.vaultPin) {
+    showToast("Secret Vault Unlocked! 🎉");
+    playTone(880, 0.5);
+    alert(`🔐 SECRET VAULT UNLOCKED:\n\n"${window.CELEBRATION_CONFIG.vaultSecretMsg}"`);
+  } else {
+    showToast("Incorrect PIN. Try again!");
+    playTone(220, 0.4);
   }
 }
-function submitRSVP(choice) {
-  document.getElementById('rsvpStatus').innerText = `RSVP Status Recorded: ${choice}! ✨`;
-  showToast(`RSVP Recorded: ${choice}`);
+
+/* ======================================================================
+ 10. INVITATION & RSVP
+ ====================================================================== */
+function submitRSVP(status) {
+  document.getElementById('rsvpStatus').innerText = `RSVP Status Recorded: ${status}! Thank you!`;
+  showToast(`RSVP: ${status}`);
+  playTone(523.25, 0.3);
 }
+
+function downloadICS() {
+  const cfg = window.CELEBRATION_CONFIG;
+  const icsData = `BEGIN:VCALENDAR\nVERSION:2.0\nBEGIN:VEVENT\nSUMMARY:${cfg.eventTitle}\nDESCRIPTION:${cfg.eventDesc}\nLOCATION:${cfg.venue}\nEND:VEVENT\nEND:VCALENDAR`;
+  const blob = new Blob([icsData], { type: 'text/calendar' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'celebration-event.ics';
+  a.click();
+}
+
+/* ======================================================================
+ 11. PLAYFUL PROPOSAL & FINALE
+ ====================================================================== */
+function toggleAccessibilityMode(checked) { accMode = checked; }
 function escapeNoButton() {
   if (accMode) return;
-  const btn = document.getElementById('btnNo');
-  const x = (Math.random() - 0.5) * 200;
+  const btnNo = document.getElementById('btnNo');
+  const x = (Math.random() - 0.5) * 220;
   const y = (Math.random() - 0.5) * 120;
-  btn.style.transform = `translate(${x}px, ${y}px)`;
-}
-function toggleAccessibilityMode(checked) {
-  accMode = checked;
-  document.getElementById('btnNo').style.transform = 'none';
+  btnNo.style.transform = `translate(${x}px, ${y}px)`;
+  playTone(300, 0.1);
 }
 function triggerYesCelebration() {
   document.getElementById('proposalResultCard').style.display = 'block';
   triggerConfettiBurst(150);
-  playBirthdayTune();
+  playTone(880, 0.8, 'triangle');
+  showToast("She said YES! 🎉");
 }
 
 /* ======================================================================
- 14. PLAYABLE PIANO ENGINE
+ 12. CUTE INTERACTIVE PLAYABLE PIANO ENGINE
  ====================================================================== */
 const pianoNotes = [
   { note: 'C4', freq: 261.63, type: 'white', key: 'a' },
@@ -2394,150 +2243,576 @@ const pianoNotes = [
   { note: 'A4', freq: 440.00, type: 'white', key: 'h' },
   { note: 'A#4', freq: 466.16, type: 'black', key: 'u' },
   { note: 'B4', freq: 493.88, type: 'white', key: 'j' },
-  { note: 'C5', freq: 523.25, type: 'white', key: 'k' }
+  { note: 'C5', freq: 523.25, type: 'white', key: 'k' },
+  { note: 'C#5', freq: 554.37, type: 'black', key: 'o' },
+  { note: 'D5', freq: 587.33, type: 'white', key: 'l' }
 ];
 
-function renderPianoKeyboard() {
-  const kb = document.getElementById('pianoKeyboard');
-  if (!kb) return;
-  kb.innerHTML = '';
+function initPlayablePiano() {
+  const keyboard = document.getElementById('pianoKeyboard');
+  if (!keyboard) return;
+  keyboard.innerHTML = '';
+  
   pianoNotes.forEach(n => {
     const keyEl = document.createElement('div');
     keyEl.className = `piano-key ${n.type}`;
+    keyEl.dataset.note = n.note;
     keyEl.innerHTML = `<span class="piano-key-label">${n.note}</span>`;
-    keyEl.onmousedown = keyEl.ontouchstart = () => {
-      playPianoSound(n.freq);
-      keyEl.classList.add('pressed');
-      setTimeout(() => keyEl.classList.remove('pressed'), 200);
-    };
-    kb.appendChild(keyEl);
+    
+    keyEl.addEventListener('mousedown', () => pressPianoKey(n, keyEl));
+    keyEl.addEventListener('touchstart', (e) => { e.preventDefault(); pressPianoKey(n, keyEl); });
+    
+    keyboard.appendChild(keyEl);
+  });
+
+  window.addEventListener('keydown', (e) => {
+    const match = pianoNotes.find(n => n.key === e.key.toLowerCase());
+    if (match) {
+      const el = keyboard.querySelector(`[data-note="${match.note}"]`);
+      pressPianoKey(match, el);
+    }
   });
 }
 
-function playPianoPreset(preset) {
-  const songs = {
-    birthday: [261.63, 261.63, 293.66, 261.63, 349.23, 329.63],
-    celebration: [329.63, 329.63, 349.23, 392.00, 392.00, 349.23, 329.63, 293.66],
-    romantic: [440.00, 392.00, 349.23, 329.63, 293.66, 261.63],
-    relaxing: [261.63, 329.63, 392.00, 523.25, 392.00, 329.63]
-  };
-  const list = songs[preset] || songs.birthday;
+function pressPianoKey(noteObj, el) {
+  playPianoSound(noteObj.freq);
+  if (el) {
+    el.classList.add('pressed');
+    setTimeout(() => el.classList.remove('pressed'), 200);
+  }
+}
+
+const pianoPresets = {
+  birthday: [
+    { note: 'G4', dur: 0.3 }, { note: 'G4', dur: 0.3 }, { note: 'A4', dur: 0.5 }, { note: 'G4', dur: 0.5 }, { note: 'C5', dur: 0.5 }, { note: 'B4', dur: 0.8 },
+    { note: 'G4', dur: 0.3 }, { note: 'G4', dur: 0.3 }, { note: 'A4', dur: 0.5 }, { note: 'G4', dur: 0.5 }, { note: 'D5', dur: 0.5 }, { note: 'C5', dur: 0.8 }
+  ],
+  celebration: [
+    { note: 'C4', dur: 0.2 }, { note: 'E4', dur: 0.2 }, { note: 'G4', dur: 0.2 }, { note: 'C5', dur: 0.6 },
+    { note: 'G4', dur: 0.3 }, { note: 'C5', dur: 0.8 }
+  ],
+  romantic: [
+    { note: 'E4', dur: 0.4 }, { note: 'G4', dur: 0.4 }, { note: 'B4', dur: 0.4 }, { note: 'C5', dur: 0.8 },
+    { note: 'A4', dur: 0.4 }, { note: 'F4', dur: 0.4 }, { note: 'D4', dur: 0.8 }
+  ],
+  relaxing: [
+    { note: 'C4', dur: 0.5 }, { note: 'G4', dur: 0.5 }, { note: 'E4', dur: 0.5 }, { note: 'A4', dur: 0.5 }, { note: 'G4', dur: 1.0 }
+  ]
+};
+
+function playPianoPreset(presetKey) {
+  stopPianoPreset();
+  const melody = pianoPresets[presetKey];
+  if (!melody) return;
+  
   let delay = 0;
-  list.forEach(freq => {
-    setTimeout(() => playPianoSound(freq), delay);
-    delay += 400;
+  melody.forEach(step => {
+    presetTimer = setTimeout(() => {
+      const match = pianoNotes.find(n => n.note === step.note);
+      if (match) {
+        const el = document.querySelector(`[data-note="${match.note}"]`);
+        pressPianoKey(match, el);
+      }
+    }, delay * 1000);
+    delay += step.dur;
   });
 }
-function stopPianoPreset() {}
+
+function stopPianoPreset() {
+  if (presetTimer) clearTimeout(presetTimer);
+}
 
 /* ======================================================================
- 15. DOCUMENT EXPORT (PDF & WORD DOCX)
+ 13. ALL ARCADE GAMES IMPLEMENTATION
+ ====================================================================== */
+function closeGameModal() {
+  document.getElementById('gameModal').style.display = 'none';
+}
+
+function openGame(type) {
+  const modal = document.getElementById('gameModal');
+  const container = document.getElementById('gameContainer');
+  modal.style.display = 'flex';
+  container.innerHTML = '';
+
+  if (type === 'scratch') {
+    container.innerHTML = `
+      <h3 style="text-align:center; margin-bottom:1rem;">Scratch Off Secret Card</h3>
+      <div style="position:relative; width:300px; height:150px; margin:0 auto;">
+        <div style="position:absolute; width:100%; height:100%; display:flex; align-items:center; justify-content:center; background:#fff0f5; border-radius:12px; font-family:var(--font-handwriting); font-size:1.5rem; color:var(--primary); text-align:center; padding:1rem;">
+          You are my absolute favorite human! ✨
+        </div>
+        <canvas id="scratchCanvas" width="300" height="150" style="position:absolute; top:0; left:0;"></canvas>
+      </div>`;
+    initScratchCanvas();
+  } else if (type === 'match') {
+    container.innerHTML = '<h3 style="text-align:center; margin-bottom:0.5rem;">Memory Match</h3><div class="memory-grid" id="memGrid"></div>';
+    initMemoryGame();
+  } else if (type === 'wheel') {
+    container.innerHTML = `
+      <h3 style="text-align:center; margin-bottom:0.5rem;">Lucky Wheel</h3>
+      <div style="text-align:center;">
+        <canvas id="wheelCanvas" width="260" height="260"></canvas><br>
+        <button class="btn" style="margin-top:1rem;" onclick="spinWheel()">Spin Wheel!</button>
+        <p id="wheelResult" style="margin-top:1rem; font-weight:600; color:var(--primary);"></p>
+      </div>`;
+    drawWheel();
+  } else if (type === 'quiz') {
+    const cfg = window.CELEBRATION_CONFIG;
+    container.innerHTML = `
+      <h3 style="text-align:center; margin-bottom:1rem;">Love & Memory Quiz</h3>
+      <div id="quizBox" style="text-align:center;">
+        <p style="font-size:1.1rem; margin-bottom:1rem;">${cfg.quizQuestion}</p>
+        <button class="btn btn-secondary" style="width:100%; margin-bottom:0.5rem;" onclick="answerQuiz(true)">${cfg.quizCorrect}</button>
+        <button class="btn btn-secondary" style="width:100%;" onclick="answerQuiz(false)">${cfg.quizWrong}</button>
+      </div>`;
+  } else if (type === 'balloon') {
+    container.innerHTML = `
+      <h3 style="text-align:center;">Balloon Pop</h3>
+      <p style="text-align:center; font-size:0.85rem; color:var(--text-muted);">Pop 5 balloons!</p>
+      <div id="balloonArea" style="height:220px; position:relative; overflow:hidden; border:1px dashed #ccc; border-radius:12px; margin-top:1rem;"></div>`;
+    initBalloonGame();
+  } else if (type === 'hearts') {
+    container.innerHTML = `
+      <h3 style="text-align:center;">Catch My Heart</h3>
+      <div id="heartGameArea" style="height:220px; position:relative; overflow:hidden; border:1px dashed #ccc; border-radius:12px; margin-top:1rem; text-align:center;">
+        <button class="btn" style="margin-top:80px;" onclick="startCatchHearts()">Start Game</button>
+      </div>`;
+  } else if (type === 'puzzle') {
+    container.innerHTML = `
+      <h3 style="text-align:center;">Photo Puzzle</h3>
+      <div id="puzzleGrid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap:4px; max-width:270px; margin:1rem auto;"></div>`;
+    initPuzzleGame();
+  } else if (type === 'magic') {
+    container.innerHTML = `
+      <h3 style="text-align:center;">Magic Canvas Reveal</h3>
+      <canvas id="magicCvs" width="300" height="180" style="display:block; margin:1rem auto; border-radius:12px; border:1px solid #ccc;"></canvas>`;
+    initMagicCanvas();
+  } else if (type === 'target') {
+    container.innerHTML = `
+      <h3 style="text-align:center;">Target Game</h3>
+      <div id="targetArea" style="height:200px; position:relative; border:1px dashed #ccc; border-radius:12px; margin-top:1rem;"></div>`;
+    initTargetGame();
+  } else if (type === 'hunt') {
+    container.innerHTML = `
+      <h3 style="text-align:center;">Treasure Hunt</h3>
+      <div style="text-align:center; margin-top:1rem;">
+        <p>Clue: Where do cherry blossoms bloom?</p>
+        <button class="btn" style="margin-top:1rem;" onclick="solveHunt()">Answer: Sakura Tree</button>
+      </div>`;
+  }
+}
+
+function initScratchCanvas() {
+  const cvs = document.getElementById('scratchCanvas');
+  if (!cvs) return;
+  const ctx = cvs.getContext('2d');
+  ctx.fillStyle = '#cccccc';
+  ctx.fillRect(0, 0, 300, 150);
+  ctx.fillStyle = '#666';
+  ctx.font = '14px sans-serif';
+  ctx.fillText('Scratch here!', 105, 80);
+
+  let isScratching = false;
+  function scratch(e) {
+    if (!isScratching) return;
+    const rect = cvs.getBoundingClientRect();
+    const x = (e.touches ? e.touches[0].clientX : e.clientX) - rect.left;
+    const y = (e.touches ? e.touches[0].clientY : e.clientY) - rect.top;
+    ctx.globalCompositeOperation = 'destination-out';
+    ctx.beginPath();
+    ctx.arc(x, y, 15, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  cvs.addEventListener('mousedown', () => isScratching = true);
+  cvs.addEventListener('mouseup', () => isScratching = false);
+  cvs.addEventListener('mousemove', scratch);
+  cvs.addEventListener('touchstart', () => isScratching = true);
+  cvs.addEventListener('touchend', () => isScratching = false);
+  cvs.addEventListener('touchmove', scratch);
+}
+
+function initMemoryGame() {
+  const grid = document.getElementById('memGrid');
+  const icons = ['🌸', '🌸', '💖', '💖', '🎁', '🎁', '🎂', '🎂'];
+  icons.sort(() => Math.random() - 0.5);
+  let flipped = [];
+  
+  icons.forEach((ic, idx) => {
+    const tile = document.createElement('div');
+    tile.className = 'memory-tile';
+    tile.innerText = '❓';
+    tile.onclick = () => {
+      if (flipped.length < 2 && !tile.classList.contains('flipped')) {
+        tile.innerText = ic;
+        tile.classList.add('flipped');
+        flipped.push({ tile, ic });
+        if (flipped.length === 2) {
+          if (flipped[0].ic === flipped[1].ic) {
+            flipped = [];
+          } else {
+            setTimeout(() => {
+              flipped.forEach(f => { f.tile.innerText = '❓'; f.tile.classList.remove('flipped'); });
+              flipped = [];
+            }, 800);
+          }
+        }
+      }
+    };
+    grid.appendChild(tile);
+  });
+}
+
+function drawWheel() {
+  const cvs = document.getElementById('wheelCanvas');
+  if (!cvs) return;
+  const ctx = cvs.getContext('2d');
+  const colors = ['#f472b6', '#38bdf8', '#facc15', '#4ade80', '#c084fc'];
+  for (let i = 0; i < 5; i++) {
+    ctx.beginPath();
+    ctx.moveTo(130, 130);
+    ctx.arc(130, 130, 120, (i * 72 * Math.PI) / 180, ((i + 1) * 72 * Math.PI) / 180);
+    ctx.fillStyle = colors[i];
+    ctx.fill();
+  }
+}
+function spinWheel() {
+  const compliments = ["You are incredible!", "Pure Sunshine!", "Most Loving Heart!", "Sweetest Smile!", "A True Treasure!"];
+  const choice = compliments[Math.floor(Math.random() * compliments.length)];
+  document.getElementById('wheelResult').innerText = `✨ Result: ${choice}`;
+  playTone(600, 0.4);
+}
+
+function answerQuiz(correct) {
+  if (correct) {
+    alert("Correct! You know us so well! 💕");
+    triggerConfettiBurst(60);
+  } else {
+    alert("Oops! Try again! 😊");
+  }
+}
+
+function initBalloonGame() {
+  const area = document.getElementById('balloonArea');
+  let popped = 0;
+  for (let i = 0; i < 5; i++) {
+    const b = document.createElement('div');
+    b.innerText = '🎈';
+    b.style.position = 'absolute';
+    b.style.fontSize = '2rem';
+    b.style.left = `${10 + i * 18}%`;
+    b.style.top = `${20 + (i % 2) * 30}%`;
+    b.style.cursor = 'pointer';
+    b.onclick = () => {
+      b.style.display = 'none';
+      popped++;
+      playTone(700, 0.2);
+      if (popped === 5) alert("All balloons popped! 🎉");
+    };
+    area.appendChild(b);
+  }
+}
+
+function startCatchHearts() {
+  const area = document.getElementById('heartGameArea');
+  area.innerHTML = '<p>Catch the falling heart!</p>';
+  const h = document.createElement('div');
+  h.innerText = '💖';
+  h.style.position = 'absolute';
+  h.style.fontSize = '2rem';
+  h.style.left = '45%';
+  h.style.top = '10px';
+  h.style.cursor = 'pointer';
+  h.onclick = () => {
+    alert("You caught my heart! 💕");
+    triggerConfettiBurst(50);
+  };
+  area.appendChild(h);
+}
+
+function initPuzzleGame() {
+  const grid = document.getElementById('puzzleGrid');
+  for (let i = 1; i <= 9; i++) {
+    const d = document.createElement('div');
+    d.style.aspectRatio = '1';
+    d.style.background = '#f472b6';
+    d.style.color = '#fff';
+    d.style.display = 'flex';
+    d.style.alignItems = 'center';
+    d.style.justifyContent = 'center';
+    d.style.borderRadius = '6px';
+    d.innerText = i;
+    grid.appendChild(d);
+  }
+}
+
+function initMagicCanvas() {
+  const cvs = document.getElementById('magicCvs');
+  if (!cvs) return;
+  const ctx = cvs.getContext('2d');
+  ctx.fillStyle = '#ffd166';
+  ctx.fillRect(0, 0, 300, 180);
+}
+
+function initTargetGame() {
+  const area = document.getElementById('targetArea');
+  const t = document.createElement('div');
+  t.innerText = '🎯';
+  t.style.position = 'absolute';
+  t.style.fontSize = '2.5rem';
+  t.style.left = '40%'; t.style.top = '30%';
+  t.style.cursor = 'pointer';
+  t.onclick = () => alert("Bullseye! 🎯 You hit the target!");
+  area.appendChild(t);
+}
+
+function solveHunt() {
+  alert("Treasure Unlocked: You found the secret key to my heart! 🔑💕");
+  triggerConfettiBurst(60);
+}
+
+/* ======================================================================
+ 14. DOCUMENT EXPORT ENGINE (PDF & WORD .DOCX GENERATORS)
  ====================================================================== */
 function exportPDFDocument() {
-  if (!window.jspdf) return;
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  const cfg = window.CELEBRATION_CONFIG;
+  showToast("Generating PDF Document...");
+  if (window.jspdf) {
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+    const cfg = window.CELEBRATION_CONFIG;
 
-  doc.setFont("helvetica", "bold"); doc.setFontSize(22);
-  doc.text(`${cfg.recipientName}'s Celebration Summary`, 20, 25);
-  doc.setFontSize(12); doc.setFont("helvetica", "normal");
-  doc.text(`Occasion: ${cfg.occasion}`, 20, 35);
-  doc.text(`Sender: ${cfg.senderName}`, 20, 43);
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(22);
+    doc.setTextColor(230, 57, 70);
+    doc.text(`CelebrationVerse - ${cfg.recipientName}`, 20, 20);
 
-  doc.setFontSize(14); doc.setFont("helvetica", "bold");
-  doc.text("Love Letter:", 20, 55);
-  doc.setFontSize(11); doc.setFont("helvetica", "italic");
-  let y = 63;
-  cfg.letterPages.forEach(p => {
-    const lines = doc.splitTextToSize(p, 170);
-    doc.text(lines, 20, y);
-    y += lines.length * 7 + 5;
-  });
+    doc.setFontSize(12);
+    doc.setTextColor(50, 50, 50);
+    doc.setFont("helvetica", "normal");
+    
+    let y = 35;
+    doc.text(`Occasion: ${cfg.occasion}`, 20, y); y += 10;
+    doc.text(`From: ${cfg.senderName}`, 20, y); y += 15;
 
-  doc.save(`${cfg.recipientName}_Celebration_Document.pdf`);
-  showToast("Exported PDF Document!");
+    doc.setFont("helvetica", "bold");
+    doc.text("Heartfelt Letter:", 20, y); y += 10;
+    doc.setFont("helvetica", "normal");
+
+    cfg.letterPages.forEach(p => {
+      const lines = doc.splitTextToSize(p, 170);
+      doc.text(lines, 20, y);
+      y += lines.length * 7 + 5;
+    });
+
+    y += 10;
+    doc.setFont("helvetica", "bold");
+    doc.text("Sakura Wish Notes:", 20, y); y += 10;
+    doc.setFont("helvetica", "normal");
+
+    cfg.wishes.forEach((w, i) => {
+      doc.text(`${i + 1}. ${w.text}`, 20, y);
+      y += 8;
+    });
+
+    doc.save(`${cfg.recipientName}-Celebration-Document.pdf`);
+    showToast("PDF Exported Successfully!");
+  } else {
+    showToast("PDF engine loading...");
+  }
 }
 
 function exportWordDocument() {
-  if (!window.docx) return;
-  const { Document, Packer, Paragraph, TextRun, HeadingLevel } = window.docx;
-  const cfg = window.CELEBRATION_CONFIG;
+  showToast("Generating Word (.docx) Document...");
+  if (window.docx) {
+    const { Document, Packer, Paragraph, TextRun, HeadingLevel } = window.docx;
+    const cfg = window.CELEBRATION_CONFIG;
 
-  const doc = new Document({
-    sections: [{
-      properties: {},
-      children: [
-        new Paragraph({ text: `${cfg.recipientName}'s Celebration Book`, heading: HeadingLevel.HEADING_1 }),
-        new Paragraph({ children: [new TextRun({ text: `Occasion: ${cfg.occasion}`, bold: true })] }),
-        new Paragraph({ children: [new TextRun({ text: `From: ${cfg.senderName}` })] }),
-        new Paragraph({ text: "Letter Content:", heading: HeadingLevel.HEADING_2 }),
-        ...cfg.letterPages.map(p => new Paragraph({ text: p }))
-      ]
-    }]
-  });
+    const doc = new Document({
+      sections: [{
+        properties: {},
+        children: [
+          new Paragraph({
+            text: `CelebrationVerse - ${cfg.recipientName}`,
+            heading: HeadingLevel.HEADING_1,
+          }),
+          new Paragraph({
+            children: [
+              new TextRun({ text: `Occasion: ${cfg.occasion}`, bold: true }),
+              new TextRun({ text: `\nFrom: ${cfg.senderName}`, italic: true }),
+            ],
+          }),
+          new Paragraph({ text: "\nHeartfelt Letter:", heading: HeadingLevel.HEADING_2 }),
+          ...cfg.letterPages.map(p => new Paragraph({ text: p })),
+          new Paragraph({ text: "\nSakura Wish Notes:", heading: HeadingLevel.HEADING_2 }),
+          ...cfg.wishes.map((w, i) => new Paragraph({ text: `${i + 1}. ${w.text}` }))
+        ],
+      }],
+    });
 
-  Packer.toBlob(doc).then(blob => {
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = `${cfg.recipientName}_Celebration.docx`;
-    a.click();
-    showToast("Exported Word Document!");
-  });
+    Packer.toBlob(doc).then(blob => {
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${cfg.recipientName}-Celebration-Document.docx`;
+      a.click();
+      showToast("Word Document Exported!");
+    });
+  } else {
+    showToast("Word generator loading...");
+  }
 }
 
 /* ======================================================================
- 16. CONFETTI BURST ENGINE
+ 15. CREATOR CONTROL CENTER & OWNER SECURITY
  ====================================================================== */
-function triggerConfettiBurst(count = 50) {
-  const canvas = document.getElementById('fxCanvas');
-  if (!canvas) return;
-  const ctx = canvas.getContext('2d');
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+function openCreatorModal() {
+  if (isOwnerAuthenticated) {
+    populateCreatorForm();
+    document.getElementById('creatorModal').style.display = 'flex';
+  } else {
+    document.getElementById('ownerAuthModal').style.display = 'flex';
+  }
+}
+function closeCreatorModal() { document.getElementById('creatorModal').style.display = 'none'; }
+function closeOwnerAuthModal() { document.getElementById('ownerAuthModal').style.display = 'none'; }
 
-  const particles = [];
-  const colors = ['#e63946', '#ff758f', '#ffd166', '#4ade80', '#38bdf8', '#c084fc'];
+function verifyOwnerAccess() {
+  const pwd = document.getElementById('ownerPasscodePrompt').value;
+  if (pwd === window.CELEBRATION_CONFIG.ownerPasscode) {
+    isOwnerAuthenticated = true;
+    closeOwnerAuthModal();
+    openCreatorModal();
+    showToast("Owner Access Unlocked!");
+  } else {
+    showToast("Incorrect Passcode!");
+  }
+}
 
+function switchCreatorTab(tabId) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(tabId).classList.add('active');
+}
+
+function populateCreatorForm() {
+  const cfg = window.CELEBRATION_CONFIG;
+  document.getElementById('edtRecipient').value = cfg.recipientName;
+  document.getElementById('edtSender').value = cfg.senderName;
+  document.getElementById('edtOccasion').value = cfg.occasion;
+  document.getElementById('edtIntroHeading').value = cfg.introHeading;
+  document.getElementById('edtMainMessage').value = cfg.mainMessage;
+  document.getElementById('edtGiftTitle').value = cfg.giftTitle;
+  document.getElementById('edtGiftText').value = cfg.giftText;
+  document.getElementById('edtLetterPages').value = JSON.stringify(cfg.letterPages, null, 2);
+  document.getElementById('edtFlowers').value = JSON.stringify(cfg.flowers, null, 2);
+  document.getElementById('edtMemories').value = JSON.stringify(cfg.memories, null, 2);
+  document.getElementById('edtTimeline').value = JSON.stringify(cfg.timeline, null, 2);
+  document.getElementById('edtPin').value = cfg.vaultPin;
+  document.getElementById('edtSecretMsg').value = cfg.vaultSecretMsg;
+  document.getElementById('edtOwnerPasscode').value = cfg.ownerPasscode;
+}
+
+function saveCreatorConfig() {
+  const cfg = window.CELEBRATION_CONFIG;
+  cfg.recipientName = document.getElementById('edtRecipient').value;
+  cfg.senderName = document.getElementById('edtSender').value;
+  cfg.occasion = document.getElementById('edtOccasion').value;
+  cfg.introHeading = document.getElementById('edtIntroHeading').value;
+  cfg.mainMessage = document.getElementById('edtMainMessage').value;
+  cfg.giftTitle = document.getElementById('edtGiftTitle').value;
+  cfg.giftText = document.getElementById('edtGiftText').value;
+  cfg.vaultPin = document.getElementById('edtPin').value;
+  cfg.vaultSecretMsg = document.getElementById('edtSecretMsg').value;
+  cfg.ownerPasscode = document.getElementById('edtOwnerPasscode').value;
+
+  try {
+    cfg.letterPages = JSON.parse(document.getElementById('edtLetterPages').value);
+    cfg.flowers = JSON.parse(document.getElementById('edtFlowers').value);
+    cfg.memories = JSON.parse(document.getElementById('edtMemories').value);
+    cfg.timeline = JSON.parse(document.getElementById('edtTimeline').value);
+  } catch(e) {}
+
+  localStorage.setItem('celebration_cfg', JSON.stringify(cfg));
+  updateUIFromConfig();
+  closeCreatorModal();
+  showToast("Configuration Saved Successfully!");
+}
+
+function resetCreatorConfig() {
+  localStorage.removeItem('celebration_cfg');
+  location.reload();
+}
+
+function updateUIFromConfig() {
+  const cfg = window.CELEBRATION_CONFIG;
+  document.getElementById('cfgRecipientName').innerText = cfg.recipientName;
+  document.getElementById('cfgOccasion').innerText = cfg.occasion;
+  document.getElementById('cfgMainMessage').innerText = cfg.mainMessage;
+  document.getElementById('cfgGiftTitle').innerText = cfg.giftTitle;
+  document.getElementById('cfgGiftText').innerText = cfg.giftText;
+  document.getElementById('cfgSenderSign').innerText = `With all my love, ${cfg.senderName}`;
+  
+  initBouquet();
+  renderMemory();
+  initPhotoWall();
+  renderPinterestBoard();
+  initRetroTv();
+  initTimeline();
+  drawFullRealisticSakuraTree();
+}
+
+/* ======================================================================
+ 16. CANVAS PARTICLE FX ENGINE (CONFETTI, FIREWORKS)
+ ====================================================================== */
+let fxCvs, fxCtx, particles = [];
+function initFxCanvas() {
+  fxCvs = document.getElementById('fxCanvas');
+  if (!fxCvs) return;
+  fxCvs.width = window.innerWidth;
+  fxCvs.height = window.innerHeight;
+  fxCtx = fxCvs.getContext('2d');
+  requestAnimationFrame(animFxLoop);
+}
+
+function triggerConfettiBurst(count = 100) {
+  if (!fxCvs) return;
   for (let i = 0; i < count; i++) {
     particles.push({
-      x: canvas.width / 2,
-      y: canvas.height / 2,
-      vx: (Math.random() - 0.5) * 14,
-      vy: (Math.random() - 0.7) * 14,
-      size: Math.random() * 8 + 4,
-      color: colors[Math.floor(Math.random() * colors.length)],
-      alpha: 1
+      x: fxCvs.width / 2,
+      y: fxCvs.height / 2,
+      vx: (Math.random() - 0.5) * 12,
+      vy: (Math.random() - 0.8) * 12,
+      color: ['#e63946', '#ffb703', '#38bdf8', '#4ade80', '#c084fc'][Math.floor(Math.random() * 5)],
+      size: 6 + Math.random() * 6,
+      life: 100
     });
   }
+}
 
-  function drawFx() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    let active = false;
-    particles.forEach(p => {
-      p.x += p.vx; p.y += p.vy; p.vy += 0.25; p.alpha -= 0.015;
-      if (p.alpha > 0) {
-        active = true;
-        ctx.globalAlpha = p.alpha;
-        ctx.fillStyle = p.color;
-        ctx.fillRect(p.x, p.y, p.size, p.size);
-      }
-    });
-    if (active) requestAnimationFrame(drawFx);
-    else ctx.clearRect(0, 0, canvas.width, canvas.height);
-  }
-  drawFx();
+function animFxLoop() {
+  if (!fxCtx) return;
+  fxCtx.clearRect(0, 0, fxCvs.width, fxCvs.height);
+  particles.forEach((p, idx) => {
+    fxCtx.fillStyle = p.color;
+    fxCtx.fillRect(p.x, p.y, p.size, p.size);
+    p.x += p.vx;
+    p.y += p.vy;
+    p.vy += 0.2; // gravity
+    p.life--;
+    if (p.life <= 0) particles.splice(idx, 1);
+  });
+  requestAnimationFrame(animFxLoop);
 }
 
 /* ======================================================================
- 17. INITIALIZATION ON DOM READY
+ INITIALIZATION ENTRY POINT
  ====================================================================== */
 window.addEventListener('DOMContentLoaded', () => {
-  updateDOMFromConfig();
-  renderPianoKeyboard();
+  updateUIFromConfig();
   initSakuraTreeEngine();
-  setInterval(updateCountdown, 1000);
-  updateCountdown();
+  initPlayablePiano();
+  initFxCanvas();
 });
 </script>
 </body>
